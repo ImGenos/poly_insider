@@ -70,3 +70,9 @@
 2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.410Z] [INFO ] TimeSeriesDB schema initialised
 2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.550Z] [INFO ] AnalyzerService: all connections established
 2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.550Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.700Z] [INFO ] AnalyzerService starting
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.728Z] [INFO ] Redis connected
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.756Z] [INFO ] Redis ready
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.097Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.247Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.247Z] [INFO ] AnalyzerService: starting consumer loop

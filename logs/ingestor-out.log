@@ -207,3 +207,12 @@
 2026-04-10 17:35:09 +02:00: [2026-04-10T15:35:09.807Z] [INFO ] IngestorService started
 2026-04-10 17:35:09 +02:00: [2026-04-10T15:35:09.909Z] [INFO ] WebSocket connected
 2026-04-10 17:35:09 +02:00: [2026-04-10T15:35:09.910Z] [INFO ] Subscribed to market channel {"tokenCount":2000}
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.678Z] [INFO ] IngestorService starting
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.704Z] [INFO ] Redis connected
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.719Z] [INFO ] Redis ready
+2026-04-10 18:35:05 +02:00: [2026-04-10T16:35:05.721Z] [INFO ] Fetching active markets from Gamma API
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.156Z] [INFO ] Markets loaded {"count":500,"tokens":81031}
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.158Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.161Z] [INFO ] IngestorService started
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.234Z] [INFO ] WebSocket connected
+2026-04-10 18:35:06 +02:00: [2026-04-10T16:35:06.236Z] [INFO ] Subscribed to market channel {"tokenCount":2000}

@@ -13,8 +13,8 @@ const CONNECTION_TIMEOUT_MS = 30_000;
 const PING_INTERVAL_MS = 10_000;
 // Fetch top markets sorted by 24h volume — ensures we monitor the most active ones
 const GAMMA_API = 'https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=500&order=volume24hr&ascending=false';
-// Max token IDs per subscription — server handles at least 3000+ without issues
-const MAX_TOKENS_PER_SUB = 2000;
+// Total token cap per connection — server rejects subscriptions beyond this
+const MAX_TOTAL_TOKENS = 2000;
 
 interface GammaMarket {
   conditionId: string;
@@ -166,9 +166,8 @@ export class WebSocketManager {
       return;
     }
 
-    // Send in batches to avoid oversized frames
-    const tokens = this.tokenIds.slice(0, MAX_TOKENS_PER_SUB);
-    // Note: do NOT include custom_feature_enabled — it causes server-side 1006 disconnects
+    // Server only accepts a single subscription message — send all tokens at once
+    const tokens = this.tokenIds.slice(0, MAX_TOTAL_TOKENS);
     const msg = JSON.stringify({
       assets_ids: tokens,
       type: 'market',
@@ -261,7 +260,7 @@ export class WebSocketManager {
       side: e.side === 'BUY' ? 'YES' : 'NO',
       price,
       size,
-      size_usd: size, // size is already in USDC on Polymarket
+      size_usd: size * price, // size is in shares; multiply by price to get USDC value
       timestamp,
       maker_address: placeholder,
       taker_address: placeholder,

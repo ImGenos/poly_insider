@@ -28,3 +28,45 @@
 2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.867Z] [INFO ] TimeSeriesDB schema initialised
 2026-04-09 23:33:35 +02:00: [2026-04-09T21:33:35.007Z] [INFO ] AnalyzerService: all connections established
 2026-04-09 23:33:35 +02:00: [2026-04-09T21:33:35.007Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 15:52:25 +02:00: [2026-04-10T13:52:25.915Z] [INFO ] AnalyzerService starting
+2026-04-10 15:52:25 +02:00: [2026-04-10T13:52:25.942Z] [INFO ] Redis connected
+2026-04-10 15:52:25 +02:00: [2026-04-10T13:52:25.952Z] [INFO ] Redis ready
+2026-04-10 15:52:26 +02:00: [2026-04-10T13:52:26.250Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 15:52:26 +02:00: [2026-04-10T13:52:26.398Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 15:52:26 +02:00: [2026-04-10T13:52:26.399Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.114Z] [INFO ] AnalyzerService starting
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.143Z] [INFO ] Redis connected
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.153Z] [INFO ] Redis ready
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.218Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.416Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 15:58:00 +02:00: [2026-04-10T13:58:00.417Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.588Z] [INFO ] AnalyzerService starting
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.618Z] [INFO ] Redis connected
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.626Z] [INFO ] Redis ready
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.680Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.874Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 15:59:57 +02:00: [2026-04-10T13:59:57.875Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 16:06:03 +02:00: [2026-04-10T14:06:03.617Z] [INFO ] AnalyzerService starting
+2026-04-10 16:06:03 +02:00: [2026-04-10T14:06:03.644Z] [INFO ] Redis connected
+2026-04-10 16:06:03 +02:00: [2026-04-10T14:06:03.650Z] [INFO ] Redis ready
+2026-04-10 16:06:03 +02:00: [2026-04-10T14:06:03.860Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 16:06:04 +02:00: [2026-04-10T14:06:04.027Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 16:06:04 +02:00: [2026-04-10T14:06:04.028Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.404Z] [INFO ] AnalyzerService starting
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.453Z] [INFO ] Redis connected
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.462Z] [INFO ] Redis ready
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.526Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.705Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 16:06:18 +02:00: [2026-04-10T14:06:18.706Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 16:06:32 +02:00: [2026-04-10T14:06:32.817Z] [INFO ] AnalyzerService starting
+2026-04-10 16:06:32 +02:00: [2026-04-10T14:06:32.855Z] [INFO ] Redis connected
+2026-04-10 16:06:32 +02:00: [2026-04-10T14:06:32.866Z] [INFO ] Redis ready
+2026-04-10 16:06:32 +02:00: [2026-04-10T14:06:32.929Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 16:06:33 +02:00: [2026-04-10T14:06:33.092Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 16:06:33 +02:00: [2026-04-10T14:06:33.093Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-10 16:53:23 +02:00: [2026-04-10T14:53:23.663Z] [INFO ] AnalyzerService starting
+2026-04-10 16:53:23 +02:00: [2026-04-10T14:53:23.704Z] [INFO ] Redis connected
+2026-04-10 16:53:23 +02:00: [2026-04-10T14:53:23.713Z] [INFO ] Redis ready
+2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.410Z] [INFO ] TimeSeriesDB schema initialised
+2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.550Z] [INFO ] AnalyzerService: all connections established
+2026-04-10 16:53:27 +02:00: [2026-04-10T14:53:27.550Z] [INFO ] AnalyzerService: starting consumer loop

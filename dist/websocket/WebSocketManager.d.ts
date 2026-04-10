@@ -1,0 +1,41 @@
+import { RawTrade } from '../types/index';
+import { Logger } from '../utils/Logger';
+type TradeCallback = (trade: RawTrade) => void;
+type ErrorCallback = (err: Error) => void;
+type ReconnectCallback = () => void;
+export declare class WebSocketManager {
+    private ws;
+    private readonly url;
+    private readonly logger;
+    private tradeCallbacks;
+    private errorCallbacks;
+    private reconnectCallbacks;
+    private marketNames;
+    private tokenToMarket;
+    private tokenIds;
+    private reconnectAttempt;
+    private reconnectTimer;
+    private connectionTimer;
+    private pingTimer;
+    private shouldReconnect;
+    constructor(url: string, logger: Logger);
+    onTrade(callback: TradeCallback): void;
+    onError(callback: ErrorCallback): void;
+    onReconnect(callback: ReconnectCallback): void;
+    isConnected(): boolean;
+    connect(): Promise<void>;
+    disconnect(): void;
+    private _fetchMarkets;
+    private _connect;
+    private _subscribe;
+    private _startPing;
+    private _stopPing;
+    private _handleMessage;
+    private _handleEvent;
+    private _parseLastTradePrice;
+    private _scheduleReconnect;
+    private _clearTimers;
+    private _clearConnectionTimer;
+}
+export {};
+//# sourceMappingURL=WebSocketManager.d.ts.map

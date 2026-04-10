@@ -1,0 +1,101 @@
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.538Z] [INFO ] IngestorService starting
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.560Z] [INFO ] Redis connected
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.570Z] [INFO ] Redis ready
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.571Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.613Z] [INFO ] IngestorService started
+2026-04-09 17:41:15 +02:00: [2026-04-09T15:41:15.746Z] [INFO ] WebSocket connected
+2026-04-09 17:43:20 +02:00: [2026-04-09T15:43:20.760Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:43:20 +02:00: [2026-04-09T15:43:20.767Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:43:21 +02:00: [2026-04-09T15:43:21.768Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:43:21 +02:00: [2026-04-09T15:43:21.853Z] [INFO ] WebSocket connected
+2026-04-09 17:45:26 +02:00: [2026-04-09T15:45:26.864Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:45:26 +02:00: [2026-04-09T15:45:26.869Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:45:27 +02:00: [2026-04-09T15:45:27.873Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:45:27 +02:00: [2026-04-09T15:45:27.972Z] [INFO ] WebSocket connected
+2026-04-09 17:47:32 +02:00: [2026-04-09T15:47:32.985Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:47:32 +02:00: [2026-04-09T15:47:32.993Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:47:34 +02:00: [2026-04-09T15:47:34.002Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:47:34 +02:00: [2026-04-09T15:47:34.087Z] [INFO ] WebSocket connected
+2026-04-09 17:49:39 +02:00: [2026-04-09T15:49:39.090Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:49:39 +02:00: [2026-04-09T15:49:39.102Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:49:40 +02:00: [2026-04-09T15:49:40.105Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:49:40 +02:00: [2026-04-09T15:49:40.225Z] [INFO ] WebSocket connected
+2026-04-09 17:51:45 +02:00: [2026-04-09T15:51:45.233Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:51:45 +02:00: [2026-04-09T15:51:45.233Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:51:46 +02:00: [2026-04-09T15:51:46.238Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:51:46 +02:00: [2026-04-09T15:51:46.330Z] [INFO ] WebSocket connected
+2026-04-09 17:53:51 +02:00: [2026-04-09T15:53:51.339Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:53:51 +02:00: [2026-04-09T15:53:51.355Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:53:52 +02:00: [2026-04-09T15:53:52.374Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:53:52 +02:00: [2026-04-09T15:53:52.483Z] [INFO ] WebSocket connected
+2026-04-09 17:55:57 +02:00: [2026-04-09T15:55:57.492Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:55:57 +02:00: [2026-04-09T15:55:57.501Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:55:58 +02:00: [2026-04-09T15:55:58.508Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:55:58 +02:00: [2026-04-09T15:55:58.624Z] [INFO ] WebSocket connected
+2026-04-09 17:58:03 +02:00: [2026-04-09T15:58:03.643Z] [INFO ] WebSocket reconnecting...
+2026-04-09 17:58:03 +02:00: [2026-04-09T15:58:03.648Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 17:58:04 +02:00: [2026-04-09T15:58:04.653Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 17:58:04 +02:00: [2026-04-09T15:58:04.748Z] [INFO ] WebSocket connected
+2026-04-09 18:00:09 +02:00: [2026-04-09T16:00:09.765Z] [INFO ] WebSocket reconnecting...
+2026-04-09 18:00:09 +02:00: [2026-04-09T16:00:09.774Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 18:00:10 +02:00: [2026-04-09T16:00:10.787Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 18:00:10 +02:00: [2026-04-09T16:00:10.879Z] [INFO ] WebSocket connected
+2026-04-09 18:02:15 +02:00: [2026-04-09T16:02:15.894Z] [INFO ] WebSocket reconnecting...
+2026-04-09 18:02:15 +02:00: [2026-04-09T16:02:15.900Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 18:02:16 +02:00: [2026-04-09T16:02:16.902Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 18:02:16 +02:00: [2026-04-09T16:02:16.986Z] [INFO ] WebSocket connected
+2026-04-09 18:04:22 +02:00: [2026-04-09T16:04:22.007Z] [INFO ] WebSocket reconnecting...
+2026-04-09 18:04:22 +02:00: [2026-04-09T16:04:22.016Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 18:04:23 +02:00: [2026-04-09T16:04:23.028Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 18:04:23 +02:00: [2026-04-09T16:04:23.123Z] [INFO ] WebSocket connected
+2026-04-09 18:06:28 +02:00: [2026-04-09T16:06:28.140Z] [INFO ] WebSocket reconnecting...
+2026-04-09 18:06:28 +02:00: [2026-04-09T16:06:28.150Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 18:06:29 +02:00: [2026-04-09T16:06:29.155Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 18:06:29 +02:00: [2026-04-09T16:06:29.257Z] [INFO ] WebSocket connected
+2026-04-09 18:08:34 +02:00: [2026-04-09T16:08:34.265Z] [INFO ] WebSocket reconnecting...
+2026-04-09 18:08:34 +02:00: [2026-04-09T16:08:34.276Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 18:08:35 +02:00: [2026-04-09T16:08:35.278Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 18:08:35 +02:00: [2026-04-09T16:08:35.345Z] [INFO ] WebSocket connected
+2026-04-09 18:09:13 +02:00: [2026-04-09T16:09:13.701Z] [INFO ] IngestorService starting
+2026-04-09 18:09:13 +02:00: [2026-04-09T16:09:13.732Z] [INFO ] Redis connected
+2026-04-09 18:09:13 +02:00: [2026-04-09T16:09:13.738Z] [INFO ] Redis ready
+2026-04-09 18:09:13 +02:00: [2026-04-09T16:09:13.741Z] [INFO ] Fetching active markets from Gamma API
+2026-04-09 18:09:14 +02:00: [2026-04-09T16:09:14.205Z] [INFO ] Markets loaded {"count":500,"tokens":81057}
+2026-04-09 18:09:14 +02:00: [2026-04-09T16:09:14.207Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-09 18:09:14 +02:00: [2026-04-09T16:09:14.209Z] [INFO ] IngestorService started
+2026-04-09 18:09:14 +02:00: [2026-04-09T16:09:14.273Z] [INFO ] WebSocket connected
+2026-04-09 18:09:14 +02:00: [2026-04-09T16:09:14.274Z] [INFO ] Subscribed to market channel {"tokenCount":200}
+2026-04-09 20:56:34 +02:00: [2026-04-09T18:56:34.221Z] [INFO ] WebSocket reconnecting...
+2026-04-09 20:56:34 +02:00: [2026-04-09T18:56:34.230Z] [INFO ] WebSocket reconnecting {"attempt":0}
+2026-04-09 20:56:35 +02:00: [2026-04-09T18:56:35.244Z] [INFO ] Fetching active markets from Gamma API
+2026-04-09 20:56:35 +02:00: [2026-04-09T18:56:35.643Z] [INFO ] Markets loaded {"count":500,"tokens":81057}
+2026-04-09 20:56:35 +02:00: [2026-04-09T18:56:35.643Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":1}
+2026-04-09 20:56:35 +02:00: [2026-04-09T18:56:35.734Z] [INFO ] WebSocket connected
+2026-04-09 20:56:35 +02:00: [2026-04-09T18:56:35.734Z] [INFO ] Subscribed to market channel {"tokenCount":200}
+2026-04-09 22:30:28 +02:00: [2026-04-09T20:30:28.527Z] [INFO ] IngestorService starting
+2026-04-09 22:30:28 +02:00: [2026-04-09T20:30:28.552Z] [INFO ] Redis connected
+2026-04-09 22:30:28 +02:00: [2026-04-09T20:30:28.567Z] [INFO ] Redis ready
+2026-04-09 22:30:28 +02:00: [2026-04-09T20:30:28.569Z] [INFO ] Fetching active markets from Gamma API
+2026-04-09 22:30:29 +02:00: [2026-04-09T20:30:29.039Z] [INFO ] Markets loaded {"count":500,"tokens":81041}
+2026-04-09 22:30:29 +02:00: [2026-04-09T20:30:29.041Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-09 22:30:29 +02:00: [2026-04-09T20:30:29.044Z] [INFO ] IngestorService started
+2026-04-09 22:30:29 +02:00: [2026-04-09T20:30:29.147Z] [INFO ] WebSocket connected
+2026-04-09 22:30:29 +02:00: [2026-04-09T20:30:29.148Z] [INFO ] Subscribed to market channel {"tokenCount":2000}
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.227Z] [INFO ] IngestorService starting
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.267Z] [INFO ] Redis connected
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.301Z] [INFO ] Redis ready
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.305Z] [INFO ] Fetching active markets from Gamma API
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.776Z] [INFO ] Markets loaded {"count":500,"tokens":81042}
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.779Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.782Z] [INFO ] IngestorService started
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.864Z] [INFO ] WebSocket connected
+2026-04-09 23:24:37 +02:00: [2026-04-09T21:24:37.865Z] [INFO ] Subscribed to market channel {"tokenCount":2000}
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.147Z] [INFO ] IngestorService starting
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.184Z] [INFO ] Redis connected
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.195Z] [INFO ] Redis ready
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.197Z] [INFO ] Fetching active markets from Gamma API
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.677Z] [INFO ] Markets loaded {"count":500,"tokens":81039}
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.679Z] [INFO ] WebSocketManager connecting {"url":"wss://ws-subscriptions-clob.polymarket.com/ws/market","attempt":0}
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.682Z] [INFO ] IngestorService started
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.766Z] [INFO ] WebSocket connected
+2026-04-09 23:33:34 +02:00: [2026-04-09T21:33:34.768Z] [INFO ] Subscribed to market channel {"tokenCount":2000}

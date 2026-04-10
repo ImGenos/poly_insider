@@ -153,6 +153,7 @@ export class RedisCache {
       'is_new', String(profile.isNew),
       'risk_score', String(profile.riskScore),
     );
+    await this.client.expire(`wallet:${profile.address}`, 86400);
   }
 
   // ─── Wallet Funder Cache ──────────────────────────────────────────────────

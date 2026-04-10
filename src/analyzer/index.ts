@@ -33,11 +33,12 @@ function deserializeStreamFields(fields: Record<string, string>): RawTrade {
     market_name: fields['market_name'] ?? '',
     side: (fields['side'] as 'YES' | 'NO') ?? 'YES',
     price: Number(fields['price'] ?? 0),
-    size: Number(fields['size_usd'] ?? 0),
+    size: Number(fields['size'] ?? 0),
     size_usd: Number(fields['size_usd'] ?? 0),
     timestamp: Number(fields['timestamp'] ?? 0),
-    maker_address: fields['maker_address'] ?? '',
-    taker_address: fields['taker_address'] ?? '',
+    // Addresses are optional — absent when the ingestor source did not expose them.
+    maker_address: fields['maker_address'] !== undefined ? fields['maker_address'] : undefined,
+    taker_address: fields['taker_address'] !== undefined ? fields['taker_address'] : undefined,
     order_book_depth: {
       bid_liquidity: Number(fields['bid_liquidity'] ?? 0),
       ask_liquidity: Number(fields['ask_liquidity'] ?? 0),
@@ -272,7 +273,7 @@ export class AnalyzerService {
       }
 
       // Req 8.1: append price point to TimescaleDB after processing
-      await this.appendPricePoint(filteredTrade.marketId, filteredTrade.price, filteredTrade.timestamp);
+      await this.appendPricePoint(filteredTrade.marketId, filteredTrade.price, filteredTrade.sizeUSDC, filteredTrade.timestamp);
 
     } catch (err) {
       this.logger.error('AnalyzerService: unhandled error processing message', err, { id });
@@ -295,9 +296,28 @@ export class AnalyzerService {
   private async runAnomalyDetector(filteredTrade: Parameters<AnomalyDetector['analyze']>[0]) {
     try {
       const anomalies = await this.anomalyDetector.analyze(filteredTrade);
-      // Reset consecutive Alchemy fail counter on success (Req 16.6)
-      this.alchemyConsecutiveFails = 0;
-      this.alchemyDegradedAlertSent = false;
+      // Req 16.6: only reset the consecutive-fail counter when Alchemy actually
+      // succeeded — not when analyze() silently fell back to Moralis/static.
+      if (this.blockchainAnalyzer.lastCallUsedFallback) {
+        this.alchemyConsecutiveFails++;
+      } else {
+        this.alchemyConsecutiveFails = 0;
+        this.alchemyDegradedAlertSent = false;
+      }
+      if (
+        this.alchemyConsecutiveFails > ALCHEMY_CONSECUTIVE_FAIL_THRESHOLD &&
+        !this.alchemyDegradedAlertSent
+      ) {
+        this.alchemyDegradedAlertSent = true;
+        this.logger.warn('Alchemy API degraded — insider detection using fallback', {
+          consecutiveFails: this.alchemyConsecutiveFails,
+        });
+        await this.telegramNotifier.sendAlert({
+          text: 'Alchemy API degraded — insider detection using fallback',
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+        }).catch(() => {/* non-blocking */});
+      }
       return anomalies;
     } catch (err) {
       this.logger.warn('AnalyzerService: anomalyDetector.analyze threw', { error: String(err) });
@@ -330,9 +350,9 @@ export class AnalyzerService {
     }
   }
 
-  private async appendPricePoint(marketId: string, price: number, timestamp: Date): Promise<void> {
+  private async appendPricePoint(marketId: string, price: number, sizeUsd: number, timestamp: Date): Promise<void> {
     try {
-      await this.timeSeriesDB.appendPricePoint(marketId, price, timestamp);
+      await this.timeSeriesDB.appendPricePoint(marketId, price, sizeUsd, timestamp);
       // Req 16.7: reset unavailability tracking on success
       this.lastSuccessfulDbWrite = Date.now();
       this.timescaleDbAlertSent = false;

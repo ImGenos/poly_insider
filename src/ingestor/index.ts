@@ -25,8 +25,10 @@ function validateRawTrade(t: RawTrade): boolean {
   if (typeof t.price !== 'number' || t.price < 0 || t.price > 1) return false;
   if (typeof t.size_usd !== 'number' || t.size_usd <= 0) return false;
   if (typeof t.timestamp !== 'number' || !isFinite(t.timestamp) || t.timestamp <= 0) return false;
-  if (!isValidEthAddress(t.maker_address) || isZeroAddress(t.maker_address)) return false;
-  if (!isValidEthAddress(t.taker_address) || isZeroAddress(t.taker_address)) return false;
+  // Addresses are optional (not exposed by the Polymarket CLOB WS market channel).
+  // When present, they must be valid non-zero Ethereum addresses.
+  if (t.maker_address !== undefined && (!isValidEthAddress(t.maker_address) || isZeroAddress(t.maker_address))) return false;
+  if (t.taker_address !== undefined && (!isValidEthAddress(t.taker_address) || isZeroAddress(t.taker_address))) return false;
   return true;
 }
 
@@ -36,6 +38,7 @@ function normalize(trade: RawTrade): NormalizedTrade {
     market_name: trade.market_name,
     side: trade.side,
     price: trade.price,
+    size: trade.size,
     size_usd: trade.size_usd,
     timestamp: trade.timestamp,
     maker_address: trade.maker_address,
@@ -46,18 +49,21 @@ function normalize(trade: RawTrade): NormalizedTrade {
 }
 
 function toStreamFields(trade: NormalizedTrade): Record<string, string> {
-  return {
+  const fields: Record<string, string> = {
     market_id: trade.market_id,
     market_name: trade.market_name,
     side: trade.side,
     price: String(trade.price),
+    size: String(trade.size),
     size_usd: String(trade.size_usd),
     timestamp: String(trade.timestamp),
-    maker_address: trade.maker_address,
-    taker_address: trade.taker_address,
     bid_liquidity: String(trade.bid_liquidity),
     ask_liquidity: String(trade.ask_liquidity),
   };
+  // Only include addresses when they are known
+  if (trade.maker_address !== undefined) fields['maker_address'] = trade.maker_address;
+  if (trade.taker_address !== undefined) fields['taker_address'] = trade.taker_address;
+  return fields;
 }
 
 // ─── Fire-and-forget push with exponential backoff on Redis unavailability ────

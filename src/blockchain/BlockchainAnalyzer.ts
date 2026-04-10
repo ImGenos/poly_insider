@@ -15,6 +15,13 @@ export class BlockchainAnalyzer {
   private lastAlchemyCallTime = 0;
   private readonly minAlchemyIntervalMs = 200;
 
+  /**
+   * Set to true after any analyzeWalletProfile call that fell back to Moralis
+   * or the static fallback because Alchemy failed. Reset to false on a clean
+   * Alchemy success. Read by AnalyzerService to drive the consecutive-fail counter.
+   */
+  lastCallUsedFallback = false;
+
   // Optional stored RedisCache — set when analyzeWalletProfile is called
   private redisCache: RedisCache | null = null;
 
@@ -201,8 +208,10 @@ export class BlockchainAnalyzer {
         ? new Date(transfer.metadata.blockTimestamp).getTime()
         : null;
       profile = this.buildProfile(address, firstTimestamp, transfer ? 1 : 0);
+      this.lastCallUsedFallback = false;
       this.logger.debug('BlockchainAnalyzer: fetched profile via Alchemy', { address });
     } catch (err) {
+      this.lastCallUsedFallback = true;
       this.logger.warn('BlockchainAnalyzer: Alchemy failed, trying Moralis', {
         address,
         error: String(err),

@@ -8,8 +8,10 @@ export interface RawTrade {
   size: number;
   size_usd: number;
   timestamp: number; // Unix ms
-  maker_address: string;
-  taker_address: string;
+  /** Wallet address of the maker. Optional — not exposed by the Polymarket CLOB WS market channel. */
+  maker_address?: string;
+  /** Wallet address of the taker. Optional — not exposed by the Polymarket CLOB WS market channel. */
+  taker_address?: string;
   order_book_depth: {
     bid_liquidity: number;
     ask_liquidity: number;
@@ -23,10 +25,13 @@ export interface NormalizedTrade {
   market_name: string;
   side: 'YES' | 'NO';
   price: number;
+  size: number;   // raw share quantity
   size_usd: number;
   timestamp: number; // Unix ms
-  maker_address: string;
-  taker_address: string;
+  /** Absent when the source (e.g. Polymarket CLOB WS) does not expose wallet addresses. */
+  maker_address?: string;
+  /** Absent when the source (e.g. Polymarket CLOB WS) does not expose wallet addresses. */
+  taker_address?: string;
   bid_liquidity: number;
   ask_liquidity: number;
 }
@@ -39,7 +44,8 @@ export interface FilteredTrade {
   price: number;
   sizeUSDC: number;
   timestamp: Date;
-  walletAddress: string;
+  /** Absent when the source does not expose wallet addresses (e.g. Polymarket CLOB WS market channel). */
+  walletAddress?: string;
   orderBookLiquidity: number;
   marketCategory?: string;
 }

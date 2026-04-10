@@ -45,7 +45,6 @@ export class ConfigManager {
       { key: 'INSIDER_WALLET_AGE_HOURS', default: 48 },
       { key: 'INSIDER_MIN_TRADE_SIZE', default: 10000 },
       { key: 'CLUSTER_WINDOW_MINUTES', default: 10 },
-      { key: 'CLUSTER_MIN_WALLETS', default: 3 },
       { key: 'ZSCORE_THRESHOLD', default: 3.0 },
       { key: 'ZSCORE_MIN_SAMPLES', default: 30 },
       { key: 'ZSCORE_BASELINE_WINDOW', default: 100 },

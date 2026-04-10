@@ -8,7 +8,8 @@ CREATE EXTENSION IF NOT EXISTS timescaledb;
 CREATE TABLE IF NOT EXISTS price_history (
   time        TIMESTAMPTZ NOT NULL,
   market_id   TEXT NOT NULL,
-  price       DOUBLE PRECISION NOT NULL
+  price       DOUBLE PRECISION NOT NULL,
+  size_usd    DOUBLE PRECISION NOT NULL DEFAULT 0
 );
 SELECT create_hypertable('price_history', 'time', if_not_exists => TRUE);
 CREATE INDEX IF NOT EXISTS idx_price_history_market ON price_history(market_id, time DESC);
@@ -30,6 +31,8 @@ SELECT
   market_id,
   AVG(price) AS avg_price,
   STDDEV(price) AS stddev_price,
+  AVG(size_usd) AS avg_trade_size,
+  STDDEV(size_usd) AS stddev_trade_size,
   COUNT(*) AS trade_count
 FROM price_history
 GROUP BY bucket, market_id;
@@ -84,12 +87,12 @@ export class TimeSeriesDB {
 
   // ─── Price History ────────────────────────────────────────────────────────
 
-  async appendPricePoint(marketId: string, price: number, timestamp: Date): Promise<void> {
+  async appendPricePoint(marketId: string, price: number, sizeUsd: number, timestamp: Date): Promise<void> {
     if (!this.pool) return;
     try {
       await this.pool.query(
-        'INSERT INTO price_history (time, market_id, price) VALUES ($1, $2, $3)',
-        [timestamp, marketId, price],
+        'INSERT INTO price_history (time, market_id, price, size_usd) VALUES ($1, $2, $3, $4)',
+        [timestamp, marketId, price, sizeUsd],
       );
     } catch (err) {
       this.logger.error('appendPricePoint failed', err, { marketId });
@@ -133,9 +136,11 @@ export class TimeSeriesDB {
       const result = await this.pool.query<{
         avg_price: string;
         stddev_price: string | null;
+        avg_trade_size: string;
+        stddev_trade_size: string | null;
         trade_count: string;
       }>(
-        `SELECT avg_price, stddev_price, trade_count
+        `SELECT avg_price, stddev_price, avg_trade_size, stddev_trade_size, trade_count
          FROM market_volatility_1h
          WHERE market_id = $1
          ORDER BY bucket DESC
@@ -150,8 +155,8 @@ export class TimeSeriesDB {
         marketId,
         avgPrice: parseFloat(row.avg_price) || 0,
         stddevPrice: row.stddev_price !== null ? parseFloat(row.stddev_price) : 0,
-        avgTradeSize: 0,
-        stddevTradeSize: 0,
+        avgTradeSize: parseFloat(row.avg_trade_size) || 0,
+        stddevTradeSize: row.stddev_trade_size !== null ? parseFloat(row.stddev_trade_size) : 0,
         sampleCount: parseInt(row.trade_count, 10) || 0,
         lastUpdated: new Date(),
       };

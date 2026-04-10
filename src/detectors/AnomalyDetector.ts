@@ -235,7 +235,7 @@ export class AnomalyDetector {
       details: {
         description: `Whale activity detected via static threshold: ${liquidityPercent.toFixed(2)}% of liquidity`,
         metrics: {
-          liquidityPercent,
+          liquidityConsumedPercent: liquidityPercent,
           sizeUSDC: trade.sizeUSDC,
           orderBookLiquidity: trade.orderBookLiquidity,
           staticThresholdPercent,

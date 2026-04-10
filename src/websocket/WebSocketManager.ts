@@ -258,9 +258,7 @@ export class WebSocketManager {
     const marketCategory = this.marketCategories.get(conditionId);
 
     // Polymarket CLOB WS does not expose wallet addresses on the market channel.
-    // We use the asset_id as a deterministic placeholder so downstream validation passes.
-    // Real wallet profiling happens via Alchemy on the analyzer side.
-    const placeholder = `0x${'0'.repeat(40)}`;
+    // Addresses are omitted here; wallet profiling happens via Alchemy on the analyzer side.
 
     return {
       market_id: conditionId,
@@ -273,8 +271,6 @@ export class WebSocketManager {
       // This assumption holds for standard CLOB markets but may not apply to exotic contract types.
       size_usd: size * price,
       timestamp,
-      maker_address: placeholder,
-      taker_address: placeholder,
       order_book_depth: { bid_liquidity: 0, ask_liquidity: 0 },
       market_category: marketCategory,
     };

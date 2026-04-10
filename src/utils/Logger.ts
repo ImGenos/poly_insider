@@ -80,6 +80,9 @@ export class Logger {
     }
 
     this.fileStream = fs.createWriteStream(rotatedPath, { flags: 'a' });
+    this.fileStream.on('error', (err: NodeJS.ErrnoException) => {
+      process.stderr.write(`[Logger] File stream error (${err.code ?? err.message}): ${rotatedPath}\n`);
+    });
   }
 
   private rotateIfNeeded(): void {

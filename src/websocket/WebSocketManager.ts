@@ -1,5 +1,4 @@
 import WebSocket from 'ws';
-import * as https from 'https';
 import { RawTrade } from '../types/index';
 import { Logger } from '../utils/Logger';
 import { exponentialBackoff } from '../utils/helpers';
@@ -39,9 +38,9 @@ export class WebSocketManager {
   private readonly url: string;
   private readonly logger: Logger;
 
-  private tradeCallbacks: TradeCallback[] = [];
-  private errorCallbacks: ErrorCallback[] = [];
-  private reconnectCallbacks: ReconnectCallback[] = [];
+  private tradeCallback: TradeCallback | null = null;
+  private errorCallback: ErrorCallback | null = null;
+  private reconnectCallback: ReconnectCallback | null = null;
 
   // market conditionId → question title
   private marketNames = new Map<string, string>();
@@ -52,9 +51,9 @@ export class WebSocketManager {
   private tokenIds: string[] = [];
 
   private reconnectAttempt = 0;
-  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private connectionTimer: ReturnType<typeof setTimeout> | null = null;
   private pingTimer: ReturnType<typeof setInterval> | null = null;
+  private marketRefreshTimer: ReturnType<typeof setInterval> | null = null;
   private shouldReconnect = true;
 
   constructor(url: string, logger: Logger) {
@@ -64,9 +63,9 @@ export class WebSocketManager {
 
   // ─── Public API ────────────────────────────────────────────────────────────
 
-  onTrade(callback: TradeCallback): void { this.tradeCallbacks.push(callback); }
-  onError(callback: ErrorCallback): void { this.errorCallbacks.push(callback); }
-  onReconnect(callback: ReconnectCallback): void { this.reconnectCallbacks.push(callback); }
+  onTrade(callback: TradeCallback): void { this.tradeCallback = callback; }
+  onError(callback: ErrorCallback): void { this.errorCallback = callback; }
+  onReconnect(callback: ReconnectCallback): void { this.reconnectCallback = callback; }
 
   isConnected(): boolean {
     return this.ws !== null && this.ws.readyState === WebSocket.OPEN;
@@ -77,52 +76,75 @@ export class WebSocketManager {
     this.reconnectAttempt = 0;
     await this._fetchMarkets();
     await this._connect();
+    this._startMarketRefresh();
   }
 
   disconnect(): void {
     this.shouldReconnect = false;
     this._clearTimers();
     if (this.ws) { this.ws.close(); this.ws = null; }
+    this.tradeCallback = null;
+    this.errorCallback = null;
+    this.reconnectCallback = null;
     this.logger.info('WebSocketManager disconnected');
   }
 
   // ─── Market fetch ──────────────────────────────────────────────────────────
 
-  private _fetchMarkets(): Promise<void> {
-    return new Promise((resolve) => {
-      this.logger.info('Fetching active markets from Gamma API');
-      https.get(GAMMA_API, (res) => {
-        let body = '';
-        res.on('data', (chunk: Buffer) => { body += chunk.toString(); });
-        res.on('end', () => {
-          try {
-            const markets: GammaMarket[] = JSON.parse(body);
-            this.marketNames.clear();
-            this.tokenToMarket.clear();
-            this.tokenIds = [];
+  /** Fetches the market list and returns any token IDs not previously known. */
+  private async _fetchMarkets(): Promise<string[]> {
+    this.logger.info('Fetching active markets from Gamma API');
+    try {
+      const response = await fetch(GAMMA_API);
+      if (!response.ok) {
+        this.logger.warn('Gamma API fetch failed, continuing without market names', { status: response.status });
+        return [];
+      }
+      const markets: GammaMarket[] = await response.json();
+      const previousTokenIds = new Set(this.tokenIds);
 
-            for (const m of markets) {
-              if (!m.clobTokenIds?.length) continue;
-              this.marketNames.set(m.conditionId, m.question ?? m.conditionId);
-              // Derive category from tags array or top-level category field
-              const category = m.category ?? m.tags?.[0]?.slug ?? m.tags?.[0]?.label;
-              if (category) this.marketCategories.set(m.conditionId, category.toLowerCase());
-              for (const tid of m.clobTokenIds) {
-                this.tokenToMarket.set(tid, m.conditionId);
-                this.tokenIds.push(tid);
-              }
-            }
-            this.logger.info('Markets loaded', { count: this.marketNames.size, tokens: this.tokenIds.length });
-          } catch (err) {
-            this.logger.warn('Failed to parse Gamma API response, will retry on reconnect', { error: String(err) });
-          }
-          resolve();
-        });
-      }).on('error', (err) => {
-        this.logger.warn('Gamma API fetch failed, continuing without market names', { error: err.message });
-        resolve();
-      });
-    });
+      this.marketNames.clear();
+      this.tokenToMarket.clear();
+      this.tokenIds = [];
+
+      for (const m of markets) {
+        if (!m.clobTokenIds?.length) continue;
+        this.marketNames.set(m.conditionId, m.question ?? m.conditionId);
+        // Derive category from tags array or top-level category field
+        const category = m.category ?? m.tags?.[0]?.slug ?? m.tags?.[0]?.label;
+        if (category) this.marketCategories.set(m.conditionId, category.toLowerCase());
+        for (const tid of m.clobTokenIds) {
+          this.tokenToMarket.set(tid, m.conditionId);
+          this.tokenIds.push(tid);
+        }
+      }
+      this.logger.info('Markets loaded', { count: this.marketNames.size, tokens: this.tokenIds.length });
+
+      return this.tokenIds.filter(tid => !previousTokenIds.has(tid));
+    } catch (err) {
+      this.logger.warn('Gamma API fetch failed, continuing without market names', { error: String(err) });
+      return [];
+    }
+  }
+
+  // ─── Periodic market refresh ───────────────────────────────────────────────
+
+  private _startMarketRefresh(): void {
+    if (this.marketRefreshTimer !== null) return;
+    this.marketRefreshTimer = setInterval(async () => {
+      const newTokenIds = await this._fetchMarkets();
+      if (newTokenIds.length === 0) return;
+
+      const ws = this.ws;
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+
+      // Subscribe only to the newly discovered tokens
+      const tokens = newTokenIds.slice(0, MAX_TOTAL_TOKENS - (this.tokenIds.length - newTokenIds.length));
+      if (tokens.length === 0) return;
+
+      ws.send(JSON.stringify({ assets_ids: tokens, type: 'market' }));
+      this.logger.info('Market refresh: subscribed to new tokens', { newTokenCount: tokens.length });
+    }, 6 * 60 * 60 * 1000); // every 6 hours
   }
 
   // ─── Connection ────────────────────────────────────────────────────────────
@@ -130,7 +152,14 @@ export class WebSocketManager {
   private async _connect(): Promise<void> {
     this.logger.info('WebSocketManager connecting', { url: this.url, attempt: this.reconnectAttempt });
 
-    const ws = new WebSocket(this.url);
+    let ws: WebSocket;
+    try {
+      ws = new WebSocket(this.url);
+    } catch (err) {
+      this.logger.error('WebSocket constructor threw', err instanceof Error ? err : new Error(String(err)));
+      if (this.shouldReconnect) this._scheduleReconnect();
+      return;
+    }
     this.ws = ws;
 
     this.connectionTimer = setTimeout(() => {
@@ -144,7 +173,11 @@ export class WebSocketManager {
       this._clearConnectionTimer();
       this.reconnectAttempt = 0;
       this.logger.info('WebSocket connected');
-      this._subscribe(ws);
+      try {
+        this._subscribe(ws);
+      } catch (err) {
+        this.logger.error('WebSocket _subscribe threw', err instanceof Error ? err : new Error(String(err)));
+      }
       this._startPing(ws);
     });
 
@@ -154,7 +187,7 @@ export class WebSocketManager {
 
     ws.on('error', (err: Error) => {
       this.logger.error('WebSocket error', err);
-      for (const cb of this.errorCallbacks) cb(err);
+      this.errorCallback?.(err);
     });
 
     ws.on('close', () => {
@@ -237,7 +270,7 @@ export class WebSocketManager {
       });
       const trade = this._parseLastTradePrice(e as unknown as LastTradePriceEvent);
       if (trade) {
-        for (const cb of this.tradeCallbacks) cb(trade);
+        this.tradeCallback?.(trade);
       }
     }
     // book (no event_type), price_change, best_bid_ask, new_market, market_resolved — ignored
@@ -279,23 +312,27 @@ export class WebSocketManager {
   // ─── Reconnect ─────────────────────────────────────────────────────────────
 
   private _scheduleReconnect(): void {
-    for (const cb of this.reconnectCallbacks) cb();
-    this.reconnectTimer = setTimeout(async () => {
-      this.reconnectAttempt++;
-      this.logger.info('WebSocket reconnecting', { attempt: this.reconnectAttempt });
-      await exponentialBackoff(this.reconnectAttempt, MAX_RECONNECT_DELAY);
-      // Refresh market list on reconnect
-      await this._fetchMarkets();
-      await this._connect();
-    }, 0);
+    this.reconnectCallback?.();
+    (async () => {
+      try {
+        await exponentialBackoff(this.reconnectAttempt, MAX_RECONNECT_DELAY);
+        this.reconnectAttempt++;
+        this.logger.info('WebSocket reconnecting', { attempt: this.reconnectAttempt });
+        // Refresh market list on reconnect
+        await this._fetchMarkets();
+        await this._connect();
+      } catch (err) {
+        this.logger.error('WebSocket reconnect failed', err instanceof Error ? err : new Error(String(err)));
+      }
+    })();
   }
 
   private _clearTimers(): void {
     this._clearConnectionTimer();
     this._stopPing();
-    if (this.reconnectTimer !== null) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
+    if (this.marketRefreshTimer !== null) {
+      clearInterval(this.marketRefreshTimer);
+      this.marketRefreshTimer = null;
     }
   }
 

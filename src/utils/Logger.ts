@@ -49,6 +49,7 @@ export class Logger {
   private readonly logLevel: LogLevel;
   private readonly logFilePath: string | undefined;
   private currentDateSuffix: string;
+  private nextRotateAt: number;
   private fileStream: fs.WriteStream | null = null;
   private secretValues: string[];
 
@@ -56,11 +57,18 @@ export class Logger {
     this.logLevel = logLevel;
     this.logFilePath = logFilePath;
     this.currentDateSuffix = getDateSuffix();
+    this.nextRotateAt = Logger.nextMidnight();
     this.secretValues = buildSecretValues();
 
     if (this.logFilePath) {
       this.openFileStream();
     }
+  }
+
+  private static nextMidnight(): number {
+    const d = new Date();
+    d.setHours(24, 0, 0, 0);
+    return d.getTime();
   }
 
   private openFileStream(): void {
@@ -86,11 +94,10 @@ export class Logger {
   }
 
   private rotateIfNeeded(): void {
-    const today = getDateSuffix();
-    if (today !== this.currentDateSuffix) {
-      this.currentDateSuffix = today;
-      this.openFileStream();
-    }
+    if (Date.now() < this.nextRotateAt) return;
+    this.currentDateSuffix = getDateSuffix();
+    this.nextRotateAt = Logger.nextMidnight();
+    this.openFileStream();
   }
 
   private shouldLog(level: LogLevel): boolean {

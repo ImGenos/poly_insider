@@ -16,7 +16,8 @@ function formatSize(sizeUSDC: number): string {
 }
 
 function polygonScanLink(address: string): string {
-  return `[${escapeMarkdown(address)}](${POLYGONSCAN_BASE}/${address})`;
+  const short = `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return `[${escapeMarkdown(short)}](${POLYGONSCAN_BASE}/${address})`;
 }
 
 function polymarketLink(marketId: string, marketName: string): string {
@@ -25,7 +26,9 @@ function polymarketLink(marketId: string, marketName: string): string {
 
 function truncate(text: string): string {
   if (text.length <= MAX_MESSAGE_LENGTH) return text;
-  return text.slice(0, MAX_MESSAGE_LENGTH - 3) + '...';
+  const boundary = text.lastIndexOf('\n', MAX_MESSAGE_LENGTH - 4);
+  const cutAt = boundary > 0 ? boundary : MAX_MESSAGE_LENGTH - 4;
+  return text.slice(0, cutAt) + '\n...';
 }
 
 export class AlertFormatter {
@@ -48,7 +51,7 @@ export class AlertFormatter {
 
     return {
       text: truncate(text),
-      parse_mode: 'Markdown',
+      parse_mode: 'MarkdownV2',
       disable_web_page_preview: false,
     };
   }
@@ -113,7 +116,7 @@ export class AlertFormatter {
   formatInsiderAlert(anomaly: Anomaly, trade: FilteredTrade): string {
     const emoji = severityEmoji(anomaly.severity);
     const metrics = anomaly.details.metrics as Record<string, unknown>;
-    const walletAge = metrics.walletAgeHours as number | undefined;
+    const walletAge = metrics.ageHours as number | undefined;
     const txCount = metrics.transactionCount as number | undefined;
     const riskScore = metrics.riskScore as number | undefined;
 
@@ -178,7 +181,7 @@ export class AlertFormatter {
   formatClusterMessage(anomaly: ClusterAnomaly): TelegramMessage {
     return {
       text: truncate(this.formatClusterAlert(anomaly)),
-      parse_mode: 'Markdown',
+      parse_mode: 'MarkdownV2',
       disable_web_page_preview: false,
     };
   }

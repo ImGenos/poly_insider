@@ -10,9 +10,14 @@ export function calculateZScore(value: number, mean: number, stddev: number): nu
 /**
  * Delay execution using exponential backoff.
  * Delay = min(2^attempt * 1000, maxDelay) ms.
+ *
+ * The attempt value is capped at 20 before computing the power to prevent
+ * Math.pow(2, attempt) from producing astronomically large intermediate values.
+ * 2^20 * 1000ms ≈ 17 minutes, which already exceeds any realistic maxDelay.
  */
 export function exponentialBackoff(attempt: number, maxDelay: number): Promise<void> {
-  const delay = Math.min(Math.pow(2, attempt) * 1000, maxDelay);
+  const cappedAttempt = Math.min(attempt, 20);
+  const delay = Math.min(Math.pow(2, cappedAttempt) * 1000, maxDelay);
   return sleep(delay);
 }
 

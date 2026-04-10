@@ -27,14 +27,33 @@ const TIMESCALEDB_UNAVAILABLE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
 
 // ─── Stream field deserialization ─────────────────────────────────────────────
 
-function deserializeStreamFields(fields: Record<string, string>): RawTrade {
+function deserializeStreamFields(fields: Record<string, string>): RawTrade | null {
+  const price = Number(fields['price'] ?? NaN);
+  const sizeUsd = Number(fields['size_usd'] ?? NaN);
+  const side = fields['side'];
+
+  // Validate price: must be finite and in [0, 1]
+  if (!Number.isFinite(price) || price < 0 || price > 1) {
+    return null;
+  }
+
+  // Validate size_usd: must be positive and finite
+  if (!Number.isFinite(sizeUsd) || sizeUsd <= 0) {
+    return null;
+  }
+
+  // Validate side: must be exactly 'YES' or 'NO'
+  if (side !== 'YES' && side !== 'NO') {
+    return null;
+  }
+
   return {
     market_id: fields['market_id'] ?? '',
     market_name: fields['market_name'] ?? '',
-    side: (fields['side'] as 'YES' | 'NO') ?? 'YES',
-    price: Number(fields['price'] ?? 0),
+    side: side as 'YES' | 'NO',
+    price,
     size: Number(fields['size'] ?? 0),
-    size_usd: Number(fields['size_usd'] ?? 0),
+    size_usd: sizeUsd,
     timestamp: Number(fields['timestamp'] ?? 0),
     // Addresses are optional — absent when the ingestor source did not expose them.
     maker_address: fields['maker_address'] !== undefined ? fields['maker_address'] : undefined,
@@ -43,22 +62,23 @@ function deserializeStreamFields(fields: Record<string, string>): RawTrade {
       bid_liquidity: Number(fields['bid_liquidity'] ?? 0),
       ask_liquidity: Number(fields['ask_liquidity'] ?? 0),
     },
+    market_category: fields['market_category'] || undefined,
   };
 }
 
 // ─── AnalyzerService ──────────────────────────────────────────────────────────
 
 export class AnalyzerService {
-  private readonly config: ConfigManager;
-  private readonly logger: Logger;
-  private readonly redisCache: RedisCache;
-  private readonly timeSeriesDB: TimeSeriesDB;
-  private readonly tradeFilter: TradeFilter;
-  private readonly blockchainAnalyzer: BlockchainAnalyzer;
-  private readonly anomalyDetector: AnomalyDetector;
-  private readonly clusterDetector: ClusterDetector;
+  private config: ConfigManager | null;
+  private logger: Logger;
+  private redisCache: RedisCache | null = null;
+  private timeSeriesDB: TimeSeriesDB | null = null;
+  private tradeFilter: TradeFilter | null = null;
+  private blockchainAnalyzer: BlockchainAnalyzer | null = null;
+  private anomalyDetector: AnomalyDetector | null = null;
+  private clusterDetector: ClusterDetector | null = null;
   private readonly alertFormatter: AlertFormatter;
-  private readonly telegramNotifier: TelegramNotifier;
+  private telegramNotifier: TelegramNotifier | null = null;
 
   private running = false;
   private depthCheckTimer: ReturnType<typeof setInterval> | null = null;
@@ -67,6 +87,10 @@ export class AnalyzerService {
 
   /** Sliding window of booleans: true = malformed, false = ok (last 100 messages) */
   private malformedWindow: boolean[] = [];
+  /** Timestamp of the last malformed-rate alert, for 5-minute cooldown */
+  private lastMalformedAlertAt: number = 0;
+  /** Timestamp of the last stream-depth alert, for 10-minute cooldown */
+  private lastDepthAlertAt: number = 0;
 
   /** Consecutive Alchemy failure counter (resets on success) */
   private alchemyConsecutiveFails = 0;
@@ -76,19 +100,38 @@ export class AnalyzerService {
   private lastSuccessfulDbWrite: number = Date.now();
   private timescaleDbAlertSent = false;
 
-  constructor() {
-    this.config = new ConfigManager();
-    this.logger = new Logger(this.config.getLogLevel(), this.config.getLogFilePath());
+  /**
+   * @param config Pre-constructed ConfigManager. When omitted, a new one is
+   *   created inside start() so that env vars are only required at runtime,
+   *   not at construction time — making the service unit-testable without a
+   *   full environment.
+   */
+  constructor(config?: ConfigManager) {
+    this.config = config ?? null;
+    // Temporary info-level logger until config is available in start()
+    this.logger = new Logger('info', undefined);
+    this.alertFormatter = new AlertFormatter();
+  }
 
-    const thresholds = this.config.getThresholds();
+  // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
-    this.redisCache = new RedisCache(this.config.getRedisUrl(), this.logger);
-    this.timeSeriesDB = new TimeSeriesDB(this.config.getTimescaleDbUrl(), this.logger);
+  async start(): Promise<void> {
+    // Build config and all dependent services here if not injected
+    if (!this.config) {
+      this.config = new ConfigManager();
+    }
+    const config = this.config;
+
+    this.logger = new Logger(config.getLogLevel(), config.getLogFilePath());
+    const thresholds = config.getThresholds();
+
+    this.redisCache = new RedisCache(config.getRedisUrl(), this.logger);
+    this.timeSeriesDB = new TimeSeriesDB(config.getTimescaleDbUrl(), this.logger);
     this.tradeFilter = new TradeFilter(thresholds.minTradeSizeUSDC);
     this.blockchainAnalyzer = new BlockchainAnalyzer(
-      this.config.getAlchemyApiKey(),
-      this.config.getMoralisApiKey() ?? '',
-      this.config.getKnownExchangeWallets(),
+      config.getAlchemyApiKey(),
+      config.getMoralisApiKey() ?? '',
+      config.getKnownExchangeWallets(),
       this.logger,
     );
     this.anomalyDetector = new AnomalyDetector(
@@ -104,23 +147,19 @@ export class AnalyzerService {
       this.redisCache,
       this.blockchainAnalyzer,
       this.logger,
-      this.config.getClusterDedupTtl(),
+      config.getClusterDedupTtl(),
     );
-    this.alertFormatter = new AlertFormatter();
-    this.telegramNotifier = new TelegramNotifier(this.config.getTelegramConfig(), this.logger);
-  }
+    this.telegramNotifier = new TelegramNotifier(config.getTelegramConfig(), this.logger);
 
-  // ─── Lifecycle ─────────────────────────────────────────────────────────────
-
-  async start(): Promise<void> {
     this.logger.info('AnalyzerService starting');
 
     // Connect dependencies
-    await this.redisCache.connect();
-    await this.timeSeriesDB.connect();
+    await this.redisCache!.connect();
+    await this.redisCache!.createConsumerGroup(STREAM_KEY, CONSUMER_GROUP);
+    await this.timeSeriesDB!.connect();
 
     // Req 11.4: test Telegram connection; exit with code 1 on failure
-    const telegramOk = await this.telegramNotifier.testConnection();
+    const telegramOk = await this.telegramNotifier!.testConnection();
     if (!telegramOk) {
       this.logger.error('AnalyzerService: Telegram connection test failed, exiting');
       process.exit(1);
@@ -151,8 +190,8 @@ export class AnalyzerService {
       this.depthCheckTimer = null;
     }
 
-    await this.redisCache.disconnect();
-    await this.timeSeriesDB.disconnect();
+    await this.redisCache?.disconnect();
+    await this.timeSeriesDB?.disconnect();
     this.logger.info('AnalyzerService stopped');
   }
 
@@ -161,16 +200,20 @@ export class AnalyzerService {
   private startDepthMonitor(): void {
     this.depthCheckTimer = setInterval(async () => {
       try {
-        const depth = await this.redisCache.getStreamDepth(STREAM_KEY);
+        const depth = await this.redisCache!.getStreamDepth(STREAM_KEY);
 
         if (depth > STREAM_DEPTH_ALERT_THRESHOLD) {
-          // Req 12.7: send Telegram alert
+          // Req 12.7: send Telegram alert, throttled to once per 10 minutes
           this.logger.warn('Stream depth critically high, sending Telegram alert', { depth });
-          await this.telegramNotifier.sendAlert({
-            text: `⚠️ Stream backlog critical: ${depth.toLocaleString()} messages pending. Consider horizontal scaling.`,
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-          });
+          const now = Date.now();
+          if (now - this.lastDepthAlertAt > 10 * 60 * 1000) {
+            this.lastDepthAlertAt = now;
+            await this.telegramNotifier!.sendAlert({
+              text: `⚠️ Stream backlog critical: ${depth.toLocaleString()} messages pending. Consider horizontal scaling.`,
+              parse_mode: 'MarkdownV2',
+              disable_web_page_preview: true,
+            });
+          }
         } else if (depth > STREAM_DEPTH_WARN_THRESHOLD) {
           // Req 12.6: log warning
           this.logger.warn('Stream depth exceeds warning threshold', { depth });
@@ -191,7 +234,7 @@ export class AnalyzerService {
 
       try {
         // Req 12.2: XREADGROUP COUNT 10 BLOCK 100
-        messages = await this.redisCache.readFromStream(
+        messages = await this.redisCache!.readFromStream(
           STREAM_KEY,
           CONSUMER_GROUP,
           CONSUMER_NAME,
@@ -217,21 +260,16 @@ export class AnalyzerService {
 
     try {
       // Deserialize stream fields → RawTrade
-      let rawTrade: RawTrade;
-      try {
-        rawTrade = deserializeStreamFields(fields);
-      } catch (err) {
-        this.logger.warn('AnalyzerService: failed to deserialize stream message', {
-          id,
-          error: String(err),
-        });
+      const rawTrade = deserializeStreamFields(fields);
+      if (rawTrade === null) {
+        this.logger.warn('AnalyzerService: malformed stream message with invalid fields', { id });
         this.trackMalformed(true);
         await this.ackMessage(id);
         return;
       }
 
       // Apply TradeFilter (Req 2.2)
-      const filteredTrade = this.tradeFilter.filter(rawTrade);
+      const filteredTrade = this.tradeFilter!.filter(rawTrade);
       if (filteredTrade === null) {
         // Req 2.2, 12.3: filtered out — XACK and continue
         this.trackMalformed(false);
@@ -250,24 +288,24 @@ export class AnalyzerService {
       // Handle cluster anomaly alert (Req 9.1, 9.2, 9.3)
       if (clusterAnomaly !== null) {
         const msg = this.alertFormatter.formatClusterMessage(clusterAnomaly);
-        await this.telegramNotifier.sendAlert(msg);
+        await this.telegramNotifier!.sendAlert(msg);
       }
 
       // Handle anomaly alerts (Req 9.1, 9.2, 9.3)
       for (const anomaly of anomalies) {
-        const alreadySent = await this.redisCache.hasAlertBeenSent(
+        const alreadySent = await this.redisCache!.hasAlertBeenSent(
           anomaly.type,
           filteredTrade.marketId,
           filteredTrade.walletAddress,
         );
         if (!alreadySent) {
           const msg = this.alertFormatter.format(anomaly, filteredTrade);
-          await this.telegramNotifier.sendAlert(msg);
-          await this.redisCache.recordSentAlert(
+          await this.telegramNotifier!.sendAlert(msg);
+          await this.redisCache!.recordSentAlert(
             anomaly.type,
             filteredTrade.marketId,
             filteredTrade.walletAddress,
-            this.config.getAlertDedupTtl(),
+            this.config!.getAlertDedupTtl(),
           );
         }
       }
@@ -287,7 +325,7 @@ export class AnalyzerService {
 
   private async ackMessage(id: string): Promise<void> {
     try {
-      await this.redisCache.acknowledgeMessage(STREAM_KEY, CONSUMER_GROUP, id);
+      await this.redisCache!.acknowledgeMessage(STREAM_KEY, CONSUMER_GROUP, id);
     } catch (err) {
       this.logger.warn('AnalyzerService: failed to XACK message', { id, error: String(err) });
     }
@@ -295,10 +333,10 @@ export class AnalyzerService {
 
   private async runAnomalyDetector(filteredTrade: Parameters<AnomalyDetector['analyze']>[0]) {
     try {
-      const anomalies = await this.anomalyDetector.analyze(filteredTrade);
+      const anomalies = await this.anomalyDetector!.analyze(filteredTrade);
       // Req 16.6: only reset the consecutive-fail counter when Alchemy actually
       // succeeded — not when analyze() silently fell back to Moralis/static.
-      if (this.blockchainAnalyzer.lastCallUsedFallback) {
+      if (this.blockchainAnalyzer!.lastCallUsedFallback) {
         this.alchemyConsecutiveFails++;
       } else {
         this.alchemyConsecutiveFails = 0;
@@ -312,9 +350,9 @@ export class AnalyzerService {
         this.logger.warn('Alchemy API degraded — insider detection using fallback', {
           consecutiveFails: this.alchemyConsecutiveFails,
         });
-        await this.telegramNotifier.sendAlert({
+        await this.telegramNotifier!.sendAlert({
           text: 'Alchemy API degraded — insider detection using fallback',
-          parse_mode: 'Markdown',
+          parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
       }
@@ -331,9 +369,9 @@ export class AnalyzerService {
         this.logger.warn('Alchemy API degraded — insider detection using fallback', {
           consecutiveFails: this.alchemyConsecutiveFails,
         });
-        await this.telegramNotifier.sendAlert({
+        await this.telegramNotifier!.sendAlert({
           text: 'Alchemy API degraded — insider detection using fallback',
-          parse_mode: 'Markdown',
+          parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
       }
@@ -343,7 +381,7 @@ export class AnalyzerService {
 
   private async runClusterDetector(filteredTrade: Parameters<ClusterDetector['detectCluster']>[0]) {
     try {
-      return await this.clusterDetector.detectCluster(filteredTrade);
+      return await this.clusterDetector!.detectCluster(filteredTrade);
     } catch (err) {
       this.logger.warn('AnalyzerService: clusterDetector.detectCluster threw', { error: String(err) });
       return null;
@@ -352,7 +390,7 @@ export class AnalyzerService {
 
   private async appendPricePoint(marketId: string, price: number, sizeUsd: number, timestamp: Date): Promise<void> {
     try {
-      await this.timeSeriesDB.appendPricePoint(marketId, price, sizeUsd, timestamp);
+      await this.timeSeriesDB!.appendPricePoint(marketId, price, sizeUsd, timestamp);
       // Req 16.7: reset unavailability tracking on success
       this.lastSuccessfulDbWrite = Date.now();
       this.timescaleDbAlertSent = false;
@@ -365,9 +403,9 @@ export class AnalyzerService {
         this.logger.warn('TimescaleDB unavailable — Z-score detection using static thresholds', {
           unavailableMs,
         });
-        await this.telegramNotifier.sendAlert({
+        await this.telegramNotifier!.sendAlert({
           text: 'TimescaleDB unavailable — Z-score detection using static thresholds',
-          parse_mode: 'Markdown',
+          parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
       }
@@ -387,19 +425,21 @@ export class AnalyzerService {
       const errorRate = errorCount / this.malformedWindow.length;
 
       if (errorRate > MALFORMED_ERROR_RATE_THRESHOLD) {
-        this.logger.warn('Malformed trade error rate exceeds 10%', {
-          errorRate: (errorRate * 100).toFixed(1) + '%',
-          errorCount,
-          windowSize: this.malformedWindow.length,
-        });
-        // Send Telegram notification (Req 16.5) — fire-and-forget
-        this.telegramNotifier.sendAlert({
-          text: `⚠️ Malformed trade error rate: ${(errorRate * 100).toFixed(1)}% of last ${MALFORMED_WINDOW_SIZE} messages`,
-          parse_mode: 'Markdown',
-          disable_web_page_preview: true,
-        }).catch(() => {/* non-blocking */});
-        // Reset window to avoid repeated alerts on every message
-        this.malformedWindow = [];
+        const now = Date.now();
+        if (now - this.lastMalformedAlertAt >= 5 * 60 * 1000) {
+          this.lastMalformedAlertAt = now;
+          this.logger.warn('Malformed trade error rate exceeds 10%', {
+            errorRate: (errorRate * 100).toFixed(1) + '%',
+            errorCount,
+            windowSize: this.malformedWindow.length,
+          });
+          // Send Telegram notification (Req 16.5) — fire-and-forget
+          this.telegramNotifier!.sendAlert({
+            text: `⚠️ Malformed trade error rate: ${(errorRate * 100).toFixed(1)}% of last ${MALFORMED_WINDOW_SIZE} messages`,
+            parse_mode: 'MarkdownV2',
+            disable_web_page_preview: true,
+          }).catch(() => {/* non-blocking */});
+        }
       }
     }
   }

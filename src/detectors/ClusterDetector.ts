@@ -50,21 +50,21 @@ export class ClusterDetector {
     // Step 1: persist trade (Req 6.1) — do NOT mutate input (Req 6.9)
     await this.recordTrade(trade);
 
-    // Step 2: query distinct wallets within the window (Req 6.2)
-    const since = new Date(Date.now() - clusterWindowMinutes * 60 * 1000);
-    const rawWallets = await this.timeSeriesDB.getClusterWallets(trade.marketId, trade.side, since);
-
-    // Step 3: deduplicate wallet list (Req 6.8)
-    const distinctWallets = [...new Set(rawWallets)];
-
-    // Step 4: return null if below threshold (Req 6.3)
-    if (distinctWallets.length < clusterMinWallets) {
+    // Step 2: deduplication — skip all DB queries if alert already sent for this market/side (Req 6.7)
+    const alreadySent = await this.redisCache.hasClusterAlertBeenSent(trade.marketId, trade.side);
+    if (alreadySent) {
       return null;
     }
 
-    // Step 5: deduplication — skip if alert already sent for this market/side (Req 6.7)
-    const alreadySent = await this.redisCache.hasClusterAlertBeenSent(trade.marketId, trade.side);
-    if (alreadySent) {
+    // Step 3: query distinct wallets within the window (Req 6.2)
+    const since = new Date(Date.now() - clusterWindowMinutes * 60 * 1000);
+    const rawWallets = await this.timeSeriesDB.getClusterWallets(trade.marketId, trade.side, since);
+
+    // Step 4: deduplicate wallet list (Req 6.8)
+    const distinctWallets = [...new Set(rawWallets)];
+
+    // Step 5: return null if below threshold (Req 6.3)
+    if (distinctWallets.length < clusterMinWallets) {
       return null;
     }
 

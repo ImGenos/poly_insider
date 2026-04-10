@@ -19,8 +19,10 @@ export class TradeFilter {
       return null;
     }
 
-    // side=YES means buy (taker is the buyer), side=NO means sell (maker is the seller)
-    const walletAddress = trade.side === 'YES' ? trade.taker_address : trade.maker_address;
+    // Always use the taker address: the taker is the aggressive order placer who
+    // crossed the spread and initiated the trade, making them the more meaningful
+    // signal for anomaly detection regardless of side.
+    const walletAddress = trade.taker_address;
 
     return {
       marketId: trade.market_id,

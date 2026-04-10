@@ -2,6 +2,15 @@ import { Pool, PoolClient } from 'pg';
 import { FilteredTrade, MarketVolatility, PricePoint } from '../types/index';
 import { Logger } from '../utils/Logger';
 
+const SCHEMA_VERSION = 1;
+
+const SCHEMA_VERSION_SQL = `
+CREATE TABLE IF NOT EXISTS schema_version (
+  version     INTEGER NOT NULL,
+  applied_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+`;
+
 const INIT_SQL = `
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
@@ -49,7 +58,16 @@ export class TimeSeriesDB {
   }
 
   async connect(): Promise<void> {
-    this.pool = new Pool({ connectionString: this.connectionString });
+    // Pool sizing: the analyzer runs one consumer loop (sequential per message) plus
+    // a depth-monitor interval. Each message may issue up to ~4 concurrent DB queries
+    // (getMarketVolatility, getPriceHistory, recordClusterTrade, getClusterWallets/Size).
+    // max: 10 gives comfortable headroom for bursts without exhausting DB connections.
+    this.pool = new Pool({
+      connectionString: this.connectionString,
+      max: 10,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 5_000,
+    });
     await this.initSchema();
   }
 
@@ -65,6 +83,23 @@ export class TimeSeriesDB {
     let client: PoolClient | null = null;
     try {
       client = await this.pool.connect();
+
+      // Ensure schema_version table exists (always safe to run)
+      await client.query(SCHEMA_VERSION_SQL);
+
+      // Check recorded version
+      const versionResult = await client.query<{ version: number }>(
+        'SELECT version FROM schema_version ORDER BY applied_at DESC LIMIT 1',
+      );
+      const currentVersion = versionResult.rows[0]?.version ?? 0;
+
+      if (currentVersion >= SCHEMA_VERSION) {
+        this.logger.info('TimeSeriesDB schema up to date', { version: currentVersion });
+        return;
+      }
+
+      this.logger.info('TimeSeriesDB applying schema', { from: currentVersion, to: SCHEMA_VERSION });
+
       // Run each statement individually — CREATE EXTENSION and SELECT
       // create_hypertable cannot run inside a multi-statement transaction block
       // together with DDL on some TimescaleDB versions, so we execute them
@@ -77,9 +112,16 @@ export class TimeSeriesDB {
       for (const stmt of statements) {
         await client.query(stmt);
       }
-      this.logger.info('TimeSeriesDB schema initialised');
+
+      await client.query(
+        'INSERT INTO schema_version (version) VALUES ($1)',
+        [SCHEMA_VERSION],
+      );
+
+      this.logger.info('TimeSeriesDB schema initialised', { version: SCHEMA_VERSION });
     } catch (err) {
       this.logger.error('TimeSeriesDB initSchema failed', err);
+      throw err;
     } finally {
       client?.release();
     }
@@ -119,7 +161,7 @@ export class TimeSeriesDB {
 
   // ─── Market Volatility ────────────────────────────────────────────────────
 
-  async getMarketVolatility(marketId: string, _windowMinutes: number): Promise<MarketVolatility> {
+  async getMarketVolatility(marketId: string): Promise<MarketVolatility> {
     const zero: MarketVolatility = {
       marketId,
       avgPrice: 0,

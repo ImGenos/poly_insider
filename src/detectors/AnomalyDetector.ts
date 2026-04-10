@@ -5,7 +5,6 @@ import {
   Severity,
   MarketVolatility,
   PricePoint,
-  WalletProfile,
   DetectionThresholds,
 } from '../types/index';
 import { TimeSeriesDB } from '../db/TimeSeriesDB';
@@ -77,8 +76,9 @@ export class AnomalyDetector {
       // Req 3.3: HIGH if Z-score > 2× threshold, MEDIUM otherwise
       const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
 
-      // Req 3.5: confidence formula
-      const confidence = Math.min(zScore / (zScoreThreshold * 2), 1.0);
+      // Req 3.5: confidence formula — sigmoid centred on threshold for meaningful
+      // differentiation between e.g. 3σ and 6σ events
+      const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
 
       return {
         type: 'RAPID_ODDS_SHIFT',
@@ -164,8 +164,9 @@ export class AnomalyDetector {
       // Req 4.4: HIGH if Z-score > 2× threshold
       const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
 
-      // Req 4.6: confidence formula
-      const confidence = Math.min(zScore / (zScoreThreshold * 2), 1.0);
+      // Req 4.6: confidence formula — sigmoid centred on threshold for meaningful
+      // differentiation between e.g. 3σ and 6σ events
+      const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
 
       return {
         type: 'WHALE_ACTIVITY',
@@ -254,15 +255,11 @@ export class AnomalyDetector {
       nicheMarketCategories,
     } = this.thresholds;
 
-    // Req 5.1: check Redis cache before any Alchemy call
-    let walletProfile: WalletProfile | null = await this.redisCache.getWalletProfile(trade.walletAddress);
-
-    if (!walletProfile) {
-      walletProfile = await this.blockchainAnalyzer.analyzeWalletProfile(
-        trade.walletAddress,
-        this.redisCache,
-      );
-    }
+    // Req 5.1: analyzeWalletProfile checks Redis cache before any Alchemy call
+    const walletProfile = await this.blockchainAnalyzer.analyzeWalletProfile(
+      trade.walletAddress,
+      this.redisCache,
+    );
 
     const ageHours = walletProfile.ageHours;
     const transactionCount = walletProfile.transactionCount;
@@ -335,10 +332,7 @@ export class AnomalyDetector {
     let priceHistory: PricePoint[] = [];
 
     try {
-      volatility = await this.timeSeriesDB.getMarketVolatility(
-        trade.marketId,
-        rapidOddsShiftWindowMinutes,
-      );
+      volatility = await this.timeSeriesDB.getMarketVolatility(trade.marketId);
     } catch (err) {
       this.logger.warn('AnomalyDetector: getMarketVolatility failed, using static thresholds', {
         marketId: trade.marketId,

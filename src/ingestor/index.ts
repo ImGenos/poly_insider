@@ -14,11 +14,6 @@ const MAX_BACKOFF_MS = 60_000;
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
-const ZERO_ADDRESS = `0x${'0'.repeat(40)}`;
-function isZeroAddress(address: string): boolean {
-  return address.toLowerCase() === ZERO_ADDRESS;
-}
-
 function validateRawTrade(t: RawTrade): boolean {
   if (!t.market_id || typeof t.market_id !== 'string' || t.market_id.trim() === '') return false;
   if (t.side !== 'YES' && t.side !== 'NO') return false;
@@ -26,9 +21,10 @@ function validateRawTrade(t: RawTrade): boolean {
   if (typeof t.size_usd !== 'number' || t.size_usd <= 0) return false;
   if (typeof t.timestamp !== 'number' || !isFinite(t.timestamp) || t.timestamp <= 0) return false;
   // Addresses are optional (not exposed by the Polymarket CLOB WS market channel).
-  // When present, they must be valid non-zero Ethereum addresses.
-  if (t.maker_address !== undefined && (!isValidEthAddress(t.maker_address) || isZeroAddress(t.maker_address))) return false;
-  if (t.taker_address !== undefined && (!isValidEthAddress(t.taker_address) || isZeroAddress(t.taker_address))) return false;
+  // When present, they must be valid Ethereum addresses. Zero-address placeholders
+  // from upstream sources are accepted here; downstream consumers can filter them.
+  if (t.maker_address !== undefined && !isValidEthAddress(t.maker_address)) return false;
+  if (t.taker_address !== undefined && !isValidEthAddress(t.taker_address)) return false;
   return true;
 }
 
@@ -45,6 +41,7 @@ function normalize(trade: RawTrade): NormalizedTrade {
     taker_address: trade.taker_address,
     bid_liquidity: trade.order_book_depth?.bid_liquidity ?? 0,
     ask_liquidity: trade.order_book_depth?.ask_liquidity ?? 0,
+    market_category: trade.market_category,
   };
 }
 
@@ -59,6 +56,7 @@ function toStreamFields(trade: NormalizedTrade): Record<string, string> {
     timestamp: String(trade.timestamp),
     bid_liquidity: String(trade.bid_liquidity),
     ask_liquidity: String(trade.ask_liquidity),
+    market_category: trade.market_category ?? '',
   };
   // Only include addresses when they are known
   if (trade.maker_address !== undefined) fields['maker_address'] = trade.maker_address;
@@ -72,41 +70,76 @@ async function pushWithRetry(
   redisCache: RedisCache,
   fields: Record<string, string>,
   logger: Logger,
-): Promise<void> {
+  maxAttempts = 10,
+): Promise<boolean> {
   let attempt = 0;
-  while (true) {
+  while (attempt < maxAttempts) {
     try {
       await redisCache.pushToStream(STREAM_KEY, fields);
-      return;
+      return true;
     } catch (err) {
       logger.error('Failed to push trade to Redis stream, retrying with backoff', err, { attempt });
       await exponentialBackoff(attempt, MAX_BACKOFF_MS);
       attempt++;
     }
   }
+  logger.warn('pushWithRetry: max attempts reached, dropping trade', {
+    maxAttempts,
+    market_id: fields['market_id'],
+    side: fields['side'],
+  });
+  return false;
 }
 
 // ─── IngestorService ──────────────────────────────────────────────────────────
 
 export class IngestorService {
-  private readonly config: ConfigManager;
-  private readonly logger: Logger;
-  private readonly redisCache: RedisCache;
-  private readonly wsManager: WebSocketManager;
+  private config: ConfigManager | null;
+  private logger: Logger;
+  private redisCache: RedisCache | null = null;
+  private wsManager: WebSocketManager | null = null;
 
-  constructor() {
-    this.config = new ConfigManager();
-    this.logger = new Logger(this.config.getLogLevel(), this.config.getLogFilePath());
-    this.redisCache = new RedisCache(this.config.getRedisUrl(), this.logger);
-    this.wsManager = new WebSocketManager(this.config.getPolymarketWsUrl(), this.logger);
+  private droppedTrades = 0;
+  private droppedLogTimer: ReturnType<typeof setInterval> | null = null;
+
+  /**
+   * @param config Pre-constructed ConfigManager. When omitted, a new one is
+   *   created inside start() so that env vars are only required at runtime,
+   *   not at construction time — making the service unit-testable without a
+   *   full environment.
+   */
+  constructor(config?: ConfigManager) {
+    this.config = config ?? null;
+    // Use a temporary info-level logger until config is available in start()
+    this.logger = new Logger('info', undefined);
   }
 
   async start(): Promise<void> {
+    // Build config (and dependent services) here if not injected
+    if (!this.config) {
+      this.config = new ConfigManager();
+    }
+    const config = this.config;
+
+    this.logger = new Logger(config.getLogLevel(), config.getLogFilePath());
+    this.redisCache = new RedisCache(config.getRedisUrl(), this.logger);
+    this.wsManager = new WebSocketManager(config.getPolymarketWsUrl(), this.logger);
+
     this.logger.info('IngestorService starting');
 
     // Connect Redis and create consumer group (idempotent)
     await this.redisCache.connect();
     await this.redisCache.createConsumerGroup(STREAM_KEY, CONSUMER_GROUP);
+
+    // Periodically log the dropped-trade counter so operators can see the drop rate
+    this.droppedLogTimer = setInterval(() => {
+      if (this.droppedTrades > 0) {
+        this.logger.warn('IngestorService: trades dropped due to Redis unavailability', {
+          droppedSinceLastLog: this.droppedTrades,
+        });
+        this.droppedTrades = 0;
+      }
+    }, 60_000);
 
     // Register trade callback
     this.wsManager.onTrade((rawTrade: RawTrade) => {
@@ -129,7 +162,9 @@ export class IngestorService {
 
       // Fire-and-forget: never await downstream per Requirements 1.4
       // Retry with exponential backoff on Redis unavailability per Requirements 16.3
-      pushWithRetry(this.redisCache, fields, this.logger).catch((err) => {
+      pushWithRetry(this.redisCache!, fields, this.logger).then((pushed) => {
+        if (!pushed) this.droppedTrades++;
+      }).catch((err) => {
         this.logger.error('Unexpected error in pushWithRetry', err);
       });
     });
@@ -155,13 +190,17 @@ export class IngestorService {
 
   async stop(): Promise<void> {
     this.logger.info('IngestorService stopping');
-    this.wsManager.disconnect();
-    await this.redisCache.disconnect();
+    if (this.droppedLogTimer !== null) {
+      clearInterval(this.droppedLogTimer);
+      this.droppedLogTimer = null;
+    }
+    this.wsManager?.disconnect();
+    await this.redisCache?.disconnect();
     this.logger.info('IngestorService stopped');
   }
 
   async getStreamDepth(): Promise<number> {
-    return this.redisCache.getStreamDepth(STREAM_KEY);
+    return this.redisCache?.getStreamDepth(STREAM_KEY) ?? 0;
   }
 }
 

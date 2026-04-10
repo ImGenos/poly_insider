@@ -28,11 +28,10 @@ export class ConfigManager {
     const missing = required.filter((key) => !this.env[key]?.trim());
 
     if (missing.length > 0) {
-      console.error(
+      throw new Error(
         `[ConfigManager] Missing required environment variables: ${missing.join(', ')}. ` +
           'Please set them in your .env file or environment before starting the bot.'
       );
-      process.exit(1);
     }
   }
 
@@ -69,10 +68,9 @@ export class ConfigManager {
     }
 
     if (errors.length > 0) {
-      console.error(
+      throw new Error(
         `[ConfigManager] Invalid numeric threshold configuration:\n  - ${errors.join('\n  - ')}`
       );
-      process.exit(1);
     }
   }
 

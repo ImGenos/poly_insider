@@ -40,11 +40,11 @@ export class TelegramNotifier {
     // Append this send to the tail of the queue. The previous tail resolves
     // only after its RATE_LIMIT_INTERVAL_MS delay, so ordering is guaranteed.
     const result = this.sendQueue.then(() => this._doSend(message));
-    // Advance the queue tail; swallow errors so a failed send doesn't break
-    // subsequent ones.
+    // Advance the queue tail; only sleep after a successful send so the rate
+    // limit interval is not consumed by failed attempts.
     this.sendQueue = result.then(
       () => sleep(RATE_LIMIT_INTERVAL_MS),
-      () => sleep(RATE_LIMIT_INTERVAL_MS),
+      () => Promise.resolve(),
     );
     return result;
   }
@@ -122,10 +122,7 @@ export class TelegramNotifier {
       error: error instanceof Error ? error.message : String(error),
     });
 
-    try {
-      fs.appendFileSync(FAILED_ALERTS_LOG, entry + '\n', 'utf8');
-    } catch (fsErr) {
-      this.logger.error('Failed to write to failed-alerts.log', fsErr);
-    }
+    fs.promises.appendFile(FAILED_ALERTS_LOG, entry + '\n', 'utf8')
+      .catch(fsErr => this.logger.error('Failed to write to failed-alerts.log', fsErr));
   }
 }

@@ -840,3 +840,9 @@
 2026-04-10 17:07:15 +02:00: [2026-04-10T15:07:15.069Z] [WARN ] WebSocket malformed JSON {"data":"INVALID OPERATION"}
 2026-04-10 17:07:15 +02:00: [2026-04-10T15:07:15.130Z] [WARN ] WebSocket malformed JSON {"data":"INVALID OPERATION"}
 2026-04-10 17:07:15 +02:00: [2026-04-10T15:07:15.183Z] [WARN ] WebSocket malformed JSON {"data":"INVALID OPERATION"}
+2026-04-10 21:34:33 +02:00: [2026-04-10T19:34:33.604Z] [WARN ] WebSocket closed
+2026-04-10 21:34:55 +02:00: [2026-04-10T19:34:55.649Z] [WARN ] Gamma API fetch failed, continuing without market names {"error":"connect ETIMEDOUT 212.27.38.252:443"}
+2026-04-10 21:35:16 +02:00: [2026-04-10T19:35:16.663Z] [ERROR] WebSocket error {"error":{"message":"connect ETIMEDOUT 212.27.38.252:443","stack":"Error: connect ETIMEDOUT 212.27.38.252:443\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)"}}
+2026-04-10 21:35:16 +02:00: [2026-04-10T19:35:16.663Z] [ERROR] WebSocket error {"error":{"message":"connect ETIMEDOUT 212.27.38.252:443","stack":"Error: connect ETIMEDOUT 212.27.38.252:443\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)"}}
+2026-04-10 21:35:16 +02:00: [2026-04-10T19:35:16.664Z] [WARN ] WebSocket closed
+2026-04-10 21:52:13 +02:00: [2026-04-10T19:52:13.222Z] [WARN ] WebSocket closed

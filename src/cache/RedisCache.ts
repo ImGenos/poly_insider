@@ -8,8 +8,10 @@ export class RedisCache {
   private readonly logger: Logger;
   isConnected = false;
 
-  // In-memory fallback for alert dedup when Redis is unavailable
-  private readonly dedupMap = new Map<string, boolean>();
+  // In-memory fallback for alert dedup when Redis is unavailable.
+  // Stores expiry timestamps (ms). Capped at DEDUP_MAP_MAX_SIZE entries.
+  private readonly dedupMap = new Map<string, number>();
+  private static readonly DEDUP_MAP_MAX_SIZE = 10_000;
 
   constructor(url: string, logger: Logger) {
     this.url = url;
@@ -62,6 +64,9 @@ export class RedisCache {
     const flatFields: string[] = [];
     for (const [k, v] of Object.entries(fields)) {
       flatFields.push(k, v);
+    }
+    if (flatFields.length % 2 !== 0) {
+      throw new Error('Stream fields must be an even number of key-value pairs — got ' + flatFields.length);
     }
     // XADD streamKey MAXLEN ~ 100000 * field value ...
     const id = await this.client.xadd(streamKey, 'MAXLEN', '~', '100000', '*', ...flatFields);
@@ -174,7 +179,7 @@ export class RedisCache {
   async hasAlertBeenSent(type: string, marketId: string, walletAddress: string): Promise<boolean> {
     const key = `alert:${type}:${marketId}:${walletAddress}`;
     if (!this.client || !this.isConnected) {
-      return this.dedupMap.get(key) === true;
+      return this.dedupHas(key);
     }
     const val = await this.client.get(key);
     return val !== null;
@@ -188,7 +193,7 @@ export class RedisCache {
   ): Promise<void> {
     const key = `alert:${type}:${marketId}:${walletAddress}`;
     if (!this.client || !this.isConnected) {
-      this.dedupMap.set(key, true);
+      this.dedupSet(key, ttlSeconds);
       return;
     }
     await this.client.setex(key, ttlSeconds, '1');
@@ -199,7 +204,7 @@ export class RedisCache {
   async hasClusterAlertBeenSent(marketId: string, side: string): Promise<boolean> {
     const key = `cluster:${marketId}:${side}`;
     if (!this.client || !this.isConnected) {
-      return this.dedupMap.get(key) === true;
+      return this.dedupHas(key);
     }
     const val = await this.client.get(key);
     return val !== null;
@@ -208,9 +213,31 @@ export class RedisCache {
   async recordClusterAlert(marketId: string, side: string, ttlSeconds: number): Promise<void> {
     const key = `cluster:${marketId}:${side}`;
     if (!this.client || !this.isConnected) {
-      this.dedupMap.set(key, true);
+      this.dedupSet(key, ttlSeconds);
       return;
     }
     await this.client.setex(key, ttlSeconds, '1');
+  }
+
+  // ─── In-memory dedup helpers ──────────────────────────────────────────────
+
+  private dedupHas(key: string): boolean {
+    const expiry = this.dedupMap.get(key);
+    if (expiry === undefined) return false;
+    if (Date.now() > expiry) {
+      // Lazy eviction of expired entry
+      this.dedupMap.delete(key);
+      return false;
+    }
+    return true;
+  }
+
+  private dedupSet(key: string, ttlSeconds: number): void {
+    // Evict oldest entry on overflow to bound memory use
+    if (!this.dedupMap.has(key) && this.dedupMap.size >= RedisCache.DEDUP_MAP_MAX_SIZE) {
+      const oldestKey = this.dedupMap.keys().next().value;
+      if (oldestKey !== undefined) this.dedupMap.delete(oldestKey);
+    }
+    this.dedupMap.set(key, Date.now() + ttlSeconds * 1000);
   }
 }

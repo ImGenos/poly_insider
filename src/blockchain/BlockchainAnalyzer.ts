@@ -291,28 +291,29 @@ export class BlockchainAnalyzer {
   async analyzeClusterFunding(wallets: string[]): Promise<FundingAnalysis> {
     const validWallets = wallets.filter(w => isValidEthAddress(w));
 
-    const funders = new Map<string, string>();        // wallet -> funder
-    const sharedFunders = new Map<string, string[]>(); // funder (lowercase) -> wallets[]
+    const funders: Record<string, string> = {};         // wallet -> funder
+    const sharedFunders: Record<string, string[]> = {}; // funder (lowercase) -> wallets[]
 
-    // For each wallet, get funder (Req 7.3)
-    for (const wallet of validWallets) {
+    // Fetch all funders concurrently (Req 7.3)
+    await Promise.all(validWallets.map(async (wallet) => {
       try {
         const funder = await this.getWalletFunder(wallet);
         if (funder) {
-          funders.set(wallet, funder);
+          funders[wallet] = funder;
           const funderLower = funder.toLowerCase();
-          const existing = sharedFunders.get(funderLower) ?? [];
-          existing.push(wallet);
-          sharedFunders.set(funderLower, existing);
+          if (!sharedFunders[funderLower]) {
+            sharedFunders[funderLower] = [];
+          }
+          sharedFunders[funderLower].push(wallet);
         }
       } catch {
         // Skip individual wallet on failure (Req 7.5) — non-blocking
         this.logger.warn('BlockchainAnalyzer: skipping wallet in cluster funding analysis', { wallet });
       }
-    }
+    }));
 
     // If all lookups failed, return safe default (Req 7.6)
-    if (funders.size === 0) {
+    if (Object.keys(funders).length === 0) {
       return {
         wallets,
         funders,
@@ -330,7 +331,7 @@ export class BlockchainAnalyzer {
     let isKnownExchange = false;
     let exchangeName: string | null = null;
 
-    for (const [funderAddr, fundedWallets] of sharedFunders.entries()) {
+    for (const [funderAddr, fundedWallets] of Object.entries(sharedFunders)) {
       if (fundedWallets.length >= 2) {
         if (this.knownExchangeWallets.has(funderAddr)) {
           // Known exchange: set exchange info but do NOT set hasCommonNonExchangeFunder (Req 7.4)

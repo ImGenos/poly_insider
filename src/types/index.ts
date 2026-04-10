@@ -34,6 +34,7 @@ export interface NormalizedTrade {
   taker_address?: string;
   bid_liquidity: number;
   ask_liquidity: number;
+  market_category?: string;
 }
 
 /** Trade that passed the minimum size threshold (camelCase) */
@@ -109,8 +110,8 @@ export interface MarketVolatility {
 
 export interface FundingAnalysis {
   wallets: string[];
-  funders: Map<string, string>;
-  sharedFunders: Map<string, string[]>;
+  funders: Record<string, string>;
+  sharedFunders: Record<string, string[]>;
   hasCommonNonExchangeFunder: boolean;
   commonFunderAddress: string | null;
   isKnownExchange: boolean;
@@ -156,7 +157,7 @@ export interface ConnectionOptions {
 
 export interface TelegramMessage {
   text: string;
-  parse_mode: 'Markdown' | 'HTML';
+  parse_mode: 'MarkdownV2' | 'HTML';
   disable_web_page_preview: boolean;
 }
 

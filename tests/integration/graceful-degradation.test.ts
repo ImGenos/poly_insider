@@ -220,8 +220,8 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
     const timeSeriesDB = {
       getMarketVolatility: jest.fn().mockResolvedValue({
         marketId: 'market-degrade',
-        avgPriceChange: 0.5,
-        stddevPriceChange: 0.05,
+        avgPrice: 0.5,
+        stddevPrice: 0.05,
         avgTradeSize: 5000,
         stddevTradeSize: 1000,
         sampleCount: 5, // below min → static path
@@ -272,8 +272,8 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
     const timeSeriesDB = {
       getMarketVolatility: jest.fn().mockResolvedValue({
         marketId: 'market-degrade',
-        avgPriceChange: 0.5,
-        stddevPriceChange: 0.0,
+        avgPrice: 0.5,
+        stddevPrice: 0.0,
         avgTradeSize: 5000,
         stddevTradeSize: 0,
         sampleCount: 5,
@@ -314,8 +314,8 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
     const timeSeriesDB = {
       getMarketVolatility: jest.fn().mockResolvedValue({
         marketId: 'market-degrade',
-        avgPriceChange: 0.5,
-        stddevPriceChange: 0.0,
+        avgPrice: 0.5,
+        stddevPrice: 0.0,
         avgTradeSize: 5000,
         stddevTradeSize: 0,
         sampleCount: 5,
@@ -412,8 +412,8 @@ describe('Graceful degradation — in-memory dedup fallback (Req 16.4)', () => {
     const timeSeriesDB = {
       getMarketVolatility: jest.fn().mockResolvedValue({
         marketId: 'market-degrade',
-        avgPriceChange: 0.5,
-        stddevPriceChange: 0.0,
+        avgPrice: 0.5,
+        stddevPrice: 0.0,
         avgTradeSize: 5000,
         stddevTradeSize: 0,
         sampleCount: 5,

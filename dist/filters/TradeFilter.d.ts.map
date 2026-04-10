@@ -1,1 +1,0 @@
-{"version":3,"file":"TradeFilter.d.ts","sourceRoot":"","sources":["../../src/filters/TradeFilter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,aAAa,EAAE,MAAM,gBAAgB,CAAC;AAIzD,qBAAa,WAAW;IACtB,OAAO,CAAC,gBAAgB,CAAS;gBAErB,gBAAgB,GAAE,MAAoC;IAIlE;;;;OAIG;IACH,MAAM,CAAC,KAAK,EAAE,QAAQ,GAAG,aAAa,GAAG,IAAI;IAqB7C,cAAc,CAAC,QAAQ,EAAE,MAAM,GAAG,IAAI;IAItC,cAAc,IAAI,MAAM;CAGzB"}

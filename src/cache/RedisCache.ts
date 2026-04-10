@@ -65,7 +65,8 @@ export class RedisCache {
     }
     // XADD streamKey MAXLEN ~ 100000 * field value ...
     const id = await this.client.xadd(streamKey, 'MAXLEN', '~', '100000', '*', ...flatFields);
-    return id as string;
+    if (!id) throw new Error(`xadd returned null for stream "${streamKey}"`);
+    return id;
   }
 
   async createConsumerGroup(streamKey: string, group: string): Promise<void> {

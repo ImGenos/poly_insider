@@ -64,10 +64,11 @@ export class AnomalyDetector {
     if (
       volatility !== null &&
       volatility.sampleCount >= zScoreMinSamples &&
-      volatility.stddevPriceChange > 0
+      volatility.stddevPrice > 0
     ) {
-      const priceChange = Math.abs(trade.price - volatility.avgPriceChange);
-      const zScore = calculateZScore(trade.price, volatility.avgPriceChange, volatility.stddevPriceChange);
+      // priceChange: deviation of current price from the historical mean
+      const priceChange = Math.abs(trade.price - volatility.avgPrice);
+      const zScore = calculateZScore(trade.price, volatility.avgPrice, volatility.stddevPrice);
 
       if (zScore < zScoreThreshold) {
         return null;
@@ -88,8 +89,8 @@ export class AnomalyDetector {
           metrics: {
             zScore,
             priceChange,
-            avgPriceChange: volatility.avgPriceChange,
-            stddevPriceChange: volatility.stddevPriceChange,
+            avgPrice: volatility.avgPrice,
+            stddevPrice: volatility.stddevPrice,
             currentPrice: trade.price,
             sampleCount: volatility.sampleCount,
           },
@@ -141,10 +142,10 @@ export class AnomalyDetector {
     staticThresholdPercent: number,
     zScoreThreshold: number,
   ): Anomaly | null {
-    // Req 4.3: return null if orderBookLiquidity is zero or unavailable
-    if (!trade.orderBookLiquidity || trade.orderBookLiquidity === 0) {
-      return null;
-    }
+    // Req 4.3: return null if orderBookLiquidity is zero or unavailable — but
+    // the Polymarket WS never provides order book depth, so we skip the liquidity
+    // ratio path entirely when depth is unavailable and rely on Z-score or size threshold.
+    const hasLiquidityData = trade.orderBookLiquidity > 0;
 
     const zScoreMinSamples = this.thresholds.zScoreMinSamples;
 
@@ -185,6 +186,30 @@ export class AnomalyDetector {
     }
 
     // Req 4.2: static liquidity percentage fallback
+    if (!hasLiquidityData) {
+      // No order book depth from WS — fall back to absolute size threshold
+      // Use insiderMinTradeSize as a proxy for "whale-sized" trade
+      const whaleMinSize = this.thresholds.insiderMinTradeSize;
+      if (trade.sizeUSDC < whaleMinSize) {
+        return null;
+      }
+      const severity: Severity = trade.sizeUSDC > whaleMinSize * 5 ? 'HIGH' : 'MEDIUM';
+      const confidence = Math.min(trade.sizeUSDC / (whaleMinSize * 10), 1.0);
+      return {
+        type: 'WHALE_ACTIVITY',
+        severity,
+        confidence,
+        details: {
+          description: `Whale activity detected via size threshold: ${trade.sizeUSDC.toFixed(0)} USDC (no order book data)`,
+          metrics: {
+            sizeUSDC: trade.sizeUSDC,
+            whaleMinSize,
+          },
+        },
+        detectedAt: new Date(),
+      };
+    }
+
     const liquidityPercent = (trade.sizeUSDC / trade.orderBookLiquidity) * 100;
 
     if (liquidityPercent < staticThresholdPercent) {

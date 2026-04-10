@@ -124,8 +124,8 @@ function makeWalletProfile(overrides: Partial<WalletProfile> = {}): WalletProfil
 function makeVolatility(overrides: Partial<MarketVolatility> = {}): MarketVolatility {
   return {
     marketId: 'market-e2e',
-    avgPriceChange: 0.5,
-    stddevPriceChange: 0.05,
+    avgPrice: 0.5,
+    stddevPrice: 0.05,
     avgTradeSize: 5000,
     stddevTradeSize: 1000,
     sampleCount: 50,
@@ -320,7 +320,7 @@ describe('E2E: rapid odds shift detection (Req 3.1)', () => {
 
     // avg=0.5, stddev=0.05, sampleCount=50 → Z-score of 0.9 = 8.0 >> 3.0
     components.timeSeriesDB.getMarketVolatility.mockResolvedValue(
-      makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 }),
+      makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 }),
     );
     components.timeSeriesDB.getPriceHistory.mockResolvedValue([
       { marketId: 'market-e2e', price: 0.5, timestamp: new Date(Date.now() - 60000) },

@@ -14,14 +14,19 @@ const MAX_BACKOFF_MS = 60_000;
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
+const ZERO_ADDRESS = `0x${'0'.repeat(40)}`;
+function isZeroAddress(address: string): boolean {
+  return address.toLowerCase() === ZERO_ADDRESS;
+}
+
 function validateRawTrade(t: RawTrade): boolean {
   if (!t.market_id || typeof t.market_id !== 'string' || t.market_id.trim() === '') return false;
   if (t.side !== 'YES' && t.side !== 'NO') return false;
   if (typeof t.price !== 'number' || t.price < 0 || t.price > 1) return false;
   if (typeof t.size_usd !== 'number' || t.size_usd <= 0) return false;
   if (typeof t.timestamp !== 'number' || !isFinite(t.timestamp) || t.timestamp <= 0) return false;
-  if (!isValidEthAddress(t.maker_address)) return false;
-  if (!isValidEthAddress(t.taker_address)) return false;
+  if (!isValidEthAddress(t.maker_address) || isZeroAddress(t.maker_address)) return false;
+  if (!isValidEthAddress(t.taker_address) || isZeroAddress(t.taker_address)) return false;
   return true;
 }
 

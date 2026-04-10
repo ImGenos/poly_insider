@@ -10,6 +10,7 @@ export class ClusterDetector {
   private readonly redisCache: RedisCache;
   private readonly blockchainAnalyzer: BlockchainAnalyzer;
   private readonly logger: Logger;
+  private readonly clusterDedupTtlSeconds: number;
 
   constructor(
     thresholds: DetectionThresholds,
@@ -17,12 +18,14 @@ export class ClusterDetector {
     redisCache: RedisCache,
     blockchainAnalyzer: BlockchainAnalyzer,
     logger: Logger,
+    clusterDedupTtlSeconds = 600,
   ) {
     this.thresholds = thresholds;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
     this.blockchainAnalyzer = blockchainAnalyzer;
     this.logger = logger;
+    this.clusterDedupTtlSeconds = clusterDedupTtlSeconds;
   }
 
   // ─── recordTrade ──────────────────────────────────────────────────────────
@@ -119,6 +122,9 @@ export class ClusterDetector {
       severity,
       ...(attachedFundingAnalysis !== undefined ? { fundingAnalysis: attachedFundingAnalysis } : {}),
     };
+
+    // Step 10: record dedup key so callers don't need to (Req 6.7)
+    await this.redisCache.recordClusterAlert(trade.marketId, trade.side, this.clusterDedupTtlSeconds);
 
     return anomaly;
   }

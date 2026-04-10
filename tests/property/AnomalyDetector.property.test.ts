@@ -141,8 +141,8 @@ function makePriceHistory(firstPrice: number): PricePoint[] {
 function makeVolatility(overrides: Partial<MarketVolatility> = {}): MarketVolatility {
   return {
     marketId: 'market-1',
-    avgPriceChange: 0.5,
-    stddevPriceChange: 0.05,
+    avgPrice: 0.5,
+    stddevPrice: 0.05,
     avgTradeSize: 5000,
     stddevTradeSize: 1000,
     sampleCount: 50,
@@ -176,8 +176,8 @@ describe('Property 7: Confidence Score Bounds', () => {
           const { detector } = makeDetector();
           const trade = makeTrade({ price });
           const volatility = makeVolatility({
-            avgPriceChange: mean,
-            stddevPriceChange: stddev,
+            avgPrice: mean,
+            stddevPrice: stddev,
             sampleCount,
           });
           const priceHistory = makePriceHistory(mean > 0 ? mean * 0.5 : 0.1);
@@ -295,8 +295,8 @@ describe('Property 15: Z-Score Baseline Accuracy', () => {
           const { detector } = makeDetector();
           const trade = makeTrade({ price });
           const volatility = makeVolatility({
-            avgPriceChange: mean,
-            stddevPriceChange: stddev,
+            avgPrice: mean,
+            stddevPrice: stddev,
             sampleCount,
           });
           const priceHistory = makePriceHistory(0.5);
@@ -383,7 +383,7 @@ describe('Property 16: Z-Score Static Fallback', () => {
           const trade = makeTrade({ price });
           const volatility = makeVolatility({
             sampleCount,
-            stddevPriceChange: 0.05, // non-zero, but sampleCount is too low
+            stddevPrice: 0.05, // non-zero, but sampleCount is too low
           });
           const priceHistory = makePriceHistory(firstPrice);
 
@@ -500,8 +500,8 @@ describe('Property 2: Anomaly Detection Completeness', () => {
           // Static path: volatility with insufficient samples
           const volatility: MarketVolatility = {
             marketId: 'market-completeness',
-            avgPriceChange: 0.5,
-            stddevPriceChange: 0.05,
+            avgPrice: 0.5,
+            stddevPrice: 0.05,
             avgTradeSize: 5000,
             stddevTradeSize: 1000,
             sampleCount: 5, // below ZSCORE_MIN_SAMPLES → static path

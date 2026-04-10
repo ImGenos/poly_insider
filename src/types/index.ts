@@ -14,6 +14,7 @@ export interface RawTrade {
     bid_liquidity: number;
     ask_liquidity: number;
   };
+  market_category?: string;
 }
 
 /** Canonical message pushed to trades:stream (snake_case) */
@@ -90,8 +91,10 @@ export interface WalletProfile {
 
 export interface MarketVolatility {
   marketId: string;
-  avgPriceChange: number;
-  stddevPriceChange: number;
+  /** Mean of absolute price values over the window (AVG(price) from TimescaleDB) */
+  avgPrice: number;
+  /** Standard deviation of absolute price values over the window (STDDEV(price)) */
+  stddevPrice: number;
   avgTradeSize: number;
   stddevTradeSize: number;
   sampleCount: number;

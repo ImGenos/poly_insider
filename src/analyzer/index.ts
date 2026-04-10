@@ -103,6 +103,7 @@ export class AnalyzerService {
       this.redisCache,
       this.blockchainAnalyzer,
       this.logger,
+      this.config.getClusterDedupTtl(),
     );
     this.alertFormatter = new AlertFormatter();
     this.telegramNotifier = new TelegramNotifier(this.config.getTelegramConfig(), this.logger);
@@ -247,19 +248,8 @@ export class AnalyzerService {
 
       // Handle cluster anomaly alert (Req 9.1, 9.2, 9.3)
       if (clusterAnomaly !== null) {
-        const alreadySent = await this.redisCache.hasClusterAlertBeenSent(
-          clusterAnomaly.marketId,
-          clusterAnomaly.side,
-        );
-        if (!alreadySent) {
-          const msg = this.alertFormatter.formatClusterMessage(clusterAnomaly);
-          await this.telegramNotifier.sendAlert(msg);
-          await this.redisCache.recordClusterAlert(
-            clusterAnomaly.marketId,
-            clusterAnomaly.side,
-            this.config.getClusterDedupTtl(),
-          );
-        }
+        const msg = this.alertFormatter.formatClusterMessage(clusterAnomaly);
+        await this.telegramNotifier.sendAlert(msg);
       }
 
       // Handle anomaly alerts (Req 9.1, 9.2, 9.3)

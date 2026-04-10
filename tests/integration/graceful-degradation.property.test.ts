@@ -89,8 +89,8 @@ function makeDetectorWithAlwaysFailingAlchemy(errorMessage: string): AnomalyDete
   const timeSeriesDB = {
     getMarketVolatility: jest.fn().mockResolvedValue({
       marketId: 'market-prop9',
-      avgPriceChange: 0.5,
-      stddevPriceChange: 0.0, // zero stddev → static path
+      avgPrice: 0.5,
+      stddevPrice: 0.0, // zero stddev → static path
       avgTradeSize: 5000,
       stddevTradeSize: 0,
       sampleCount: 5, // below ZSCORE_MIN_SAMPLES → static path

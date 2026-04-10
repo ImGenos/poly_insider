@@ -119,8 +119,8 @@ export class TimeSeriesDB {
   async getMarketVolatility(marketId: string, _windowMinutes: number): Promise<MarketVolatility> {
     const zero: MarketVolatility = {
       marketId,
-      avgPriceChange: 0,
-      stddevPriceChange: 0,
+      avgPrice: 0,
+      stddevPrice: 0,
       avgTradeSize: 0,
       stddevTradeSize: 0,
       sampleCount: 0,
@@ -148,8 +148,8 @@ export class TimeSeriesDB {
       const row = result.rows[0];
       return {
         marketId,
-        avgPriceChange: parseFloat(row.avg_price) || 0,
-        stddevPriceChange: row.stddev_price !== null ? parseFloat(row.stddev_price) : 0,
+        avgPrice: parseFloat(row.avg_price) || 0,
+        stddevPrice: row.stddev_price !== null ? parseFloat(row.stddev_price) : 0,
         avgTradeSize: 0,
         stddevTradeSize: 0,
         sampleCount: parseInt(row.trade_count, 10) || 0,

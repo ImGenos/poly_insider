@@ -20,6 +20,8 @@ interface GammaMarket {
   conditionId: string;
   question: string;
   clobTokenIds: string[];
+  tags?: Array<{ label?: string; slug?: string }>;
+  category?: string;
 }
 
 interface LastTradePriceEvent {
@@ -43,6 +45,8 @@ export class WebSocketManager {
 
   // market conditionId → question title
   private marketNames = new Map<string, string>();
+  // market conditionId → category
+  private marketCategories = new Map<string, string>();
   // token assetId → conditionId
   private tokenToMarket = new Map<string, string>();
   private tokenIds: string[] = [];
@@ -100,6 +104,9 @@ export class WebSocketManager {
             for (const m of markets) {
               if (!m.clobTokenIds?.length) continue;
               this.marketNames.set(m.conditionId, m.question ?? m.conditionId);
+              // Derive category from tags array or top-level category field
+              const category = m.category ?? m.tags?.[0]?.slug ?? m.tags?.[0]?.label;
+              if (category) this.marketCategories.set(m.conditionId, category.toLowerCase());
               for (const tid of m.clobTokenIds) {
                 this.tokenToMarket.set(tid, m.conditionId);
                 this.tokenIds.push(tid);
@@ -248,6 +255,7 @@ export class WebSocketManager {
 
     const conditionId = this.tokenToMarket.get(e.asset_id) ?? e.market ?? e.asset_id;
     const marketName = this.marketNames.get(conditionId) ?? conditionId;
+    const marketCategory = this.marketCategories.get(conditionId);
 
     // Polymarket CLOB WS does not expose wallet addresses on the market channel.
     // We use the asset_id as a deterministic placeholder so downstream validation passes.
@@ -260,11 +268,15 @@ export class WebSocketManager {
       side: e.side === 'BUY' ? 'YES' : 'NO',
       price,
       size,
-      size_usd: size * price, // size is in shares; multiply by price to get USDC value
+      // size is the raw share quantity from the WS event (not guaranteed USDC).
+      // On Polymarket CLOB, price is in USDC/share, so size * price gives the USDC notional.
+      // This assumption holds for standard CLOB markets but may not apply to exotic contract types.
+      size_usd: size * price,
       timestamp,
       maker_address: placeholder,
       taker_address: placeholder,
       order_book_depth: { bid_liquidity: 0, ask_liquidity: 0 },
+      market_category: marketCategory,
     };
   }
 
@@ -273,9 +285,9 @@ export class WebSocketManager {
   private _scheduleReconnect(): void {
     for (const cb of this.reconnectCallbacks) cb();
     this.reconnectTimer = setTimeout(async () => {
+      this.reconnectAttempt++;
       this.logger.info('WebSocket reconnecting', { attempt: this.reconnectAttempt });
       await exponentialBackoff(this.reconnectAttempt, MAX_RECONNECT_DELAY);
-      this.reconnectAttempt++;
       // Refresh market list on reconnect
       await this._fetchMarkets();
       await this._connect();

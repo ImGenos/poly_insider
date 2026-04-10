@@ -143,8 +143,8 @@ describe('TimeSeriesDB — getMarketVolatility', () => {
     const result = await db.getMarketVolatility('market-1', 60);
 
     expect(result.marketId).toBe('market-1');
-    expect(result.avgPriceChange).toBeCloseTo(0.62);
-    expect(result.stddevPriceChange).toBeCloseTo(0.05);
+    expect(result.avgPrice).toBeCloseTo(0.62);
+    expect(result.stddevPrice).toBeCloseTo(0.05);
     expect(result.sampleCount).toBe(45);
   });
 
@@ -155,8 +155,8 @@ describe('TimeSeriesDB — getMarketVolatility', () => {
     const result = await db.getMarketVolatility('new-market', 60);
 
     expect(result.sampleCount).toBe(0);
-    expect(result.avgPriceChange).toBe(0);
-    expect(result.stddevPriceChange).toBe(0);
+    expect(result.avgPrice).toBe(0);
+    expect(result.stddevPrice).toBe(0);
   });
 
   it('treats null stddev_price as 0', async () => {
@@ -166,7 +166,7 @@ describe('TimeSeriesDB — getMarketVolatility', () => {
     });
 
     const result = await db.getMarketVolatility('market-1', 60);
-    expect(result.stddevPriceChange).toBe(0);
+    expect(result.stddevPrice).toBe(0);
   });
 
   it('returns zero baseline when DB unavailable', async () => {

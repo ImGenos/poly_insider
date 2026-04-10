@@ -112,8 +112,8 @@ function makeTrade(overrides: Partial<FilteredTrade> = {}): FilteredTrade {
 function makeVolatility(overrides: Partial<MarketVolatility> = {}): MarketVolatility {
   return {
     marketId: 'market-1',
-    avgPriceChange: 0.5,
-    stddevPriceChange: 0.05,
+    avgPrice: 0.5,
+    stddevPrice: 0.05,
     avgTradeSize: 5000,
     stddevTradeSize: 1000,
     sampleCount: 50,
@@ -163,7 +163,7 @@ describe('detectRapidOddsShift', () => {
       const { detector } = makeDetector();
       // avg=0.5, stddev=0.05 → Z-score of 0.9 = (0.9-0.5)/0.05 = 8.0 > 3.0
       const trade = makeTrade({ price: 0.9 });
-      const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+      const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
       const priceHistory = makePriceHistory();
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -177,7 +177,7 @@ describe('detectRapidOddsShift', () => {
       const { detector } = makeDetector();
       // avg=0.5, stddev=0.05 → Z-score of 0.51 = (0.51-0.5)/0.05 = 0.2 < 3.0
       const trade = makeTrade({ price: 0.51 });
-      const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+      const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
       const priceHistory = makePriceHistory();
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -189,7 +189,7 @@ describe('detectRapidOddsShift', () => {
       const { detector } = makeDetector();
       // Z-score = (0.9-0.5)/0.05 = 8.0 > 6.0 (2×3.0)
       const trade = makeTrade({ price: 0.9 });
-      const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+      const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
       const priceHistory = makePriceHistory();
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -201,7 +201,7 @@ describe('detectRapidOddsShift', () => {
       const { detector } = makeDetector();
       // Z-score = (0.67-0.5)/0.05 = 3.4 — between 3.0 and 6.0
       const trade = makeTrade({ price: 0.67 });
-      const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+      const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
       const priceHistory = makePriceHistory();
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -213,7 +213,7 @@ describe('detectRapidOddsShift', () => {
       const { detector } = makeDetector();
       // Z-score = (1.0-0.5)/0.05 = 10.0 → confidence = min(10/6, 1) = 1.0
       const trade = makeTrade({ price: 1.0 });
-      const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+      const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
       const priceHistory = makePriceHistory();
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -248,10 +248,10 @@ describe('detectRapidOddsShift', () => {
       expect(result!.type).toBe('RAPID_ODDS_SHIFT');
     });
 
-    it('uses static fallback when stddevPriceChange is 0', () => {
+    it('uses static fallback when stddevPrice is 0', () => {
       const { detector } = makeDetector();
       const trade = makeTrade({ price: 0.9 });
-      const volatility = makeVolatility({ stddevPriceChange: 0, sampleCount: 50 });
+      const volatility = makeVolatility({ stddevPrice: 0, sampleCount: 50 });
       const priceHistory = makePriceHistory(0.5);
 
       const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);
@@ -621,7 +621,7 @@ describe('confidence always in [0, 1]', () => {
   it('detectRapidOddsShift Z-score path: confidence in [0, 1]', () => {
     const { detector } = makeDetector();
     const trade = makeTrade({ price: 0.9 });
-    const volatility = makeVolatility({ avgPriceChange: 0.5, stddevPriceChange: 0.05, sampleCount: 50 });
+    const volatility = makeVolatility({ avgPrice: 0.5, stddevPrice: 0.05, sampleCount: 50 });
     const priceHistory = makePriceHistory();
 
     const result = detector.detectRapidOddsShift(trade, priceHistory, volatility, 15, 3.0);

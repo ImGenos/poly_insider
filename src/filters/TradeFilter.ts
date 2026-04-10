@@ -31,7 +31,7 @@ export class TradeFilter {
       timestamp: new Date(trade.timestamp),
       walletAddress,
       orderBookLiquidity: trade.order_book_depth.bid_liquidity + trade.order_book_depth.ask_liquidity,
-      // marketCategory is intentionally left undefined — caller can set it
+      marketCategory: trade.market_category,
     };
   }
 

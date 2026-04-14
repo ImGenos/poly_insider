@@ -10,6 +10,7 @@ import {
 import { TimeSeriesDB } from '../db/TimeSeriesDB';
 import { RedisCache } from '../cache/RedisCache';
 import { BlockchainAnalyzer } from '../blockchain/BlockchainAnalyzer';
+import { PolymarketAPI } from '../blockchain/PolymarketAPI';
 import { Logger } from '../utils/Logger';
 import { calculateZScore } from '../utils/helpers';
 
@@ -27,6 +28,7 @@ export class AnomalyDetector {
   private readonly timeSeriesDB: TimeSeriesDB;
   private readonly redisCache: RedisCache;
   private readonly blockchainAnalyzer: BlockchainAnalyzer;
+  private readonly polymarketAPI: PolymarketAPI;
   private readonly logger: Logger;
 
   constructor(
@@ -34,38 +36,80 @@ export class AnomalyDetector {
     timeSeriesDB: TimeSeriesDB,
     redisCache: RedisCache,
     blockchainAnalyzer: BlockchainAnalyzer,
+    polymarketAPI: PolymarketAPI,
     logger: Logger,
   ) {
     this.thresholds = thresholds;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
     this.blockchainAnalyzer = blockchainAnalyzer;
+    this.polymarketAPI = polymarketAPI;
     this.logger = logger;
   }
 
-  // ─── Task 11.1: detectRapidOddsShift ─────────────────────────────────────
+  // ─── Task 11.1: detectRapidOddsShift (Hybrid: Market-Level) ──────────────────
 
-  detectRapidOddsShift(
+  /**
+   * Detect rapid odds shifts using market-level data from Polymarket Gamma API
+   * Falls back to local price history if API unavailable
+   */
+  async detectRapidOddsShift(
     trade: FilteredTrade,
     priceHistory: PricePoint[],
     volatility: MarketVolatility | null,
     staticThresholdPercent: number,
     zScoreThreshold: number,
-  ): Anomaly | null {
-    // Req 3.6: return null if price history is empty
+  ): Promise<Anomaly | null> {
+    // Try to get real-time market data from Polymarket Gamma API first
+    const marketData = await this.polymarketAPI.getMarket(trade.marketId);
+    
+    if (marketData && marketData.lastPrice > 0) {
+      // Use Polymarket's own price data for more accurate market-level detection
+      const midPrice = (marketData.bestBid + marketData.bestAsk) / 2;
+      const priceDeviation = Math.abs(trade.price - midPrice);
+      const deviationPercent = (priceDeviation / midPrice) * 100;
+      
+      // Check if current trade price deviates significantly from market mid-price
+      if (deviationPercent >= staticThresholdPercent) {
+        const severity: Severity = deviationPercent > 25 ? 'HIGH' : 'MEDIUM';
+        const confidence = Math.min(deviationPercent / (staticThresholdPercent * 2), 1.0);
+        
+        return {
+          type: 'RAPID_ODDS_SHIFT',
+          severity,
+          confidence,
+          details: {
+            description: `Rapid odds shift detected via Polymarket API: ${deviationPercent.toFixed(2)}% deviation from market mid-price`,
+            metrics: {
+              tradePrice: trade.price,
+              marketMidPrice: midPrice,
+              bestBid: marketData.bestBid,
+              bestAsk: marketData.bestAsk,
+              deviationPercent,
+              volume24h: marketData.volume24h,
+              liquidity: marketData.liquidity,
+            },
+          },
+          detectedAt: new Date(),
+        };
+      }
+      
+      // No anomaly detected with market data
+      return null;
+    }
+
+    // Fallback to original local price history approach
     if (priceHistory.length === 0) {
       return null;
     }
 
     const zScoreMinSamples = this.thresholds.zScoreMinSamples;
 
-    // Req 3.1: use Z-score when sufficient samples and stddev > 0
     if (
       volatility !== null &&
       volatility.sampleCount >= zScoreMinSamples &&
       volatility.stddevPrice > 0
     ) {
-      // priceChange: deviation of current price from the historical mean
       const priceChange = Math.abs(trade.price - volatility.avgPrice);
       const zScore = calculateZScore(trade.price, volatility.avgPrice, volatility.stddevPrice);
 
@@ -73,11 +117,7 @@ export class AnomalyDetector {
         return null;
       }
 
-      // Req 3.3: HIGH if Z-score > 2× threshold, MEDIUM otherwise
       const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
-
-      // Req 3.5: confidence formula — sigmoid centred on threshold for meaningful
-      // differentiation between e.g. 3σ and 6σ events
       const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
 
       return {
@@ -85,7 +125,7 @@ export class AnomalyDetector {
         severity,
         confidence,
         details: {
-          description: `Rapid odds shift detected via Z-score: ${zScore.toFixed(2)}σ`,
+          description: `Rapid odds shift detected via Z-score (fallback): ${zScore.toFixed(2)}σ`,
           metrics: {
             zScore,
             priceChange,
@@ -99,7 +139,6 @@ export class AnomalyDetector {
       };
     }
 
-    // Req 3.2: static threshold fallback
     const firstPrice = priceHistory[0].price;
     if (firstPrice === 0) {
       return null;
@@ -111,10 +150,7 @@ export class AnomalyDetector {
       return null;
     }
 
-    // Req 3.4: HIGH if static change > 25%, MEDIUM otherwise
     const severity: Severity = staticChange > 25 ? 'HIGH' : 'MEDIUM';
-
-    // Proportional confidence for static path
     const confidence = Math.min(staticChange / (staticThresholdPercent * 2), 1.0);
 
     return {
@@ -122,7 +158,7 @@ export class AnomalyDetector {
       severity,
       confidence,
       details: {
-        description: `Rapid odds shift detected via static threshold: ${staticChange.toFixed(2)}%`,
+        description: `Rapid odds shift detected via static threshold (fallback): ${staticChange.toFixed(2)}%`,
         metrics: {
           priceChangePercent: staticChange,
           currentPrice: trade.price,
@@ -134,22 +170,73 @@ export class AnomalyDetector {
     };
   }
 
-  // ─── Task 11.2: detectWhaleActivity ──────────────────────────────────────
+  // ─── Task 11.2: detectWhaleActivity (Hybrid: Wallet-Level Behavioral) ────────
 
-  detectWhaleActivity(
+  /**
+   * Detect whale activity using wallet-level behavioral Z-score
+   * Compares current trade size to wallet's historical trading pattern
+   */
+  async detectWhaleActivity(
     trade: FilteredTrade,
     volatility: MarketVolatility | null,
     staticThresholdPercent: number,
     zScoreThreshold: number,
-  ): Anomaly | null {
-    // Req 4.3: return null if orderBookLiquidity is zero or unavailable — but
-    // the Polymarket WS never provides order book depth, so we skip the liquidity
-    // ratio path entirely when depth is unavailable and rely on Z-score or size threshold.
-    const hasLiquidityData = trade.orderBookLiquidity > 0;
+  ): Promise<Anomaly | null> {
+    // If wallet address is available, use behavioral Z-score approach
+    if (trade.walletAddress) {
+      try {
+        // Get wallet's trading history from Alchemy
+        const walletHistory = await this.blockchainAnalyzer.getWalletTradeHistory(
+          trade.walletAddress,
+          100 // Last 100 trades
+        );
 
+        // Behavioral Z-score: "Is this trade unusual for THIS wallet?"
+        if (walletHistory.tradeCount >= 5 && walletHistory.stddevTradeSize > 0) {
+          const behavioralZScore = calculateZScore(
+            trade.sizeUSDC,
+            walletHistory.avgTradeSize,
+            walletHistory.stddevTradeSize
+          );
+
+          if (behavioralZScore >= zScoreThreshold) {
+            const severity: Severity = behavioralZScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
+            const confidence = 1 / (1 + Math.exp(-(behavioralZScore - zScoreThreshold)));
+
+            return {
+              type: 'WHALE_ACTIVITY',
+              severity,
+              confidence,
+              details: {
+                description: `Whale activity detected via behavioral Z-score: ${behavioralZScore.toFixed(2)}σ - wallet trading ${(trade.sizeUSDC / walletHistory.avgTradeSize).toFixed(1)}x their average`,
+                metrics: {
+                  behavioralZScore,
+                  currentTradeSize: trade.sizeUSDC,
+                  walletAvgTradeSize: walletHistory.avgTradeSize,
+                  walletStddevTradeSize: walletHistory.stddevTradeSize,
+                  walletTradeCount: walletHistory.tradeCount,
+                  walletAddress: trade.walletAddress,
+                },
+              },
+              detectedAt: new Date(),
+            };
+          }
+
+          // No behavioral anomaly detected
+          return null;
+        }
+      } catch (err) {
+        this.logger.warn('AnomalyDetector: failed to get wallet trade history, falling back', {
+          walletAddress: trade.walletAddress,
+          error: String(err),
+        });
+      }
+    }
+
+    // Fallback to market-level Z-score or static thresholds
+    const hasLiquidityData = trade.orderBookLiquidity > 0;
     const zScoreMinSamples = this.thresholds.zScoreMinSamples;
 
-    // Req 4.1: use Z-score when sufficient samples and stddev > 0
     if (
       volatility !== null &&
       volatility.sampleCount >= zScoreMinSamples &&
@@ -161,11 +248,7 @@ export class AnomalyDetector {
         return null;
       }
 
-      // Req 4.4: HIGH if Z-score > 2× threshold
       const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
-
-      // Req 4.6: confidence formula — sigmoid centred on threshold for meaningful
-      // differentiation between e.g. 3σ and 6σ events
       const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
 
       return {
@@ -173,7 +256,7 @@ export class AnomalyDetector {
         severity,
         confidence,
         details: {
-          description: `Whale activity detected via Z-score: ${zScore.toFixed(2)}σ`,
+          description: `Whale activity detected via market Z-score (fallback): ${zScore.toFixed(2)}σ`,
           metrics: {
             zScore,
             sizeUSDC: trade.sizeUSDC,
@@ -186,10 +269,7 @@ export class AnomalyDetector {
       };
     }
 
-    // Req 4.2: static liquidity percentage fallback
     if (!hasLiquidityData) {
-      // No order book depth from WS — fall back to absolute size threshold
-      // Use insiderMinTradeSize as a proxy for "whale-sized" trade
       const whaleMinSize = this.thresholds.insiderMinTradeSize;
       if (trade.sizeUSDC < whaleMinSize) {
         return null;
@@ -201,7 +281,7 @@ export class AnomalyDetector {
         severity,
         confidence,
         details: {
-          description: `Whale activity detected via size threshold: ${trade.sizeUSDC.toFixed(0)} USDC (no order book data)`,
+          description: `Whale activity detected via size threshold (fallback): ${trade.sizeUSDC.toFixed(0)} USDC`,
           metrics: {
             sizeUSDC: trade.sizeUSDC,
             whaleMinSize,
@@ -217,7 +297,6 @@ export class AnomalyDetector {
       return null;
     }
 
-    // Req 4.5: severity based on liquidity consumed
     let severity: Severity;
     if (liquidityPercent > 50) {
       severity = 'HIGH';
@@ -234,7 +313,7 @@ export class AnomalyDetector {
       severity,
       confidence,
       details: {
-        description: `Whale activity detected via static threshold: ${liquidityPercent.toFixed(2)}% of liquidity`,
+        description: `Whale activity detected via static threshold (fallback): ${liquidityPercent.toFixed(2)}% of liquidity`,
         metrics: {
           liquidityConsumedPercent: liquidityPercent,
           sizeUSDC: trade.sizeUSDC,
@@ -257,7 +336,7 @@ export class AnomalyDetector {
 
     // Req 5.1: analyzeWalletProfile checks Redis cache before any Alchemy call
     const walletProfile = await this.blockchainAnalyzer.analyzeWalletProfile(
-      trade.walletAddress,
+      trade.walletAddress || '',
       this.redisCache,
     );
 
@@ -352,8 +431,8 @@ export class AnomalyDetector {
 
     const results: Anomaly[] = [];
 
-    // Run all three detectors
-    const rapidOddsAnomaly = this.detectRapidOddsShift(
+    // Run all three detectors (now async)
+    const rapidOddsAnomaly = await this.detectRapidOddsShift(
       trade,
       priceHistory,
       volatility,
@@ -361,7 +440,7 @@ export class AnomalyDetector {
       zScoreThreshold,
     );
 
-    const whaleAnomaly = this.detectWhaleActivity(
+    const whaleAnomaly = await this.detectWhaleActivity(
       trade,
       volatility,
       whaleActivityPercent,

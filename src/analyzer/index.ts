@@ -7,8 +7,10 @@ import { RedisCache } from '../cache/RedisCache';
 import { TimeSeriesDB } from '../db/TimeSeriesDB';
 import { TradeFilter } from '../filters/TradeFilter';
 import { BlockchainAnalyzer } from '../blockchain/BlockchainAnalyzer';
+import { PolymarketAPI } from '../blockchain/PolymarketAPI';
 import { AnomalyDetector } from '../detectors/AnomalyDetector';
 import { ClusterDetector } from '../detectors/ClusterDetector';
+import { SmartMoneyDetector } from '../detectors/SmartMoneyDetector';
 import { AlertFormatter } from '../alerts/AlertFormatter';
 import { TelegramNotifier } from '../notifications/TelegramNotifier';
 import { RawTrade, StreamMessage } from '../types/index';
@@ -75,8 +77,10 @@ export class AnalyzerService {
   private timeSeriesDB: TimeSeriesDB | null = null;
   private tradeFilter: TradeFilter | null = null;
   private blockchainAnalyzer: BlockchainAnalyzer | null = null;
+  private polymarketAPI: PolymarketAPI | null = null;
   private anomalyDetector: AnomalyDetector | null = null;
   private clusterDetector: ClusterDetector | null = null;
+  private smartMoneyDetector: SmartMoneyDetector | null = null;
   private readonly alertFormatter: AlertFormatter;
   private telegramNotifier: TelegramNotifier | null = null;
 
@@ -134,11 +138,13 @@ export class AnalyzerService {
       config.getKnownExchangeWallets(),
       this.logger,
     );
+    this.polymarketAPI = new PolymarketAPI(this.logger);
     this.anomalyDetector = new AnomalyDetector(
       thresholds,
       this.timeSeriesDB,
       this.redisCache,
       this.blockchainAnalyzer,
+      this.polymarketAPI,
       this.logger,
     );
     this.clusterDetector = new ClusterDetector(
@@ -148,6 +154,17 @@ export class AnalyzerService {
       this.blockchainAnalyzer,
       this.logger,
       config.getClusterDedupTtl(),
+    );
+    this.smartMoneyDetector = new SmartMoneyDetector(
+      {
+        minTradeSizeUSDC: config.getSmartMoneyMinTradeSize(),
+        confidenceThreshold: config.getSmartMoneyConfidenceThreshold(),
+        walletProfileTTL: config.getSmartMoneyWalletCacheTTL(),
+      },
+      this.timeSeriesDB,
+      this.redisCache,
+      this.blockchainAnalyzer,
+      this.logger,
     );
     this.telegramNotifier = new TelegramNotifier(config.getTelegramConfig(), this.logger);
 
@@ -279,10 +296,11 @@ export class AnalyzerService {
 
       this.trackMalformed(false);
 
-      // Run ClusterDetector and AnomalyDetector in parallel
-      const [clusterAnomaly, anomalies] = await Promise.all([
+      // Run ClusterDetector, AnomalyDetector, and SmartMoneyDetector in parallel
+      const [clusterAnomaly, anomalies, smartMoneyAlert] = await Promise.all([
         this.runClusterDetector(filteredTrade),
         this.runAnomalyDetector(filteredTrade),
+        this.runSmartMoneyDetector(filteredTrade),
       ]);
 
       // Handle cluster anomaly alert (Req 9.1, 9.2, 9.3)
@@ -291,12 +309,18 @@ export class AnalyzerService {
         await this.telegramNotifier!.sendAlert(msg);
       }
 
+      // Handle smart money alert
+      if (smartMoneyAlert !== null) {
+        const msg = this.alertFormatter.formatSmartMoneyMessage(smartMoneyAlert);
+        await this.telegramNotifier!.sendAlert(msg);
+      }
+
       // Handle anomaly alerts (Req 9.1, 9.2, 9.3)
       for (const anomaly of anomalies) {
         const alreadySent = await this.redisCache!.hasAlertBeenSent(
           anomaly.type,
           filteredTrade.marketId,
-          filteredTrade.walletAddress,
+          filteredTrade.walletAddress || '',
         );
         if (!alreadySent) {
           const msg = this.alertFormatter.format(anomaly, filteredTrade);
@@ -304,7 +328,7 @@ export class AnalyzerService {
           await this.redisCache!.recordSentAlert(
             anomaly.type,
             filteredTrade.marketId,
-            filteredTrade.walletAddress,
+            filteredTrade.walletAddress || '',
             this.config!.getAlertDedupTtl(),
           );
         }
@@ -384,6 +408,15 @@ export class AnalyzerService {
       return await this.clusterDetector!.detectCluster(filteredTrade);
     } catch (err) {
       this.logger.warn('AnalyzerService: clusterDetector.detectCluster threw', { error: String(err) });
+      return null;
+    }
+  }
+
+  private async runSmartMoneyDetector(filteredTrade: Parameters<SmartMoneyDetector['detect']>[0]) {
+    try {
+      return await this.smartMoneyDetector!.detect(filteredTrade);
+    } catch (err) {
+      this.logger.warn('AnalyzerService: smartMoneyDetector.detect threw', { error: String(err) });
       return null;
     }
   }

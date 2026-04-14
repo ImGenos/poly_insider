@@ -100,7 +100,7 @@ export class WebSocketManager {
         this.logger.warn('Gamma API fetch failed, continuing without market names', { status: response.status });
         return [];
       }
-      const markets: GammaMarket[] = await response.json();
+      const markets: GammaMarket[] = await response.json() as GammaMarket[];
       const previousTokenIds = new Set(this.tokenIds);
 
       this.marketNames.clear();

@@ -147,6 +147,18 @@ export class ConfigManager {
     return this.parseNumber('CLUSTER_DEDUP_TTL_SECONDS', 600);
   }
 
+  getSmartMoneyMinTradeSize(): number {
+    return this.parseNumber('SMART_MONEY_MIN_TRADE_SIZE', 5000);
+  }
+
+  getSmartMoneyConfidenceThreshold(): number {
+    return this.parseNumber('SMART_MONEY_CONFIDENCE_THRESHOLD', 80);
+  }
+
+  getSmartMoneyWalletCacheTTL(): number {
+    return this.parseNumber('SMART_MONEY_WALLET_CACHE_TTL', 86400);
+  }
+
   getLogLevel(): LogLevel {
     const raw = this.parseString('LOG_LEVEL', 'info').toLowerCase();
     const valid: LogLevel[] = ['debug', 'info', 'warn', 'error'];

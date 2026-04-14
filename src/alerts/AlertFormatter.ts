@@ -80,7 +80,7 @@ export class AlertFormatter {
       `${detectionInfo}`,
       `Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`,
       ``,
-      `Wallet: ${polygonScanLink(trade.walletAddress)}`,
+      `Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
     ].join('\n');
   }
 
@@ -108,7 +108,7 @@ export class AlertFormatter {
 
     lines.push(`Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`);
     lines.push(``);
-    lines.push(`Wallet: ${polygonScanLink(trade.walletAddress)}`);
+    lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
     return lines.join('\n');
   }
@@ -140,7 +140,7 @@ export class AlertFormatter {
 
     lines.push(`Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`);
     lines.push(``);
-    lines.push(`Wallet: ${polygonScanLink(trade.walletAddress)}`);
+    lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
     return lines.join('\n');
   }
@@ -185,4 +185,65 @@ export class AlertFormatter {
       disable_web_page_preview: false,
     };
   }
+
+  formatSmartMoneyAlert(alert: SmartMoneyAlert): string {
+    const emoji = severityEmoji(alert.severity);
+    const ci = alert.confidenceIndex;
+
+    const lines = [
+      `${emoji} *SMART MONEY DETECTED* \\| ${escapeMarkdown(alert.severity)}`,
+      ``,
+      `⚽ *Football Market*`,
+      `Market: ${polymarketLink(alert.marketId, alert.marketName)}`,
+      `Side: *${alert.side}*`,
+      `Amount: *${formatSize(alert.amount)} USDC*`,
+      `Price: *${(alert.price * 100).toFixed(1)}%*`,
+      ``,
+      `📊 *Bettor Confidence Index: ${ci.score}/100*`,
+      ``,
+      `*Metrics:*`,
+      `• PnL: *$${formatSize(ci.metrics.pnl)}* \\(score: ${ci.metrics.pnlScore.toFixed(0)}\\)`,
+      `• Recent Volume: *$${formatSize(ci.metrics.recentVolume)}* \\(score: ${ci.metrics.volumeScore.toFixed(0)}\\)`,
+      `• Bet Size Ratio: *${ci.metrics.betSizeRatio.toFixed(2)}x* \\(score: ${ci.metrics.betSizeScore.toFixed(0)}\\)`,
+      `• Win Rate: *${(ci.metrics.winRate * 100).toFixed(1)}%* \\(score: ${ci.metrics.winRateScore.toFixed(0)}\\)`,
+      ``,
+      `Wallet: ${polygonScanLink(alert.walletAddress)}`,
+    ];
+
+    return lines.join('\n');
+  }
+
+  formatSmartMoneyMessage(alert: SmartMoneyAlert): TelegramMessage {
+    return {
+      text: truncate(this.formatSmartMoneyAlert(alert)),
+      parse_mode: 'MarkdownV2',
+      disable_web_page_preview: false,
+    };
+  }
+}
+
+// ─── Type Import for Smart Money ──────────────────────────────────────────
+
+interface SmartMoneyAlert {
+  marketId: string;
+  marketName: string;
+  side: 'YES' | 'NO';
+  amount: number;
+  price: number;
+  walletAddress: string;
+  confidenceIndex: {
+    score: number;
+    metrics: {
+      pnl: number;
+      pnlScore: number;
+      recentVolume: number;
+      volumeScore: number;
+      betSizeRatio: number;
+      betSizeScore: number;
+      winRate: number;
+      winRateScore: number;
+    };
+  };
+  severity: string;
+  detectedAt: Date;
 }

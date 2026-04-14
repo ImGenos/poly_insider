@@ -33,6 +33,24 @@ CREATE TABLE IF NOT EXISTS cluster_trades (
 SELECT create_hypertable('cluster_trades', 'time', if_not_exists => TRUE);
 CREATE INDEX IF NOT EXISTS idx_cluster_trades_market_side ON cluster_trades(market_id, side, time DESC);
 
+CREATE TABLE IF NOT EXISTS smart_money_trades (
+  time                TIMESTAMPTZ NOT NULL,
+  market_id           TEXT NOT NULL,
+  market_name         TEXT NOT NULL,
+  side                TEXT NOT NULL,
+  wallet_address      TEXT NOT NULL,
+  size_usd            DOUBLE PRECISION NOT NULL,
+  price               DOUBLE PRECISION NOT NULL,
+  confidence_score    INTEGER NOT NULL,
+  pnl                 DOUBLE PRECISION NOT NULL,
+  recent_volume       DOUBLE PRECISION NOT NULL,
+  bet_size_ratio      DOUBLE PRECISION NOT NULL,
+  win_rate            DOUBLE PRECISION NOT NULL
+);
+SELECT create_hypertable('smart_money_trades', 'time', if_not_exists => TRUE);
+CREATE INDEX IF NOT EXISTS idx_smart_money_wallet ON smart_money_trades(wallet_address, time DESC);
+CREATE INDEX IF NOT EXISTS idx_smart_money_market ON smart_money_trades(market_id, time DESC);
+
 CREATE MATERIALIZED VIEW IF NOT EXISTS market_volatility_1h
 WITH (timescaledb.continuous) AS
 SELECT
@@ -252,6 +270,49 @@ export class TimeSeriesDB {
     } catch (err) {
       this.logger.error('getClusterTotalSize failed', err, { marketId, side });
       return 0;
+    }
+  }
+
+  // ─── Smart Money Trades ───────────────────────────────────────────────────
+
+  async recordSmartMoneyTrade(trade: {
+    timestamp: Date;
+    marketId: string;
+    marketName: string;
+    side: string;
+    walletAddress: string;
+    sizeUSDC: number;
+    price: number;
+    confidenceScore: number;
+    pnl: number;
+    recentVolume: number;
+    betSizeRatio: number;
+    winRate: number;
+  }): Promise<void> {
+    if (!this.pool) return;
+    try {
+      await this.pool.query(
+        `INSERT INTO smart_money_trades 
+         (time, market_id, market_name, side, wallet_address, size_usd, price, 
+          confidence_score, pnl, recent_volume, bet_size_ratio, win_rate)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+        [
+          trade.timestamp,
+          trade.marketId,
+          trade.marketName,
+          trade.side,
+          trade.walletAddress,
+          trade.sizeUSDC,
+          trade.price,
+          trade.confidenceScore,
+          trade.pnl,
+          trade.recentVolume,
+          trade.betSizeRatio,
+          trade.winRate,
+        ],
+      );
+    } catch (err) {
+      this.logger.error('recordSmartMoneyTrade failed', err, { marketId: trade.marketId });
     }
   }
 }

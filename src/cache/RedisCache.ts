@@ -240,4 +240,16 @@ export class RedisCache {
     }
     this.dedupMap.set(key, Date.now() + ttlSeconds * 1000);
   }
+
+  // ─── Generic Cache Operations ─────────────────────────────────────────────
+
+  async get(key: string): Promise<string | null> {
+    if (!this.client || !this.isConnected) return null;
+    return await this.client.get(key);
+  }
+
+  async set(key: string, value: string, ttlSeconds: number): Promise<void> {
+    if (!this.client || !this.isConnected) return;
+    await this.client.setex(key, ttlSeconds, value);
+  }
 }

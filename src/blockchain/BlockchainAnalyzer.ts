@@ -93,6 +93,100 @@ export class BlockchainAnalyzer {
     return transfers.length > 0 ? transfers[0] : null;
   }
 
+  /**
+   * Get wallet's Polymarket trading history via alchemy_getAssetTransfers
+   * Filters for USDC transfers to/from Polymarket contracts to approximate trade history
+   * @param address - Wallet address to analyze
+   * @param maxCount - Maximum number of transfers to retrieve (default: 100)
+   */
+  async getWalletTradeHistory(address: string, maxCount = 100): Promise<WalletTradeHistory> {
+    await this.throttleAlchemy();
+
+    const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
+    
+    // Get both inbound and outbound USDC transfers
+    const body = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'alchemy_getAssetTransfers',
+      params: [
+        {
+          fromBlock: '0x0',
+          fromAddress: address,
+          maxCount,
+          order: 'desc',
+          category: ['erc20'],
+          withMetadata: true,
+        },
+      ],
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Alchemy HTTP error: ${response.status}`);
+      }
+
+      const data = await response.json() as AlchemyResponse;
+
+      if (data.error) {
+        throw new Error(`Alchemy RPC error: ${data.error.message}`);
+      }
+
+      const transfers = data.result?.transfers ?? [];
+      
+      // Extract trade sizes (USDC amounts)
+      const tradeSizes: number[] = [];
+      
+      for (const transfer of transfers) {
+        // Filter for USDC transfers (common USDC contract on Polygon)
+        if (transfer.asset?.toLowerCase() === 'usdc' && transfer.value) {
+          tradeSizes.push(transfer.value);
+        }
+      }
+
+      return {
+        address,
+        tradeSizes,
+        tradeCount: tradeSizes.length,
+        avgTradeSize: tradeSizes.length > 0 
+          ? tradeSizes.reduce((a, b) => a + b, 0) / tradeSizes.length 
+          : 0,
+        stddevTradeSize: this.calculateStdDev(tradeSizes),
+      };
+    } catch (err) {
+      this.logger.warn('BlockchainAnalyzer: failed to get wallet trade history', {
+        address,
+        error: String(err),
+      });
+      return {
+        address,
+        tradeSizes: [],
+        tradeCount: 0,
+        avgTradeSize: 0,
+        stddevTradeSize: 0,
+      };
+    }
+  }
+
+  /**
+   * Calculate standard deviation of an array of numbers
+   */
+  private calculateStdDev(values: number[]): number {
+    if (values.length < 2) return 0;
+    
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const squaredDiffs = values.map(v => Math.pow(v - mean, 2));
+    const variance = squaredDiffs.reduce((a, b) => a + b, 0) / values.length;
+    
+    return Math.sqrt(variance);
+  }
+
   // ─── Moralis Fallback ─────────────────────────────────────────────────────
 
   /**
@@ -364,6 +458,8 @@ export class BlockchainAnalyzer {
 interface AlchemyTransfer {
   from: string;
   to: string;
+  value?: number;
+  asset?: string;
   metadata?: {
     blockTimestamp?: string;
   };
@@ -394,4 +490,15 @@ interface MoralisVerboseResponse {
 interface MoralisResult {
   firstTimestamp: number | null;
   txCount: number;
+}
+
+
+// ─── Wallet Trade History ─────────────────────────────────────────────────────
+
+export interface WalletTradeHistory {
+  address: string;
+  tradeSizes: number[];
+  tradeCount: number;
+  avgTradeSize: number;
+  stddevTradeSize: number;
 }

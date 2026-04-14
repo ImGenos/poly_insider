@@ -47431,3 +47431,15 @@
 2026-04-14 14:45:47 +02:00: [2026-04-14T12:45:47.866Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
 2026-04-14 15:17:29 +02:00: [2026-04-14T13:17:29.230Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"}
 2026-04-14 15:17:29 +02:00: [2026-04-14T13:17:29.380Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.257Z] [INFO ] AnalyzerService starting
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.292Z] [INFO ] Redis connected
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.322Z] [INFO ] Redis ready
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.708Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.865Z] [INFO ] AnalyzerService: all connections established
+2026-04-14 15:40:42 +02:00: [2026-04-14T13:40:42.866Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-14 15:49:45 +02:00: [2026-04-14T13:49:45.793Z] [INFO ] AnalyzerService starting
+2026-04-14 15:49:45 +02:00: [2026-04-14T13:49:45.819Z] [INFO ] Redis connected
+2026-04-14 15:49:45 +02:00: [2026-04-14T13:49:45.826Z] [INFO ] Redis ready
+2026-04-14 15:49:46 +02:00: [2026-04-14T13:49:46.044Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-14 15:49:46 +02:00: [2026-04-14T13:49:46.179Z] [INFO ] AnalyzerService: all connections established
+2026-04-14 15:49:46 +02:00: [2026-04-14T13:49:46.179Z] [INFO ] AnalyzerService: starting consumer loop

@@ -13,6 +13,7 @@ import { AnomalyDetector } from '../../src/detectors/AnomalyDetector';
 import { RedisCache } from '../../src/cache/RedisCache';
 import { TimeSeriesDB } from '../../src/db/TimeSeriesDB';
 import { BlockchainAnalyzer } from '../../src/blockchain/BlockchainAnalyzer';
+import { PolymarketAPI } from '../../src/blockchain/PolymarketAPI';
 import { Logger } from '../../src/utils/Logger';
 import {
   FilteredTrade,
@@ -111,7 +112,12 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockResolvedValue(makeWalletProfile({ ageHours: 1000, isNew: false })),
+      getWalletTradeHistory: jest.fn().mockResolvedValue({ address: WALLET, tradeSizes: [], tradeCount: 0, avgTradeSize: 0, stddevTradeSize: 0 }),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null), // API unavailable → fallback to local data
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -119,6 +125,7 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -153,7 +160,12 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockResolvedValue(makeWalletProfile({ ageHours: 1000, isNew: false })),
+      getWalletTradeHistory: jest.fn().mockResolvedValue({ address: WALLET, tradeSizes: [], tradeCount: 0, avgTradeSize: 0, stddevTradeSize: 0 }),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -161,6 +173,7 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -194,7 +207,12 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockResolvedValue(makeWalletProfile()),
+      getWalletTradeHistory: jest.fn().mockResolvedValue({ address: WALLET, tradeSizes: [], tradeCount: 0, avgTradeSize: 0, stddevTradeSize: 0 }),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -202,6 +220,7 @@ describe('Graceful degradation — TimescaleDB unavailable (Req 16.2)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -241,7 +260,12 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
     // Alchemy always throws
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockRejectedValue(new Error('Alchemy API unavailable')),
+      getWalletTradeHistory: jest.fn().mockRejectedValue(new Error('Alchemy API unavailable')),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -249,6 +273,7 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -292,7 +317,12 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockRejectedValue(new Error('Alchemy 429 rate limit')),
+      getWalletTradeHistory: jest.fn().mockRejectedValue(new Error('Alchemy 429 rate limit')),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -300,6 +330,7 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -334,7 +365,12 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockRejectedValue(new Error('Alchemy network error')),
+      getWalletTradeHistory: jest.fn().mockRejectedValue(new Error('Alchemy network error')),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -342,6 +378,7 @@ describe('Graceful degradation — Alchemy unavailable (Req 16.1)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       redisCache as unknown as RedisCache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 
@@ -430,7 +467,12 @@ describe('Graceful degradation — in-memory dedup fallback (Req 16.4)', () => {
 
     const blockchainAnalyzer = {
       analyzeWalletProfile: jest.fn().mockResolvedValue(makeWalletProfile({ ageHours: 1000, isNew: false })),
+      getWalletTradeHistory: jest.fn().mockResolvedValue({ address: WALLET, tradeSizes: [], tradeCount: 0, avgTradeSize: 0, stddevTradeSize: 0 }),
     } as unknown as jest.Mocked<BlockchainAnalyzer>;
+
+    const polymarketAPI = {
+      getMarket: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<PolymarketAPI>;
 
     const logger = makeLogger();
     const detector = new AnomalyDetector(
@@ -438,6 +480,7 @@ describe('Graceful degradation — in-memory dedup fallback (Req 16.4)', () => {
       timeSeriesDB as unknown as TimeSeriesDB,
       cache,
       blockchainAnalyzer as unknown as BlockchainAnalyzer,
+      polymarketAPI as unknown as PolymarketAPI,
       logger,
     );
 

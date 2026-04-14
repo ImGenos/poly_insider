@@ -206,12 +206,15 @@ export class WebSocketManager {
       return;
     }
 
-    // Server only accepts a single subscription message — send all tokens at once
+    // Polymarket server accepts only ONE subscription message with all tokens
+    // Limit to MAX_TOTAL_TOKENS to avoid rejection
     const tokens = this.tokenIds.slice(0, MAX_TOTAL_TOKENS);
+    
     const msg = JSON.stringify({
       assets_ids: tokens,
       type: 'market',
     });
+    
     ws.send(msg);
     this.logger.info('Subscribed to market channel', { tokenCount: tokens.length });
   }

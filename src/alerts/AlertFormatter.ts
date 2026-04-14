@@ -12,7 +12,9 @@ function severityEmoji(severity: string): string {
 }
 
 function formatSize(sizeUSDC: number): string {
-  return sizeUSDC.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const formatted = sizeUSDC.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  // Escape special MarkdownV2 characters in the formatted number
+  return escapeMarkdown(formatted);
 }
 
 function polygonScanLink(address: string): string {
@@ -63,11 +65,11 @@ export class AlertFormatter {
 
     let detectionInfo: string;
     if (zScore !== undefined && zScore !== null) {
-      detectionInfo = `Z\\-score: *${zScore.toFixed(2)}σ*`;
+      detectionInfo = `Z\\-score: *${escapeMarkdown(zScore.toFixed(2))}σ*`;
     } else {
       const pctChange = metrics.priceChangePercent as number | undefined;
       detectionInfo = pctChange !== undefined
-        ? `Price change: *${pctChange.toFixed(1)}%* \\(static threshold\\)`
+        ? `Price change: *${escapeMarkdown(pctChange.toFixed(1))}%* \\(static threshold\\)`
         : `Static threshold triggered`;
     }
 
@@ -76,9 +78,9 @@ export class AlertFormatter {
       ``,
       `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Side: *${trade.side}*`,
-      `Size: *$${formatSize(trade.sizeUSDC)} USDC*`,
+      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
       `${detectionInfo}`,
-      `Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`,
+      `Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
       ``,
       `Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
     ].join('\n');
@@ -95,18 +97,18 @@ export class AlertFormatter {
       ``,
       `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Side: *${trade.side}*`,
-      `Size: *$${formatSize(trade.sizeUSDC)} USDC*`,
+      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
     ];
 
     if (liquidityPct !== undefined) {
-      lines.push(`Liquidity consumed: *${liquidityPct.toFixed(1)}%*`);
+      lines.push(`Liquidity consumed: *${escapeMarkdown(liquidityPct.toFixed(1))}%*`);
     }
 
     if (zScore !== undefined && zScore !== null) {
-      lines.push(`Z\\-score: *${zScore.toFixed(2)}σ*`);
+      lines.push(`Z\\-score: *${escapeMarkdown(zScore.toFixed(2))}σ*`);
     }
 
-    lines.push(`Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`);
+    lines.push(`Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
     lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
@@ -125,20 +127,20 @@ export class AlertFormatter {
       ``,
       `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Side: *${trade.side}*`,
-      `Size: *$${formatSize(trade.sizeUSDC)} USDC*`,
+      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
     ];
 
     if (walletAge !== undefined) {
-      lines.push(`Wallet age: *${walletAge.toFixed(1)}h*`);
+      lines.push(`Wallet age: *${escapeMarkdown(walletAge.toFixed(1))}h*`);
     }
     if (txCount !== undefined) {
-      lines.push(`Tx count: *${txCount}*`);
+      lines.push(`Tx count: *${escapeMarkdown(String(txCount))}*`);
     }
     if (riskScore !== undefined) {
-      lines.push(`Risk score: *${riskScore}/100*`);
+      lines.push(`Risk score: *${escapeMarkdown(String(riskScore))}/100*`);
     }
 
-    lines.push(`Confidence: *${(anomaly.confidence * 100).toFixed(0)}%*`);
+    lines.push(`Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
     lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
@@ -153,8 +155,8 @@ export class AlertFormatter {
       ``,
       `Market: ${polymarketLink(anomaly.marketId, anomaly.marketName)}`,
       `Side: *${anomaly.side}*`,
-      `Total size: *$${formatSize(anomaly.totalSizeUSDC)} USDC*`,
-      `Wallets: *${anomaly.wallets.length}* in last *${anomaly.windowMinutes}min*`,
+      `Total size: *${formatSize(anomaly.totalSizeUSDC)} USDC*`,
+      `Wallets: *${escapeMarkdown(String(anomaly.wallets.length))}* in last *${escapeMarkdown(String(anomaly.windowMinutes))}min*`,
     ];
 
     if (anomaly.severity === 'CRITICAL' && anomaly.fundingAnalysis?.commonFunderAddress) {
@@ -197,15 +199,15 @@ export class AlertFormatter {
       `Market: ${polymarketLink(alert.marketId, alert.marketName)}`,
       `Side: *${alert.side}*`,
       `Amount: *${formatSize(alert.amount)} USDC*`,
-      `Price: *${(alert.price * 100).toFixed(1)}%*`,
+      `Price: *${escapeMarkdown((alert.price * 100).toFixed(1))}%*`,
       ``,
-      `📊 *Bettor Confidence Index: ${ci.score}/100*`,
+      `📊 *Bettor Confidence Index: ${escapeMarkdown(String(ci.score))}/100*`,
       ``,
       `*Metrics:*`,
-      `• PnL: *$${formatSize(ci.metrics.pnl)}* \\(score: ${ci.metrics.pnlScore.toFixed(0)}\\)`,
-      `• Recent Volume: *$${formatSize(ci.metrics.recentVolume)}* \\(score: ${ci.metrics.volumeScore.toFixed(0)}\\)`,
-      `• Bet Size Ratio: *${ci.metrics.betSizeRatio.toFixed(2)}x* \\(score: ${ci.metrics.betSizeScore.toFixed(0)}\\)`,
-      `• Win Rate: *${(ci.metrics.winRate * 100).toFixed(1)}%* \\(score: ${ci.metrics.winRateScore.toFixed(0)}\\)`,
+      `• PnL: *${formatSize(ci.metrics.pnl)}* \\(score: ${escapeMarkdown(ci.metrics.pnlScore.toFixed(0))}\\)`,
+      `• Recent Volume: *${formatSize(ci.metrics.recentVolume)}* \\(score: ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
+      `• Bet Size Ratio: *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* \\(score: ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))}\\)`,
+      `• Win Rate: *${escapeMarkdown((ci.metrics.winRate * 100).toFixed(1))}%* \\(score: ${escapeMarkdown(ci.metrics.winRateScore.toFixed(0))}\\)`,
       ``,
       `Wallet: ${polygonScanLink(alert.walletAddress)}`,
     ];

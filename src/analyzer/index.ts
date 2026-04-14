@@ -170,6 +170,9 @@ export class AnalyzerService {
 
     this.logger.info('AnalyzerService starting');
 
+    // Pré-charge le taux de change USD→EUR
+    await this.alertFormatter.init();
+
     // Connect dependencies
     await this.redisCache!.connect();
     await this.redisCache!.createConsumerGroup(STREAM_KEY, CONSUMER_GROUP);

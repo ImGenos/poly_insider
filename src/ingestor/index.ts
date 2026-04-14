@@ -5,6 +5,7 @@ import { ConfigManager } from '../config/ConfigManager';
 import { Logger } from '../utils/Logger';
 import { RedisCache } from '../cache/RedisCache';
 import { WebSocketManager } from '../websocket/WebSocketManager';
+import { DataAPIPoller } from './DataAPIPoller';
 import { RawTrade, NormalizedTrade } from '../types/index';
 import { isValidEthAddress, exponentialBackoff } from '../utils/helpers';
 
@@ -98,6 +99,7 @@ export class IngestorService {
   private logger: Logger;
   private redisCache: RedisCache | null = null;
   private wsManager: WebSocketManager | null = null;
+  private dataAPIPoller: DataAPIPoller | null = null;
 
   private droppedTrades = 0;
   private droppedLogTimer: ReturnType<typeof setInterval> | null = null;
@@ -124,6 +126,7 @@ export class IngestorService {
     this.logger = new Logger(config.getLogLevel(), config.getLogFilePath());
     this.redisCache = new RedisCache(config.getRedisUrl(), this.logger);
     this.wsManager = new WebSocketManager(config.getPolymarketWsUrl(), this.logger);
+    this.dataAPIPoller = new DataAPIPoller(this.logger, 10000); // Poll every 10 seconds
 
     this.logger.info('IngestorService starting');
 
@@ -141,32 +144,14 @@ export class IngestorService {
       }
     }, 60_000);
 
-    // Register trade callback
+    // Register trade callback for WebSocket
     this.wsManager.onTrade((rawTrade: RawTrade) => {
-      // Validate per Requirements 15.1, 15.2
-      if (!validateRawTrade(rawTrade)) {
-        this.logger.warn('Ingestor: invalid raw trade, skipping', {
-          market_id: rawTrade?.market_id,
-          side: rawTrade?.side,
-          price: rawTrade?.price,
-          size_usd: rawTrade?.size_usd,
-          timestamp: rawTrade?.timestamp,
-          maker_address: rawTrade?.maker_address,
-          taker_address: rawTrade?.taker_address,
-        });
-        return;
-      }
+      this._handleTrade(rawTrade, 'WebSocket');
+    });
 
-      const normalized = normalize(rawTrade);
-      const fields = toStreamFields(normalized);
-
-      // Fire-and-forget: never await downstream per Requirements 1.4
-      // Retry with exponential backoff on Redis unavailability per Requirements 16.3
-      pushWithRetry(this.redisCache!, fields, this.logger).then((pushed) => {
-        if (!pushed) this.droppedTrades++;
-      }).catch((err) => {
-        this.logger.error('Unexpected error in pushWithRetry', err);
-      });
+    // Register trade callback for Data API Poller
+    this.dataAPIPoller.onTrade((rawTrade: RawTrade) => {
+      this._handleTrade(rawTrade, 'DataAPI');
     });
 
     this.wsManager.onError((err: Error) => {
@@ -185,7 +170,37 @@ export class IngestorService {
     // Connect WebSocket per Requirements 1.1
     await this.wsManager.connect();
 
+    // Start Data API Poller
+    this.dataAPIPoller.start();
+
     this.logger.info('IngestorService started');
+  }
+
+  private _handleTrade(rawTrade: RawTrade, source: string): void {
+    // Validate per Requirements 15.1, 15.2
+    if (!validateRawTrade(rawTrade)) {
+      this.logger.warn(`Ingestor: invalid raw trade from ${source}, skipping`, {
+        market_id: rawTrade?.market_id,
+        side: rawTrade?.side,
+        price: rawTrade?.price,
+        size_usd: rawTrade?.size_usd,
+        timestamp: rawTrade?.timestamp,
+        maker_address: rawTrade?.maker_address,
+        taker_address: rawTrade?.taker_address,
+      });
+      return;
+    }
+
+    const normalized = normalize(rawTrade);
+    const fields = toStreamFields(normalized);
+
+    // Fire-and-forget: never await downstream per Requirements 1.4
+    // Retry with exponential backoff on Redis unavailability per Requirements 16.3
+    pushWithRetry(this.redisCache!, fields, this.logger).then((pushed) => {
+      if (!pushed) this.droppedTrades++;
+    }).catch((err) => {
+      this.logger.error('Unexpected error in pushWithRetry', err);
+    });
   }
 
   async stop(): Promise<void> {
@@ -194,6 +209,7 @@ export class IngestorService {
       clearInterval(this.droppedLogTimer);
       this.droppedLogTimer = null;
     }
+    this.dataAPIPoller?.stop();
     this.wsManager?.disconnect();
     await this.redisCache?.disconnect();
     this.logger.info('IngestorService stopped');

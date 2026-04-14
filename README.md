@@ -36,9 +36,62 @@ Two decoupled PM2 processes communicate via a Redis Stream. TimescaleDB stores t
 - Node.js 20.x
 - Docker and Docker Compose
 - PM2 (`npm install -g pm2`)
-- Ubuntu VPS (1 vCPU, 2 GB RAM minimum recommended)
+- Ubuntu VPS (1 vCPU, 2 GB RAM minimum recommended) or Windows with Docker Desktop
 
-## Setup
+## Quick Start
+
+### 1. Check Prerequisites
+```bash
+# Windows
+check-prerequisites.bat
+
+# Linux/Mac
+./check-prerequisites.sh
+```
+
+### 2. Setup Environment
+```bash
+cp .env.example .env
+# Edit .env and fill in your API keys and tokens
+```
+
+### 3. Start Everything
+```bash
+# Windows
+start.bat
+
+# Linux/Mac
+./start.sh
+```
+
+That's it! The system will:
+- Start Docker services (Redis & TimescaleDB)
+- Install dependencies
+- Build TypeScript
+- Start ingestor and analyzer services
+
+### Daily Usage
+```bash
+# Start system
+start.bat
+
+# Restart after code changes
+restart.bat
+
+# Check status
+status.bat
+
+# View logs
+npm run logs
+
+# Stop everything
+stop.bat
+```
+
+📖 **See [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) for detailed documentation**
+📋 **See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for a one-page cheat sheet**
+
+## Manual Setup (Advanced)
 
 ```bash
 git clone <repo-url>

@@ -1,9 +1,12 @@
 import { Anomaly, ClusterAnomaly, FilteredTrade, TelegramMessage } from '../types/index';
 import { escapeMarkdown } from '../utils/helpers';
+import { ExchangeRateService } from '../utils/ExchangeRateService';
 
 const POLYGONSCAN_BASE = 'https://polygonscan.com/address';
 const POLYMARKET_BASE = 'https://polymarket.com/event';
 const MAX_MESSAGE_LENGTH = 4096;
+
+const fxService = ExchangeRateService.getInstance();
 
 function severityEmoji(severity: string): string {
   if (severity === 'HIGH' || severity === 'CRITICAL') return '🚨';
@@ -11,10 +14,28 @@ function severityEmoji(severity: string): string {
   return 'ℹ️';
 }
 
-function formatSize(sizeUSDC: number): string {
-  const formatted = sizeUSDC.toLocaleString('en-US', { maximumFractionDigits: 2 });
-  // Escape special MarkdownV2 characters in the formatted number
-  return escapeMarkdown(formatted);
+function severityFr(severity: string): string {
+  switch (severity) {
+    case 'CRITICAL': return 'CRITIQUE';
+    case 'HIGH':     return 'ÉLEVÉ';
+    case 'MEDIUM':   return 'MOYEN';
+    case 'LOW':      return 'FAIBLE';
+    default:         return severity;
+  }
+}
+
+function sideFr(side: string): string {
+  return side === 'YES' ? 'OUI' : 'NON';
+}
+
+/** Convertit un montant USDC en euros et le formate en français (taux en cache) */
+function formatEur(sizeUSDC: number): string {
+  const eur = sizeUSDC * fxService.getCachedRate();
+  const formatted = eur.toLocaleString('fr-FR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return escapeMarkdown(formatted + ' €');
 }
 
 function polygonScanLink(address: string): string {
@@ -34,6 +55,14 @@ function truncate(text: string): string {
 }
 
 export class AlertFormatter {
+  /**
+   * Pré-charge le taux de change USD→EUR au démarrage.
+   * À appeler une fois lors de l'initialisation du service.
+   */
+  async init(): Promise<void> {
+    await fxService.getUsdToEurRate();
+  }
+
   format(anomaly: Anomaly, trade: FilteredTrade): TelegramMessage {
     let text: string;
 
@@ -65,24 +94,24 @@ export class AlertFormatter {
 
     let detectionInfo: string;
     if (zScore !== undefined && zScore !== null) {
-      detectionInfo = `Z\\-score: *${escapeMarkdown(zScore.toFixed(2))}σ*`;
+      detectionInfo = `Z\\-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`;
     } else {
       const pctChange = metrics.priceChangePercent as number | undefined;
       detectionInfo = pctChange !== undefined
-        ? `Price change: *${escapeMarkdown(pctChange.toFixed(1))}%* \\(static threshold\\)`
-        : `Static threshold triggered`;
+        ? `Variation de cote : *${escapeMarkdown(pctChange.toFixed(1))}%* \\(seuil statique\\)`
+        : `Seuil statique déclenché`;
     }
 
     return [
-      `${emoji} *RAPID ODDS SHIFT* \\| ${escapeMarkdown(anomaly.severity)}`,
+      `${emoji} *GLISSEMENT DE COTE RAPIDE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
-      `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Side: *${trade.side}*`,
-      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${sideFr(trade.side)}*`,
+      `Montant : *${formatEur(trade.sizeUSDC)}*`,
       `${detectionInfo}`,
-      `Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
+      `Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
       ``,
-      `Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
+      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
     ].join('\n');
   }
 
@@ -93,24 +122,24 @@ export class AlertFormatter {
     const liquidityPct = metrics.liquidityConsumedPercent as number | undefined;
 
     const lines = [
-      `${emoji} *WHALE ACTIVITY* \\| ${escapeMarkdown(anomaly.severity)}`,
+      `${emoji} *ACTIVITÉ BALEINE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
-      `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Side: *${trade.side}*`,
-      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${sideFr(trade.side)}*`,
+      `Montant : *${formatEur(trade.sizeUSDC)}*`,
     ];
 
     if (liquidityPct !== undefined) {
-      lines.push(`Liquidity consumed: *${escapeMarkdown(liquidityPct.toFixed(1))}%*`);
+      lines.push(`Liquidité consommée : *${escapeMarkdown(liquidityPct.toFixed(1))}%*`);
     }
 
     if (zScore !== undefined && zScore !== null) {
-      lines.push(`Z\\-score: *${escapeMarkdown(zScore.toFixed(2))}σ*`);
+      lines.push(`Z\\-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`);
     }
 
-    lines.push(`Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
+    lines.push(`Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
-    lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
+    lines.push(`Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
     return lines.join('\n');
   }
@@ -123,26 +152,26 @@ export class AlertFormatter {
     const riskScore = metrics.riskScore as number | undefined;
 
     const lines = [
-      `${emoji} *INSIDER TRADING* \\| ${escapeMarkdown(anomaly.severity)}`,
+      `${emoji} *DÉLIT D'INITIÉ* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
-      `Market: ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Side: *${trade.side}*`,
-      `Size: *${formatSize(trade.sizeUSDC)} USDC*`,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${sideFr(trade.side)}*`,
+      `Montant : *${formatEur(trade.sizeUSDC)}*`,
     ];
 
     if (walletAge !== undefined) {
-      lines.push(`Wallet age: *${escapeMarkdown(walletAge.toFixed(1))}h*`);
+      lines.push(`Âge du portefeuille : *${escapeMarkdown(walletAge.toFixed(1))}h*`);
     }
     if (txCount !== undefined) {
-      lines.push(`Tx count: *${escapeMarkdown(String(txCount))}*`);
+      lines.push(`Nb de transactions : *${escapeMarkdown(String(txCount))}*`);
     }
     if (riskScore !== undefined) {
-      lines.push(`Risk score: *${escapeMarkdown(String(riskScore))}/100*`);
+      lines.push(`Score de risque : *${escapeMarkdown(String(riskScore))}/100*`);
     }
 
-    lines.push(`Confidence: *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
+    lines.push(`Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
-    lines.push(`Wallet: ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
+    lines.push(`Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
 
     return lines.join('\n');
   }
@@ -151,27 +180,27 @@ export class AlertFormatter {
     const emoji = severityEmoji(anomaly.severity);
 
     const lines = [
-      `${emoji} *COORDINATED WALLET CLUSTER* \\| ${escapeMarkdown(anomaly.severity)}`,
+      `${emoji} *CLUSTER DE PORTEFEUILLES COORDONNÉS* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
-      `Market: ${polymarketLink(anomaly.marketId, anomaly.marketName)}`,
-      `Side: *${anomaly.side}*`,
-      `Total size: *${formatSize(anomaly.totalSizeUSDC)} USDC*`,
-      `Wallets: *${escapeMarkdown(String(anomaly.wallets.length))}* in last *${escapeMarkdown(String(anomaly.windowMinutes))}min*`,
+      `Marché : ${polymarketLink(anomaly.marketId, anomaly.marketName)}`,
+      `Position : *${sideFr(anomaly.side)}*`,
+      `Montant total : *${formatEur(anomaly.totalSizeUSDC)}*`,
+      `Portefeuilles : *${escapeMarkdown(String(anomaly.wallets.length))}* en *${escapeMarkdown(String(anomaly.windowMinutes))} min*`,
     ];
 
     if (anomaly.severity === 'CRITICAL' && anomaly.fundingAnalysis?.commonFunderAddress) {
       const funder = anomaly.fundingAnalysis.commonFunderAddress;
       lines.push(``);
-      lines.push(`*Common Funder:*`);
+      lines.push(`*Financeur commun :*`);
       lines.push(`${polygonScanLink(funder)}`);
       lines.push(``);
-      lines.push(`*Funded Wallets:*`);
+      lines.push(`*Portefeuilles financés :*`);
       for (const wallet of anomaly.wallets) {
         lines.push(`• ${polygonScanLink(wallet)}`);
       }
     } else {
       lines.push(``);
-      lines.push(`*Wallets:*`);
+      lines.push(`*Portefeuilles :*`);
       for (const wallet of anomaly.wallets) {
         lines.push(`• ${polygonScanLink(wallet)}`);
       }
@@ -193,23 +222,23 @@ export class AlertFormatter {
     const ci = alert.confidenceIndex;
 
     const lines = [
-      `${emoji} *SMART MONEY DETECTED* \\| ${escapeMarkdown(alert.severity)}`,
+      `${emoji} *ARGENT INTELLIGENT DÉTECTÉ* \\| ${escapeMarkdown(severityFr(alert.severity))}`,
       ``,
-      `⚽ *Football Market*`,
-      `Market: ${polymarketLink(alert.marketId, alert.marketName)}`,
-      `Side: *${alert.side}*`,
-      `Amount: *${formatSize(alert.amount)} USDC*`,
-      `Price: *${escapeMarkdown((alert.price * 100).toFixed(1))}%*`,
+      `⚽ *Marché Football*`,
+      `Marché : ${polymarketLink(alert.marketId, alert.marketName)}`,
+      `Position : *${sideFr(alert.side)}*`,
+      `Montant : *${formatEur(alert.amount)}*`,
+      `Prix : *${escapeMarkdown((alert.price * 100).toFixed(1))}%*`,
       ``,
-      `📊 *Bettor Confidence Index: ${escapeMarkdown(String(ci.score))}/100*`,
+      `📊 *Indice de confiance du parieur : ${escapeMarkdown(String(ci.score))}/100*`,
       ``,
-      `*Metrics:*`,
-      `• PnL: *${formatSize(ci.metrics.pnl)}* \\(score: ${escapeMarkdown(ci.metrics.pnlScore.toFixed(0))}\\)`,
-      `• Recent Volume: *${formatSize(ci.metrics.recentVolume)}* \\(score: ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
-      `• Bet Size Ratio: *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* \\(score: ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))}\\)`,
-      `• Win Rate: *${escapeMarkdown((ci.metrics.winRate * 100).toFixed(1))}%* \\(score: ${escapeMarkdown(ci.metrics.winRateScore.toFixed(0))}\\)`,
+      `*Métriques :*`,
+      `• PnL : *${formatEur(ci.metrics.pnl)}* \\(score : ${escapeMarkdown(ci.metrics.pnlScore.toFixed(0))}\\)`,
+      `• Volume récent : *${formatEur(ci.metrics.recentVolume)}* \\(score : ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
+      `• Ratio mise : *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* \\(score : ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))}\\)`,
+      `• Taux de victoire : *${escapeMarkdown((ci.metrics.winRate * 100).toFixed(1))}%* \\(score : ${escapeMarkdown(ci.metrics.winRateScore.toFixed(0))}\\)`,
       ``,
-      `Wallet: ${polygonScanLink(alert.walletAddress)}`,
+      `Portefeuille : ${polygonScanLink(alert.walletAddress)}`,
     ];
 
     return lines.join('\n');

@@ -67,31 +67,33 @@ export class AnomalyDetector {
     let apiDetected: Anomaly | null = null;
     if (marketData && marketData.lastPrice > 0) {
       const midPrice = (marketData.bestBid + marketData.bestAsk) / 2;
-      const priceDeviation = Math.abs(trade.price - midPrice);
-      const deviationPercent = (priceDeviation / midPrice) * 100;
+      if (midPrice > 0) {
+        const priceDeviation = Math.abs(trade.price - midPrice);
+        const deviationPercent = (priceDeviation / midPrice) * 100;
 
-      if (deviationPercent >= staticThresholdPercent) {
-        const severity: Severity = deviationPercent > 25 ? 'HIGH' : 'MEDIUM';
-        const confidence = Math.min(deviationPercent / (staticThresholdPercent * 2), 1.0);
+        if (deviationPercent >= staticThresholdPercent) {
+          const severity: Severity = deviationPercent > 25 ? 'HIGH' : 'MEDIUM';
+          const confidence = Math.min(deviationPercent / (staticThresholdPercent * 2), 1.0);
 
-        apiDetected = {
-          type: 'RAPID_ODDS_SHIFT',
-          severity,
-          confidence,
-          details: {
-            description: `Rapid odds shift detected via Polymarket API: ${deviationPercent.toFixed(2)}% deviation from market mid-price`,
-            metrics: {
-              tradePrice: trade.price,
-              marketMidPrice: midPrice,
-              bestBid: marketData.bestBid,
-              bestAsk: marketData.bestAsk,
-              deviationPercent,
-              volume24h: marketData.volume24h,
-              liquidity: marketData.liquidity,
+          apiDetected = {
+            type: 'RAPID_ODDS_SHIFT',
+            severity,
+            confidence,
+            details: {
+              description: `Rapid odds shift detected via Polymarket API: ${deviationPercent.toFixed(2)}% deviation from market mid-price`,
+              metrics: {
+                tradePrice: trade.price,
+                marketMidPrice: midPrice,
+                bestBid: marketData.bestBid,
+                bestAsk: marketData.bestAsk,
+                deviationPercent,
+                volume24h: marketData.volume24h,
+                liquidity: marketData.liquidity,
+              },
             },
-          },
-          detectedAt: new Date(),
-        };
+            detectedAt: new Date(),
+          };
+        }
       }
       // Do NOT return null here — always run the Z-score check as a complementary signal.
     }

@@ -4,8 +4,8 @@ import { RedisCache } from '../cache/RedisCache';
 import { BlockchainAnalyzer } from '../blockchain/BlockchainAnalyzer';
 import { Logger } from '../utils/Logger';
 
-// Keywords for filtering football and tennis markets
-const SPORTS_KEYWORDS = [
+// Keywords for excluding football and tennis markets (high-frequency noise, no insider signal)
+const EXCLUDED_SPORTS_KEYWORDS = [
   // Football / Soccer
   'football',
   'soccer',
@@ -95,9 +95,10 @@ export class SmartMoneyDetector {
 
   // ─── Market filter ────────────────────────────────────────────────────────
 
-  isSupportedMarket(trade: FilteredTrade): boolean {
+  /** Returns true when the market should be EXCLUDED (football/tennis noise). */
+  isExcludedMarket(trade: FilteredTrade): boolean {
     const searchText = `${trade.marketName} ${trade.marketCategory ?? ''}`.toLowerCase();
-    return SPORTS_KEYWORDS.some(kw => searchText.includes(kw));
+    return EXCLUDED_SPORTS_KEYWORDS.some(kw => searchText.includes(kw));
   }
 
   // ─── Confidence index ─────────────────────────────────────────────────────
@@ -262,23 +263,24 @@ export class SmartMoneyDetector {
 
   /**
    * Volume over the last 30 days.
-   * < $1 k → 0   |   > $100 k → 100   |   linear in between.
+   * < $500 → 0   |   > $10 k → 100   |   linear in between.
+   * $10k/month is a realistic bar for an active Polymarket trader.
    */
   private scoreVolume(recentVolume: number): number {
-    if (recentVolume <= 1_000)   return 0;
-    if (recentVolume >= 100_000) return 100;
-    return ((recentVolume - 1_000) / 99_000) * 100;
+    if (recentVolume <= 500)    return 0;
+    if (recentVolume >= 10_000) return 100;
+    return ((recentVolume - 500) / 9_500) * 100;
   }
 
   /**
    * Bet-size ratio (current / wallet average).
-   * < 0.5 × → 0   |   > 10 × → 100   |   linear in between.
-   * A large ratio signals the wallet has strong conviction on this particular trade.
+   * < 0.5 × → 0   |   > 3 × → 100   |   linear in between.
+   * 3x the wallet's average is already a strong conviction signal on Polymarket.
    */
   private scoreBetSize(ratio: number): number {
     if (ratio <= 0.5) return 0;
-    if (ratio >= 10)  return 100;
-    return ((ratio - 0.5) / 9.5) * 100;
+    if (ratio >= 3)   return 100;
+    return ((ratio - 0.5) / 2.5) * 100;
   }
 
   /**
@@ -320,7 +322,7 @@ export class SmartMoneyDetector {
   // ─── Main detection entry point ───────────────────────────────────────────
 
   async detect(trade: FilteredTrade): Promise<SmartMoneyAlert | null> {
-    if (!this.isSupportedMarket(trade))                   return null;
+    if (this.isExcludedMarket(trade))                            return null;
     if (trade.sizeUSDC < this.config.minTradeSizeUSDC)   return null;
     if (!trade.walletAddress) {
       this.logger.debug('SmartMoneyDetector: no wallet address', { marketId: trade.marketId });

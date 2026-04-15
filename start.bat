@@ -15,26 +15,26 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-echo √ Docker is running
+echo Docker is running
 echo.
 
 REM Start Docker services (Redis ^& TimescaleDB)
 echo 2. Starting Docker services (Redis ^& TimescaleDB^)...
 docker-compose up -d
-echo √ Docker services started
+echo Docker services started
 echo.
 
 REM Wait for services to be ready
 echo 3. Waiting for services to be ready...
 timeout /t 5 /nobreak >nul
-echo √ Services ready
+echo Services ready
 echo.
 
 REM Install dependencies (only if node_modules doesn't exist)
 if not exist "node_modules\" (
     echo 4. Installing dependencies...
     call npm install
-    echo √ Dependencies installed
+    echo Dependencies installed
 ) else (
     echo 4. Dependencies already up to date (skipping npm install^)
 )
@@ -43,13 +43,13 @@ echo.
 REM Build TypeScript
 echo 5. Building TypeScript...
 call npm run build
-echo √ Build complete
+echo Build complete
 echo.
 
 REM Start services with PM2
 echo 6. Starting services with PM2...
 call npx pm2 start ecosystem.config.js
-echo √ Services started
+echo Services started
 echo.
 
 REM Show status
@@ -60,7 +60,7 @@ call npx pm2 status
 echo.
 
 echo ==========================================
-echo √ All services are running!
+echo All services are running!
 echo ==========================================
 echo.
 echo Useful commands:

@@ -26,7 +26,7 @@ echo ==========================================
 call npx pm2 status
 echo.
 
-echo √ Restart complete!
+echo Restart complete!
 echo.
 echo View logs with: npm run logs
 echo.

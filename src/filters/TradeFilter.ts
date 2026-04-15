@@ -3,12 +3,16 @@ import { RawTrade, FilteredTrade } from '../types/index';
 const DEFAULT_MIN_TRADE_SIZE_USDC = 5000;
 
 /**
- * Matches short-duration market names like:
- *   "Will X happen in the next 5 minutes?"
- *   "5-min", "5 min", "5minute", "10 minutes", "15-minute", etc.
- * Covers 1–59 minute windows to catch all intraday noise markets.
+ * Matches Polymarket's "N Minute" crypto price markets exclusively:
+ *   Title:       "[Asset] N Minute"          e.g. "Bitcoin 5 Minute"
+ *   Description: "Will X go up or down in the next N minutes?"
+ *
+ * These are high-frequency noise markets with no insider-trading signal.
+ * The pattern is intentionally narrow to avoid false positives on legitimate
+ * sports or event markets that may mention durations incidentally.
  */
-const SHORT_DURATION_MARKET_REGEX = /\b([1-9]|[1-5]\d)\s*-?\s*min(ute)?s?\b/i;
+const SHORT_DURATION_MARKET_REGEX =
+  /\b\d+\s+minutes?\b|\bwill\s+\w+\s+go\s+up\s+or\s+down\s+in\s+the\s+next\s+\d+\s+minutes?\b/i;
 
 export class TradeFilter {
   private minTradeSizeUSDC: number;

@@ -38,6 +38,7 @@ export class PolymarketAPI {
       const response = await fetch(url, {
         method: 'GET',
         headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(5000), // Bug fix #9: 5-second timeout
       });
 
       if (!response.ok) {

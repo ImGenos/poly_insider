@@ -100,6 +100,7 @@ export class BlockchainAnalyzer {
    * Filters for USDC transfers to/from Polymarket contracts to approximate trade history
    * @param address - Wallet address to analyze
    * @param maxCount - Maximum number of transfers to retrieve (default: 100)
+   * @throws Error when Alchemy API call fails (caller must handle and track failures)
    */
   async getWalletTradeHistory(address: string, maxCount = 100): Promise<WalletTradeHistory> {
     await this.throttleAlchemy();
@@ -121,15 +122,6 @@ export class BlockchainAnalyzer {
           withMetadata: true,
         },
       ],
-    };
-
-    const emptyFailed: WalletTradeHistory = {
-      address,
-      tradeSizes: [],
-      tradeCount: 0,
-      avgTradeSize: 0,
-      stddevTradeSize: 0,
-      fetchFailed: true, // caller knows this is a failure, not an empty wallet
     };
 
     let data: AlchemyResponse;
@@ -154,7 +146,8 @@ export class BlockchainAnalyzer {
         address,
         error: String(err),
       });
-      return emptyFailed; // fetchFailed: true
+      // Re-throw to propagate error to caller for proper tracking
+      throw err;
     }
 
     // Parse succeeded — build the history (fetchFailed: false even if tradeSizes is empty)
@@ -346,6 +339,9 @@ export class BlockchainAnalyzer {
    * Get the funder (from address) of the first inbound transaction.
    * Checks Redis cache first; caches result after Alchemy call.
    * Requirements 7.1, 7.2
+   * 
+   * NOTE: analyzeWalletProfile must be called first to enable caching.
+   * If redisCache is null, cache lookup is skipped and the method proceeds directly to Alchemy.
    */
   async getWalletFunder(address: string): Promise<string | null> {
     if (!isValidEthAddress(address)) {
@@ -355,9 +351,12 @@ export class BlockchainAnalyzer {
 
     const cache = this.redisCache;
 
-    // Check Redis cache first (Req 7.1) — before the rate-limit throttle so that
-    // cache hits never consume Alchemy quota.
-    if (cache) {
+    // Null check: if redisCache is null, skip cache lookup and proceed to Alchemy
+    if (cache === null) {
+      this.logger.debug('BlockchainAnalyzer: redisCache not initialized, skipping cache for funder lookup', { address });
+    } else {
+      // Check Redis cache first (Req 7.1) — before the rate-limit throttle so that
+      // cache hits never consume Alchemy quota.
       const cachedFunder = await cache.getWalletFunder(address);
       if (cachedFunder !== null) {
         return cachedFunder;

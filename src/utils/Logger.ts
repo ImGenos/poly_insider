@@ -53,9 +53,20 @@ export class Logger {
   private fileStream: fs.WriteStream | null = null;
   private secretValues: string[];
 
-  constructor(logLevel: LogLevel, logFilePath?: string) {
-    this.logLevel = logLevel;
-    this.logFilePath = logFilePath;
+  constructor(logLevel: LogLevel, logFilePath?: string);
+  constructor(serviceName: string);
+  constructor(logLevelOrServiceName: LogLevel | string, logFilePath?: string) {
+    // Named-logger pattern: if first arg is not a valid LogLevel, treat it as a service name
+    if (logLevelOrServiceName === 'debug' || logLevelOrServiceName === 'info' || 
+        logLevelOrServiceName === 'warn' || logLevelOrServiceName === 'error') {
+      this.logLevel = logLevelOrServiceName;
+      this.logFilePath = logFilePath;
+    } else {
+      // Service name provided — default to 'info' level
+      this.logLevel = 'info';
+      this.logFilePath = undefined;
+    }
+    
     this.currentDateSuffix = getDateSuffix();
     this.nextRotateAt = Logger.nextMidnight();
     this.secretValues = buildSecretValues();

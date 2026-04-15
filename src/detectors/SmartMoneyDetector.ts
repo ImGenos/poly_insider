@@ -89,8 +89,8 @@ export class SmartMoneyDetector {
     this.config = config;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
-    this.alchemyApiKey = alchemyApiKey;
     this.logger = logger;
+    this.alchemyApiKey = alchemyApiKey;
   }
 
   // ─── Market filter ────────────────────────────────────────────────────────

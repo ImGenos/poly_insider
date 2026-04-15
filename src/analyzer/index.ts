@@ -395,8 +395,8 @@ export class AnalyzerService {
       }
       return anomalies;
     } catch (err) {
-      this.logger.warn('AnalyzerService: anomalyDetector.analyze threw', { error: String(err) });
-      // Req 16.6: track consecutive Alchemy failures
+      this.logger.warn('AnalyzerService: anomalyDetector.analyze threw (Alchemy failure)', { error: String(err) });
+      // Increment alchemyConsecutiveFails when getWalletTradeHistory throws
       this.alchemyConsecutiveFails++;
       if (
         this.alchemyConsecutiveFails > ALCHEMY_CONSECUTIVE_FAIL_THRESHOLD &&

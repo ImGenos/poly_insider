@@ -130,13 +130,20 @@ export class DataAPIPoller {
 
   private _normalizeDataAPITrade(trade: DataAPITrade): RawTrade | null {
     try {
+      // Bug fix #8: correct size_usd calculation for NO/SELL trades
+      // BUY (YES side): cost = size * price
+      // SELL (NO side): cost = size * (1 - price)
+      const sizeUsd = trade.side === 'BUY' 
+        ? trade.size * trade.price 
+        : trade.size * (1 - trade.price);
+
       return {
         market_id: trade.slug || trade.conditionId,
         market_name: trade.title,
         side: trade.side === 'BUY' ? 'YES' : 'NO',
         price: trade.price,
         size: trade.size,
-        size_usd: trade.size,
+        size_usd: sizeUsd,
         timestamp: trade.timestamp * 1000,
         maker_address: undefined,
         taker_address: trade.proxyWallet,

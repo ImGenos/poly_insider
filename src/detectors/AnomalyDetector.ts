@@ -67,7 +67,8 @@ export class AnomalyDetector {
     let apiDetected: Anomaly | null = null;
     if (marketData && marketData.lastPrice > 0) {
       const midPrice = (marketData.bestBid + marketData.bestAsk) / 2;
-      if (midPrice > 0) {
+      // Guard: skip API branch if midPrice is zero or NaN
+      if (midPrice > 0 && !isNaN(midPrice)) {
         const priceDeviation = Math.abs(trade.price - midPrice);
         const deviationPercent = (priceDeviation / midPrice) * 100;
 
@@ -202,14 +203,8 @@ export class AnomalyDetector {
           100,
         );
 
-        if (walletHistory.fetchFailed) {
-          // Alchemy call failed — log and fall through to market-level Z-score.
-          // Do NOT treat this as "wallet has 0 trades" (would mis-signal as anomaly).
-          this.logger.warn('AnomalyDetector: wallet trade history unavailable, using market fallback', {
-            walletAddress: trade.walletAddress,
-          });
-          // fall through to market Z-score below
-        } else if (walletHistory.tradeCount >= 5 && walletHistory.stddevTradeSize > 0) {
+        // walletHistory.fetchFailed is no longer used — if we reach here, fetch succeeded
+        if (walletHistory.tradeCount >= 5 && walletHistory.stddevTradeSize > 0 && walletHistory.avgTradeSize > 0) {
           // We have a real behavioral baseline for this wallet
           const behavioralZScore = calculateZScore(
             trade.sizeUSDC,
@@ -248,11 +243,13 @@ export class AnomalyDetector {
         }
         // else: tradeCount < 5 or stddev === 0 — fall through to market-level fallbacks
       } catch (err) {
-        this.logger.warn('AnomalyDetector: unexpected error in behavioral Z-score path', {
+        // Alchemy call failed — propagate to AnalyzerService for tracking
+        this.logger.warn('AnomalyDetector: getWalletTradeHistory failed, using market fallback', {
           walletAddress: trade.walletAddress,
           error: String(err),
         });
-        // fall through
+        // Re-throw so AnalyzerService can increment alchemyConsecutiveFails
+        throw err;
       }
     }
 

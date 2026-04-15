@@ -63,6 +63,8 @@ SELECT
   COUNT(*) AS trade_count
 FROM price_history
 GROUP BY bucket, market_id;
+
+SELECT add_continuous_aggregate_policy('market_volatility_1h', start_offset => INTERVAL '3 hours', end_offset => INTERVAL '1 hour', schedule_interval => INTERVAL '1 hour');
 `;
 
 export class TimeSeriesDB {
@@ -230,6 +232,8 @@ export class TimeSeriesDB {
 
   async recordClusterTrade(trade: FilteredTrade): Promise<void> {
     if (!this.pool) return;
+    // Guard: skip recording if wallet address is not available
+    if (!trade.walletAddress) return;
     try {
       await this.pool.query(
         'INSERT INTO cluster_trades (time, market_id, side, wallet_address, size_usd) VALUES ($1, $2, $3, $4, $5)',

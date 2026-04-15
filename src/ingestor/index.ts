@@ -227,7 +227,9 @@ export default async function main(): Promise<void> {
   await service.start();
 }
 
-main().catch((err) => {
-  console.error('Fatal error in ingestor:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('Fatal error in ingestor:', err);
+    process.exit(1);
+  });
+}

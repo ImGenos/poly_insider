@@ -18,7 +18,7 @@ export class ExchangeRateService {
   private readonly logger: Logger;
 
   private constructor(logger?: Logger) {
-    this.logger = logger ?? new Logger('ExchangeRateService');
+    this.logger = logger ?? new Logger('info', undefined);
   }
 
   static getInstance(logger?: Logger): ExchangeRateService {

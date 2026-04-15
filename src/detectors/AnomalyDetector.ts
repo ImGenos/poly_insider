@@ -241,7 +241,10 @@ export class AnomalyDetector {
           // a false positive for a whale who is simply making a normal-sized trade.
           return null;
         }
-        // else: tradeCount < 5 or stddev === 0 — fall through to market-level fallbacks
+        // Insufficient wallet history (tradeCount < 5 or stddev === 0)
+        // Return null — do NOT fall through to market-level fallbacks when wallet
+        // address is present but we lack sufficient behavioral data.
+        return null;
       } catch (err) {
         // Alchemy call failed — propagate to AnalyzerService for tracking
         this.logger.warn('AnomalyDetector: getWalletTradeHistory failed, using market fallback', {

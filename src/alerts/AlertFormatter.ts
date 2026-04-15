@@ -47,7 +47,7 @@ function formatEur(sizeUSDC: number, rate: number): string {
 }
 
 function polygonScanLink(address: string): string {
-  const short = `${address.slice(0, 6)}...${address.slice(-4)}`;
+  const short = `${address.slice(0, 6)}…${address.slice(-4)}`;
   return `[${escapeMarkdown(short)}](${POLYGONSCAN_BASE}/${address})`;
 }
 

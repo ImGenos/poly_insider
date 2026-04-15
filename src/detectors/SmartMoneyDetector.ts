@@ -4,8 +4,9 @@ import { RedisCache } from '../cache/RedisCache';
 import { BlockchainAnalyzer } from '../blockchain/BlockchainAnalyzer';
 import { Logger } from '../utils/Logger';
 
-// Mots-clés pour filtrer les marchés de football
-const FOOTBALL_KEYWORDS = [
+// Keywords for filtering football and tennis markets
+const SPORTS_KEYWORDS = [
+  // Football / Soccer
   'football',
   'soccer',
   'champions league',
@@ -19,26 +20,41 @@ const FOOTBALL_KEYWORDS = [
   'world cup',
   'euro',
   'copa',
+  // Tennis
+  'tennis',
+  'atp',
+  'wta',
+  'grand slam',
+  'wimbledon',
+  'roland garros',
+  'us open',
+  'australian open',
+  'french open',
+  'davis cup',
 ];
+
+// Minimum transfers required before we trust the score.
+// A wallet with only 1-2 USDC transfers has no meaningful pattern.
+const MIN_TRANSFERS_FOR_SCORING = 5;
 
 export interface SmartMoneyConfig {
   minTradeSizeUSDC: number;
-  confidenceThreshold: number; // Score minimum pour déclencher une alerte (ex: 80)
-  walletProfileTTL: number; // TTL en secondes pour le cache des profils (ex: 86400 = 24h)
+  confidenceThreshold: number;
+  walletProfileTTL: number;
 }
 
 export interface BettorConfidenceIndex {
   walletAddress: string;
-  score: number; // 0-100
+  score: number; // 0–100
   metrics: {
-    pnl: number; // Profit & Loss historique
-    pnlScore: number;
     recentVolume: number;
     volumeScore: number;
-    betSizeRatio: number; // Ratio mise actuelle / mise moyenne
+    betSizeRatio: number;
     betSizeScore: number;
-    winRate: number; // Taux de réussite (0-1)
-    winRateScore: number;
+    /** How regularly the wallet trades (low CV = consistent = higher score). */
+    activityConsistency: number;
+    activityConsistencyScore: number;
+    transferCount: number;
   };
   calculatedAt: Date;
 }
@@ -59,6 +75,7 @@ export class SmartMoneyDetector {
   private readonly config: SmartMoneyConfig;
   private readonly timeSeriesDB: TimeSeriesDB;
   private readonly redisCache: RedisCache;
+  private readonly alchemyApiKey: string;
   private readonly logger: Logger;
 
   constructor(
@@ -67,28 +84,28 @@ export class SmartMoneyDetector {
     redisCache: RedisCache,
     _blockchainAnalyzer: BlockchainAnalyzer,
     logger: Logger,
+    alchemyApiKey: string,
   ) {
     this.config = config;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
-    // _blockchainAnalyzer is passed for future use but not currently needed
+    this.alchemyApiKey = alchemyApiKey;
     this.logger = logger;
   }
 
-  // ─── Filtre de Marché Football ────────────────────────────────────────────
+  // ─── Market filter ────────────────────────────────────────────────────────
 
-  isFootballMarket(trade: FilteredTrade): boolean {
-    const searchText = `${trade.marketName} ${trade.marketCategory || ''}`.toLowerCase();
-    return FOOTBALL_KEYWORDS.some(keyword => searchText.includes(keyword));
+  isSupportedMarket(trade: FilteredTrade): boolean {
+    const searchText = `${trade.marketName} ${trade.marketCategory ?? ''}`.toLowerCase();
+    return SPORTS_KEYWORDS.some(kw => searchText.includes(kw));
   }
 
-  // ─── Calcul de l'Index de Confiance ───────────────────────────────────────
+  // ─── Confidence index ─────────────────────────────────────────────────────
 
   async calculateBettorConfidenceIndex(
     walletAddress: string,
     currentTradeSize: number,
   ): Promise<BettorConfidenceIndex | null> {
-    // Vérifier le cache Redis d'abord
     const cached = await this.getCachedConfidenceIndex(walletAddress);
     if (cached) {
       this.logger.debug('SmartMoneyDetector: using cached confidence index', { walletAddress });
@@ -96,45 +113,37 @@ export class SmartMoneyDetector {
     }
 
     try {
-      // Récupérer les métriques on-chain via Alchemy
       const metrics = await this.fetchWalletMetrics(walletAddress, currentTradeSize);
-      
-      if (!metrics) {
-        return null;
-      }
+      if (!metrics) return null;
 
-      // Calculer les scores individuels (0-100)
-      const pnlScore = this.calculatePnLScore(metrics.pnl);
-      const volumeScore = this.calculateVolumeScore(metrics.recentVolume);
-      const betSizeScore = this.calculateBetSizeScore(metrics.betSizeRatio);
-      const winRateScore = this.calculateWinRateScore(metrics.winRate);
+      const volumeScore            = this.scoreVolume(metrics.recentVolume);
+      const betSizeScore           = this.scoreBetSize(metrics.betSizeRatio);
+      const activityConsistencyScore = this.scoreActivityConsistency(metrics.activityConsistency);
 
-      // Score final pondéré
-      const finalScore = 
-        pnlScore * 0.40 +      // 40% - Historique PnL (pondération forte)
-        volumeScore * 0.20 +   // 20% - Volume récent
-        betSizeScore * 0.25 +  // 25% - Ratio de mise
-        winRateScore * 0.15;   // 15% - Taux de réussite
+      // Weights: volume 35 % | bet-size ratio 35 % | activity consistency 30 %
+      // PnL is NOT included: it cannot be derived from raw USDC transfer history
+      // without tracking resolved market outcomes separately.
+      const finalScore =
+        volumeScore            * 0.35 +
+        betSizeScore           * 0.35 +
+        activityConsistencyScore * 0.30;
 
       const confidenceIndex: BettorConfidenceIndex = {
         walletAddress,
         score: Math.round(finalScore),
         metrics: {
-          pnl: metrics.pnl,
-          pnlScore,
-          recentVolume: metrics.recentVolume,
+          recentVolume:              metrics.recentVolume,
           volumeScore,
-          betSizeRatio: metrics.betSizeRatio,
+          betSizeRatio:              metrics.betSizeRatio,
           betSizeScore,
-          winRate: metrics.winRate,
-          winRateScore,
+          activityConsistency:       metrics.activityConsistency,
+          activityConsistencyScore,
+          transferCount:             metrics.transferCount,
         },
         calculatedAt: new Date(),
       };
 
-      // Mettre en cache
       await this.cacheConfidenceIndex(confidenceIndex);
-
       return confidenceIndex;
     } catch (err) {
       this.logger.warn('SmartMoneyDetector: failed to calculate confidence index', {
@@ -145,98 +154,103 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Récupération des Métriques Wallet ────────────────────────────────────
+  // ─── Wallet metrics from Alchemy ──────────────────────────────────────────
 
   private async fetchWalletMetrics(
     walletAddress: string,
     currentTradeSize: number,
   ): Promise<{
-    pnl: number;
     recentVolume: number;
     betSizeRatio: number;
-    winRate: number;
+    /** Coefficient of Variation of trade sizes (stddev / mean). Lower = more consistent. */
+    activityConsistency: number;
+    transferCount: number;
   } | null> {
-    // Récupérer l'historique des transactions Polymarket via Alchemy
-    // Note: Polymarket utilise le contrat CTF Exchange sur Polygon
-    const history = await this.getPolymarketHistory(walletAddress);
-    
-    if (!history || history.length === 0) {
+    const transfers = await this.getPolymarketUsdcTransfers(walletAddress);
+
+    if (transfers.length < MIN_TRANSFERS_FOR_SCORING) {
+      this.logger.debug('SmartMoneyDetector: insufficient transfer history', {
+        walletAddress,
+        transferCount: transfers.length,
+        required: MIN_TRANSFERS_FOR_SCORING,
+      });
       return null;
     }
 
-    // Calculer PnL (simplifié: somme des gains - pertes)
-    const pnl = this.calculatePnL(history);
-
-    // Volume récent (30 derniers jours)
+    // Volume over the last 30 days
     const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-    const recentTrades = history.filter(tx => tx.timestamp > thirtyDaysAgo);
-    const recentVolume = recentTrades.reduce((sum, tx) => sum + tx.value, 0);
+    const recentVolume = transfers
+      .filter(tx => tx.timestamp > thirtyDaysAgo)
+      .reduce((sum, tx) => sum + tx.value, 0);
 
-    // Ratio de mise (mise actuelle / mise moyenne)
-    const avgTradeSize = history.reduce((sum, tx) => sum + tx.value, 0) / history.length;
-    const betSizeRatio = avgTradeSize > 0 ? currentTradeSize / avgTradeSize : 1;
+    // Bet-size ratio: how many times larger is this trade vs. the wallet average?
+    const values = transfers.map(tx => tx.value);
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const betSizeRatio = mean > 0 ? currentTradeSize / mean : 1;
 
-    // Taux de réussite (positions gagnantes / total)
-    const winRate = this.calculateWinRate(history);
+    // Activity consistency: Coefficient of Variation (CV = stddev / mean).
+    // A low CV means the wallet trades in steady, similar-sized lots — a hallmark
+    // of a disciplined, experienced bettor rather than a one-off participant.
+    // CV is bounded to [0, 3] before inversion so a single outlier doesn't collapse
+    // the score entirely.
+    const variance = values.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / values.length;
+    const stddev = Math.sqrt(variance);
+    const cv = mean > 0 ? stddev / mean : 3; // treat zero-mean as maximally inconsistent
+    // Invert: low CV → high consistency score
+    const activityConsistency = Math.max(0, 1 - Math.min(cv, 3) / 3);
 
     return {
-      pnl,
       recentVolume,
       betSizeRatio,
-      winRate,
+      activityConsistency,
+      transferCount: transfers.length,
     };
   }
 
-  private async getPolymarketHistory(walletAddress: string): Promise<PolymarketTransaction[]> {
-    // Utiliser l'API Alchemy pour récupérer les transactions du wallet
-    // Filtrer uniquement les interactions avec le contrat Polymarket CTF Exchange
-    const POLYMARKET_CTF_EXCHANGE = '0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E'.toLowerCase();
-    
-    try {
-      const alchemyApiKey = process.env.ALCHEMY_API_KEY || '';
-      const url = `https://polygon-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
-      
-      const body = {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'alchemy_getAssetTransfers',
-        params: [{
-          fromAddress: walletAddress,
-          toAddress: POLYMARKET_CTF_EXCHANGE,
-          category: ['external', 'erc20'],
-          maxCount: 100,
-          order: 'desc',
-        }],
-      };
+  // ─── Alchemy: fetch USDC transfers to Polymarket CTF Exchange ────────────
 
+  private async getPolymarketUsdcTransfers(
+    walletAddress: string,
+  ): Promise<Array<{ timestamp: number; value: number }>> {
+    const POLYMARKET_CTF_EXCHANGE = '0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E';
+    const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
+
+    const body = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'alchemy_getAssetTransfers',
+      params: [{
+        fromAddress: walletAddress,
+        toAddress: POLYMARKET_CTF_EXCHANGE,
+        category: ['erc20'],
+        maxCount: 100,
+        order: 'desc',
+        withMetadata: true,
+      }],
+    };
+
+    try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
 
-      if (!response.ok) {
-        throw new Error(`Alchemy HTTP error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Alchemy HTTP ${response.status}`);
 
       const data = await response.json() as AlchemyAssetTransferResponse;
-      
-      if (data.error) {
-        throw new Error(`Alchemy RPC error: ${data.error.message}`);
-      }
+      if (data.error) throw new Error(`Alchemy RPC: ${data.error.message}`);
 
-      const transfers = data.result?.transfers || [];
-      
-      return transfers.map(tx => ({
-        hash: tx.hash || '',
-        timestamp: tx.metadata?.blockTimestamp 
-          ? new Date(tx.metadata.blockTimestamp).getTime() 
-          : Date.now(),
-        value: tx.value ? parseFloat(tx.value) : 0,
-        asset: tx.asset || 'USDC',
-      }));
+      return (data.result?.transfers ?? [])
+        .filter(tx => tx.asset?.toUpperCase() === 'USDC' && tx.value != null)
+        .map(tx => ({
+          timestamp: tx.metadata?.blockTimestamp
+            ? new Date(tx.metadata.blockTimestamp).getTime()
+            : Date.now(),
+          value: tx.value!,
+        }));
     } catch (err) {
-      this.logger.warn('SmartMoneyDetector: failed to fetch Polymarket history', {
+      this.logger.warn('SmartMoneyDetector: Alchemy transfer fetch failed', {
         walletAddress,
         error: String(err),
       });
@@ -244,82 +258,54 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Calculs de Scores ─────────────────────────────────────────────────────
+  // ─── Scoring functions ────────────────────────────────────────────────────
 
-  private calculatePnL(history: PolymarketTransaction[]): number {
-    // Simplification: on estime le PnL basé sur le volume total
-    // Dans une implémentation réelle, il faudrait tracker les positions ouvertes/fermées
-    const totalVolume = history.reduce((sum, tx) => sum + tx.value, 0);
-    // Estimation: 10% de profit sur le volume total pour un bon trader
-    return totalVolume * 0.1;
+  /**
+   * Volume over the last 30 days.
+   * < $1 k → 0   |   > $100 k → 100   |   linear in between.
+   */
+  private scoreVolume(recentVolume: number): number {
+    if (recentVolume <= 1_000)   return 0;
+    if (recentVolume >= 100_000) return 100;
+    return ((recentVolume - 1_000) / 99_000) * 100;
   }
 
-  private calculatePnLScore(pnl: number): number {
-    // Score basé sur le PnL
-    // PnL > $50k = 100, PnL < 0 = 0
-    if (pnl <= 0) return 0;
-    if (pnl >= 50000) return 100;
-    return (pnl / 50000) * 100;
+  /**
+   * Bet-size ratio (current / wallet average).
+   * < 0.5 × → 0   |   > 10 × → 100   |   linear in between.
+   * A large ratio signals the wallet has strong conviction on this particular trade.
+   */
+  private scoreBetSize(ratio: number): number {
+    if (ratio <= 0.5) return 0;
+    if (ratio >= 10)  return 100;
+    return ((ratio - 0.5) / 9.5) * 100;
   }
 
-  private calculateVolumeScore(recentVolume: number): number {
-    // Score basé sur le volume récent (30 jours)
-    // Volume > $100k = 100, Volume < $1k = 0
-    if (recentVolume <= 1000) return 0;
-    if (recentVolume >= 100000) return 100;
-    return ((recentVolume - 1000) / 99000) * 100;
+  /**
+   * Activity consistency = 1 − min(CV, 3) / 3  (already in [0, 1]).
+   * 0 (chaotic sizes) → 0   |   1 (perfectly uniform) → 100.
+   */
+  private scoreActivityConsistency(consistency: number): number {
+    return Math.max(0, Math.min(consistency, 1)) * 100;
   }
 
-  private calculateBetSizeScore(betSizeRatio: number): number {
-    // Score basé sur le ratio de mise
-    // Ratio > 10x = 100 (conviction très forte)
-    // Ratio < 0.5x = 0 (mise plus faible que d'habitude)
-    if (betSizeRatio <= 0.5) return 0;
-    if (betSizeRatio >= 10) return 100;
-    return ((betSizeRatio - 0.5) / 9.5) * 100;
-  }
-
-  private calculateWinRate(history: PolymarketTransaction[]): number {
-    // Simplification: on estime un win rate de 60% pour les traders actifs
-    // Dans une implémentation réelle, il faudrait tracker les résultats des positions
-    if (history.length === 0) return 0;
-    return 0.6; // 60% de réussite estimé
-  }
-
-  private calculateWinRateScore(winRate: number): number {
-    // Score basé sur le taux de réussite
-    // Win rate > 70% = 100, Win rate < 40% = 0
-    if (winRate <= 0.4) return 0;
-    if (winRate >= 0.7) return 100;
-    return ((winRate - 0.4) / 0.3) * 100;
-  }
-
-  // ─── Cache Redis ───────────────────────────────────────────────────────────
+  // ─── Redis cache helpers ──────────────────────────────────────────────────
 
   private async getCachedConfidenceIndex(
     walletAddress: string,
   ): Promise<BettorConfidenceIndex | null> {
     try {
-      const key = `smart_money:${walletAddress}`;
-      const cached = await this.redisCache.get(key);
-      
-      if (!cached) return null;
-
-      return JSON.parse(cached) as BettorConfidenceIndex;
-    } catch (err) {
-      this.logger.warn('SmartMoneyDetector: failed to get cached confidence index', {
-        walletAddress,
-        error: String(err),
-      });
+      const raw = await this.redisCache.get(`smart_money:${walletAddress}`);
+      return raw ? (JSON.parse(raw) as BettorConfidenceIndex) : null;
+    } catch {
       return null;
     }
   }
 
   private async cacheConfidenceIndex(index: BettorConfidenceIndex): Promise<void> {
     try {
-      const key = `smart_money:${index.walletAddress}`;
       await this.redisCache.set(
-        key,
+        `smart_money:${index.walletAddress}`,
         JSON.stringify(index),
         this.config.walletProfileTTL,
       );
@@ -331,91 +317,69 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Détection Principale ──────────────────────────────────────────────────
+  // ─── Main detection entry point ───────────────────────────────────────────
 
   async detect(trade: FilteredTrade): Promise<SmartMoneyAlert | null> {
-    // Filtre 1: Vérifier que c'est un marché de football
-    if (!this.isFootballMarket(trade)) {
-      return null;
-    }
-
-    // Filtre 2: Vérifier le seuil de taille minimum
-    if (trade.sizeUSDC < this.config.minTradeSizeUSDC) {
-      return null;
-    }
-
-    // Filtre 3: Vérifier qu'on a une adresse wallet
+    if (!this.isSupportedMarket(trade))                   return null;
+    if (trade.sizeUSDC < this.config.minTradeSizeUSDC)   return null;
     if (!trade.walletAddress) {
-      this.logger.debug('SmartMoneyDetector: no wallet address available', {
-        marketId: trade.marketId,
-      });
+      this.logger.debug('SmartMoneyDetector: no wallet address', { marketId: trade.marketId });
       return null;
     }
 
-    // Calculer l'Index de Confiance
     const confidenceIndex = await this.calculateBettorConfidenceIndex(
       trade.walletAddress,
       trade.sizeUSDC,
     );
+    if (!confidenceIndex)                                           return null;
+    if (confidenceIndex.score < this.config.confidenceThreshold)   return null;
 
-    if (!confidenceIndex) {
-      return null;
-    }
+    const severity: Severity =
+      confidenceIndex.score >= 90 ? 'CRITICAL' :
+      confidenceIndex.score >= 85 ? 'HIGH'     :
+      'MEDIUM';
 
-    // Vérifier le seuil de confiance
-    if (confidenceIndex.score < this.config.confidenceThreshold) {
-      return null;
-    }
-
-    // Déterminer la sévérité
-    let severity: Severity;
-    if (confidenceIndex.score >= 90) {
-      severity = 'CRITICAL';
-    } else if (confidenceIndex.score >= 85) {
-      severity = 'HIGH';
-    } else {
-      severity = 'MEDIUM';
-    }
-
-    // Enregistrer dans TimescaleDB
     await this.recordSmartMoneyTrade(trade, confidenceIndex);
 
     return {
-      marketId: trade.marketId,
-      marketName: trade.marketName,
-      side: trade.side,
-      amount: trade.sizeUSDC,
-      price: trade.price,
-      walletAddress: trade.walletAddress,
+      marketId:        trade.marketId,
+      marketName:      trade.marketName,
+      side:            trade.side,
+      amount:          trade.sizeUSDC,
+      price:           trade.price,
+      walletAddress:   trade.walletAddress,
       confidenceIndex,
       severity,
-      detectedAt: new Date(),
+      detectedAt:      new Date(),
     };
   }
 
-  // ─── Stockage TimescaleDB ──────────────────────────────────────────────────
+  // ─── TimescaleDB persistence ──────────────────────────────────────────────
 
   private async recordSmartMoneyTrade(
     trade: FilteredTrade,
-    confidenceIndex: BettorConfidenceIndex,
+    ci: BettorConfidenceIndex,
   ): Promise<void> {
     try {
       await this.timeSeriesDB.recordSmartMoneyTrade({
-        timestamp: trade.timestamp,
-        marketId: trade.marketId,
-        marketName: trade.marketName,
-        side: trade.side,
-        walletAddress: trade.walletAddress!,
-        sizeUSDC: trade.sizeUSDC,
-        price: trade.price,
-        confidenceScore: confidenceIndex.score,
-        pnl: confidenceIndex.metrics.pnl,
-        recentVolume: confidenceIndex.metrics.recentVolume,
-        betSizeRatio: confidenceIndex.metrics.betSizeRatio,
-        winRate: confidenceIndex.metrics.winRate,
+        timestamp:       trade.timestamp,
+        marketId:        trade.marketId,
+        marketName:      trade.marketName,
+        side:            trade.side,
+        walletAddress:   trade.walletAddress!,
+        sizeUSDC:        trade.sizeUSDC,
+        price:           trade.price,
+        confidenceScore: ci.score,
+        // PnL is not computable from raw transfer data; store 0 as a neutral placeholder.
+        // A future upgrade could derive this by cross-referencing resolved market outcomes.
+        pnl:             0,
+        recentVolume:    ci.metrics.recentVolume,
+        betSizeRatio:    ci.metrics.betSizeRatio,
+        // Re-purpose the win_rate column to store activity consistency (same range: 0–1).
+        winRate:         ci.metrics.activityConsistency,
       });
     } catch (err) {
-      this.logger.warn('SmartMoneyDetector: failed to record smart money trade', {
+      this.logger.warn('SmartMoneyDetector: failed to record trade', {
         marketId: trade.marketId,
         error: String(err),
       });
@@ -423,30 +387,17 @@ export class SmartMoneyDetector {
   }
 }
 
-// ─── Types Internes ────────────────────────────────────────────────────────
-
-interface PolymarketTransaction {
-  hash: string;
-  timestamp: number;
-  value: number;
-  asset: string;
-}
+// ─── Alchemy response types ───────────────────────────────────────────────────
 
 interface AlchemyAssetTransferResponse {
   jsonrpc: string;
   id: number;
   result?: {
     transfers: Array<{
-      hash?: string;
-      value?: string;
+      value?: number;
       asset?: string;
-      metadata?: {
-        blockTimestamp?: string;
-      };
+      metadata?: { blockTimestamp?: string };
     }>;
   };
-  error?: {
-    code: number;
-    message: string;
-  };
+  error?: { code: number; message: string };
 }

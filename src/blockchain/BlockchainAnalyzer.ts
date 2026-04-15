@@ -5,15 +5,17 @@ import { isValidEthAddress, sleep } from '../utils/helpers';
 
 const EXCHANGE_LABEL = 'Exchange';
 
+// Module-level rate-limit state — shared across all BlockchainAnalyzer instances so
+// that multiple instances (e.g. in tests or future horizontal scale-up within the same
+// process) cannot each independently allow 5 req/s, effectively multiplying the cap.
+let _lastAlchemyCallTime = 0;
+const _minAlchemyIntervalMs = 200; // 5 req/s max
+
 export class BlockchainAnalyzer {
   private readonly alchemyApiKey: string;
   private readonly moralisApiKey: string;
   private readonly knownExchangeWallets: Set<string>;
   private readonly logger: Logger;
-
-  // Rate limiting: max 5 Alchemy requests/second → >= 200ms between calls (Req 20.3)
-  private lastAlchemyCallTime = 0;
-  private readonly minAlchemyIntervalMs = 200;
 
   /**
    * Set to true after any analyzeWalletProfile call that fell back to Moralis
@@ -41,11 +43,11 @@ export class BlockchainAnalyzer {
 
   private async throttleAlchemy(): Promise<void> {
     const now = Date.now();
-    const elapsed = now - this.lastAlchemyCallTime;
-    if (elapsed < this.minAlchemyIntervalMs) {
-      await sleep(this.minAlchemyIntervalMs - elapsed);
+    const elapsed = now - _lastAlchemyCallTime;
+    if (elapsed < _minAlchemyIntervalMs) {
+      await sleep(_minAlchemyIntervalMs - elapsed);
     }
-    this.lastAlchemyCallTime = Date.now();
+    _lastAlchemyCallTime = Date.now();
   }
 
   // ─── Alchemy API ──────────────────────────────────────────────────────────
@@ -121,6 +123,16 @@ export class BlockchainAnalyzer {
       ],
     };
 
+    const emptyFailed: WalletTradeHistory = {
+      address,
+      tradeSizes: [],
+      tradeCount: 0,
+      avgTradeSize: 0,
+      stddevTradeSize: 0,
+      fetchFailed: true, // caller knows this is a failure, not an empty wallet
+    };
+
+    let data: AlchemyResponse;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -132,46 +144,39 @@ export class BlockchainAnalyzer {
         throw new Error(`Alchemy HTTP error: ${response.status}`);
       }
 
-      const data = await response.json() as AlchemyResponse;
+      data = await response.json() as AlchemyResponse;
 
       if (data.error) {
         throw new Error(`Alchemy RPC error: ${data.error.message}`);
       }
-
-      const transfers = data.result?.transfers ?? [];
-      
-      // Extract trade sizes (USDC amounts)
-      const tradeSizes: number[] = [];
-      
-      for (const transfer of transfers) {
-        // Filter for USDC transfers (common USDC contract on Polygon)
-        if (transfer.asset?.toLowerCase() === 'usdc' && transfer.value) {
-          tradeSizes.push(transfer.value);
-        }
-      }
-
-      return {
-        address,
-        tradeSizes,
-        tradeCount: tradeSizes.length,
-        avgTradeSize: tradeSizes.length > 0 
-          ? tradeSizes.reduce((a, b) => a + b, 0) / tradeSizes.length 
-          : 0,
-        stddevTradeSize: this.calculateStdDev(tradeSizes),
-      };
     } catch (err) {
-      this.logger.warn('BlockchainAnalyzer: failed to get wallet trade history', {
+      this.logger.warn('BlockchainAnalyzer: getWalletTradeHistory fetch failed', {
         address,
         error: String(err),
       });
-      return {
-        address,
-        tradeSizes: [],
-        tradeCount: 0,
-        avgTradeSize: 0,
-        stddevTradeSize: 0,
-      };
+      return emptyFailed; // fetchFailed: true
     }
+
+    // Parse succeeded — build the history (fetchFailed: false even if tradeSizes is empty)
+    const transfers = data.result?.transfers ?? [];
+    const tradeSizes: number[] = [];
+
+    for (const transfer of transfers) {
+      if (transfer.asset?.toLowerCase() === 'usdc' && transfer.value) {
+        tradeSizes.push(transfer.value);
+      }
+    }
+
+    return {
+      address,
+      tradeSizes,
+      tradeCount: tradeSizes.length,
+      avgTradeSize: tradeSizes.length > 0
+        ? tradeSizes.reduce((a, b) => a + b, 0) / tradeSizes.length
+        : 0,
+      stddevTradeSize: this.calculateStdDev(tradeSizes),
+      fetchFailed: false, // we got a real answer; empty just means no USDC transfers
+    };
   }
 
   /**
@@ -350,7 +355,8 @@ export class BlockchainAnalyzer {
 
     const cache = this.redisCache;
 
-    // Check Redis cache first (Req 7.1)
+    // Check Redis cache first (Req 7.1) — before the rate-limit throttle so that
+    // cache hits never consume Alchemy quota.
     if (cache) {
       const cachedFunder = await cache.getWalletFunder(address);
       if (cachedFunder !== null) {
@@ -358,7 +364,7 @@ export class BlockchainAnalyzer {
       }
     }
 
-    // Call Alchemy
+    // Cache miss — now throttle and call Alchemy
     try {
       const transfer = await this.alchemyGetFirstInboundTransfer(address);
       const funder = transfer?.from ?? null;
@@ -501,4 +507,10 @@ export interface WalletTradeHistory {
   tradeCount: number;
   avgTradeSize: number;
   stddevTradeSize: number;
+  /**
+   * True when the Alchemy call itself failed — distinguishes an API error from
+   * a wallet that genuinely has no USDC transfer history.
+   * Callers MUST NOT treat a failed result as "new wallet with 0 trades".
+   */
+  fetchFailed: boolean;
 }

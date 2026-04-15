@@ -15,13 +15,15 @@ export class ExchangeRateService {
   private rate: number = FALLBACK_RATE;
   private lastFetchedAt: number = 0;
   private fetchPromise: Promise<void> | null = null;
-  private readonly logger = new Logger('ExchangeRateService');
+  private readonly logger: Logger;
 
-  private constructor() {}
+  private constructor(logger?: Logger) {
+    this.logger = logger ?? new Logger('info');
+  }
 
-  static getInstance(): ExchangeRateService {
+  static getInstance(logger?: Logger): ExchangeRateService {
     if (!ExchangeRateService.instance) {
-      ExchangeRateService.instance = new ExchangeRateService();
+      ExchangeRateService.instance = new ExchangeRateService(logger);
     }
     return ExchangeRateService.instance;
   }

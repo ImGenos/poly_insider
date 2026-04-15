@@ -131,17 +131,18 @@ export class DataAPIPoller {
   private _normalizeDataAPITrade(trade: DataAPITrade): RawTrade | null {
     try {
       return {
-        market_id: trade.conditionId,
+        market_id: trade.slug || trade.conditionId,
         market_name: trade.title,
         side: trade.side === 'BUY' ? 'YES' : 'NO',
         price: trade.price,
         size: trade.size,
-        size_usd: trade.size * trade.price,
-        timestamp: trade.timestamp * 1000, // Convert to milliseconds
-        maker_address: undefined, // Not available in Data API
+        size_usd: trade.size,
+        timestamp: trade.timestamp * 1000,
+        maker_address: undefined,
         taker_address: trade.proxyWallet,
         order_book_depth: { bid_liquidity: 0, ask_liquidity: 0 },
-        market_category: undefined // Will be enriched by market metadata
+        market_category: undefined,
+        outcome: trade.outcome || undefined,
       };
     } catch (err) {
       this.logger.warn('Failed to normalize Data API trade', { trade, error: err });

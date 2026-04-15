@@ -19,6 +19,7 @@ interface GammaMarket {
   conditionId: string;
   question: string;
   clobTokenIds: string[];
+  slug?: string;
   tags?: Array<{ label?: string; slug?: string }>;
   category?: string;
 }
@@ -46,6 +47,8 @@ export class WebSocketManager {
   private marketNames = new Map<string, string>();
   // market conditionId → category
   private marketCategories = new Map<string, string>();
+  // market conditionId → slug (for URL building)
+  private marketSlugs = new Map<string, string>();
   // token assetId → conditionId
   private tokenToMarket = new Map<string, string>();
   private tokenIds: string[] = [];
@@ -105,11 +108,13 @@ export class WebSocketManager {
 
       this.marketNames.clear();
       this.tokenToMarket.clear();
+      this.marketSlugs.clear();
       this.tokenIds = [];
 
       for (const m of markets) {
         if (!m.clobTokenIds?.length) continue;
         this.marketNames.set(m.conditionId, m.question ?? m.conditionId);
+        if (m.slug) this.marketSlugs.set(m.conditionId, m.slug);
         // Derive category from tags array or top-level category field
         const category = m.category ?? m.tags?.[0]?.slug ?? m.tags?.[0]?.label;
         if (category) this.marketCategories.set(m.conditionId, category.toLowerCase());
@@ -292,12 +297,13 @@ export class WebSocketManager {
     const conditionId = this.tokenToMarket.get(e.asset_id) ?? e.market ?? e.asset_id;
     const marketName = this.marketNames.get(conditionId) ?? conditionId;
     const marketCategory = this.marketCategories.get(conditionId);
+    const marketSlug = this.marketSlugs.get(conditionId);
 
     // Polymarket CLOB WS does not expose wallet addresses on the market channel.
     // Addresses are omitted here; wallet profiling happens via Alchemy on the analyzer side.
 
     return {
-      market_id: conditionId,
+      market_id: marketSlug ?? conditionId,
       market_name: marketName,
       side: e.side === 'BUY' ? 'YES' : 'NO',
       price,

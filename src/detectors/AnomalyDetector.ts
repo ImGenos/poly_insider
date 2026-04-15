@@ -63,18 +63,18 @@ export class AnomalyDetector {
     // Try to get real-time market data from Polymarket Gamma API first
     const marketData = await this.polymarketAPI.getMarket(trade.marketId);
     
+    // API signal: check deviation from live market mid-price
+    let apiDetected: Anomaly | null = null;
     if (marketData && marketData.lastPrice > 0) {
-      // Use Polymarket's own price data for more accurate market-level detection
       const midPrice = (marketData.bestBid + marketData.bestAsk) / 2;
       const priceDeviation = Math.abs(trade.price - midPrice);
       const deviationPercent = (priceDeviation / midPrice) * 100;
-      
-      // Check if current trade price deviates significantly from market mid-price
+
       if (deviationPercent >= staticThresholdPercent) {
         const severity: Severity = deviationPercent > 25 ? 'HIGH' : 'MEDIUM';
         const confidence = Math.min(deviationPercent / (staticThresholdPercent * 2), 1.0);
-        
-        return {
+
+        apiDetected = {
           type: 'RAPID_ODDS_SHIFT',
           severity,
           confidence,
@@ -93,16 +93,11 @@ export class AnomalyDetector {
           detectedAt: new Date(),
         };
       }
-      
-      // No anomaly detected with market data
-      return null;
+      // Do NOT return null here — always run the Z-score check as a complementary signal.
     }
 
-    // Fallback to original local price history approach
-    if (priceHistory.length === 0) {
-      return null;
-    }
-
+    // Z-score signal: always evaluated when local volatility data is available,
+    // regardless of whether the API succeeded. This makes detection truly additive.
     const zScoreMinSamples = this.thresholds.zScoreMinSamples;
 
     if (
@@ -113,30 +108,45 @@ export class AnomalyDetector {
       const priceChange = Math.abs(trade.price - volatility.avgPrice);
       const zScore = calculateZScore(trade.price, volatility.avgPrice, volatility.stddevPrice);
 
-      if (zScore < zScoreThreshold) {
-        return null;
-      }
+      if (zScore >= zScoreThreshold) {
+        const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
+        const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
 
-      const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
-      const confidence = 1 / (1 + Math.exp(-(zScore - zScoreThreshold)));
-
-      return {
-        type: 'RAPID_ODDS_SHIFT',
-        severity,
-        confidence,
-        details: {
-          description: `Rapid odds shift detected via Z-score (fallback): ${zScore.toFixed(2)}σ`,
-          metrics: {
-            zScore,
-            priceChange,
-            avgPrice: volatility.avgPrice,
-            stddevPrice: volatility.stddevPrice,
-            currentPrice: trade.price,
-            sampleCount: volatility.sampleCount,
+        // If both signals fire, take the higher-confidence result
+        const zScoreDetected: Anomaly = {
+          type: 'RAPID_ODDS_SHIFT',
+          severity,
+          confidence,
+          details: {
+            description: apiDetected
+              ? `Rapid odds shift confirmed by both API and Z-score: ${zScore.toFixed(2)}σ`
+              : `Rapid odds shift detected via Z-score: ${zScore.toFixed(2)}σ`,
+            metrics: {
+              zScore,
+              priceChange,
+              avgPrice: volatility.avgPrice,
+              stddevPrice: volatility.stddevPrice,
+              currentPrice: trade.price,
+              sampleCount: volatility.sampleCount,
+              ...(apiDetected ? { apiConfidence: apiDetected.confidence } : {}),
+            },
           },
-        },
-        detectedAt: new Date(),
-      };
+          detectedAt: new Date(),
+        };
+
+        // Return whichever signal has higher confidence
+        if (!apiDetected || zScoreDetected.confidence >= apiDetected.confidence) {
+          return zScoreDetected;
+        }
+        return apiDetected;
+      }
+    }
+
+    // Z-score didn't fire — return API result if it did, or fall through to static check
+    if (apiDetected) return apiDetected;
+
+    if (priceHistory.length === 0) {
+      return null;
     }
 
     const firstPrice = priceHistory[0].price;
@@ -185,18 +195,24 @@ export class AnomalyDetector {
     // If wallet address is available, use behavioral Z-score approach
     if (trade.walletAddress) {
       try {
-        // Get wallet's trading history from Alchemy
         const walletHistory = await this.blockchainAnalyzer.getWalletTradeHistory(
           trade.walletAddress,
-          100 // Last 100 trades
+          100,
         );
 
-        // Behavioral Z-score: "Is this trade unusual for THIS wallet?"
-        if (walletHistory.tradeCount >= 5 && walletHistory.stddevTradeSize > 0) {
+        if (walletHistory.fetchFailed) {
+          // Alchemy call failed — log and fall through to market-level Z-score.
+          // Do NOT treat this as "wallet has 0 trades" (would mis-signal as anomaly).
+          this.logger.warn('AnomalyDetector: wallet trade history unavailable, using market fallback', {
+            walletAddress: trade.walletAddress,
+          });
+          // fall through to market Z-score below
+        } else if (walletHistory.tradeCount >= 5 && walletHistory.stddevTradeSize > 0) {
+          // We have a real behavioral baseline for this wallet
           const behavioralZScore = calculateZScore(
             trade.sizeUSDC,
             walletHistory.avgTradeSize,
-            walletHistory.stddevTradeSize
+            walletHistory.stddevTradeSize,
           );
 
           if (behavioralZScore >= zScoreThreshold) {
@@ -208,7 +224,8 @@ export class AnomalyDetector {
               severity,
               confidence,
               details: {
-                description: `Whale activity detected via behavioral Z-score: ${behavioralZScore.toFixed(2)}σ - wallet trading ${(trade.sizeUSDC / walletHistory.avgTradeSize).toFixed(1)}x their average`,
+                description: `Whale activity via behavioral Z-score: ${behavioralZScore.toFixed(2)}σ — ` +
+                  `wallet trading ${(trade.sizeUSDC / walletHistory.avgTradeSize).toFixed(1)}x their average`,
                 metrics: {
                   behavioralZScore,
                   currentTradeSize: trade.sizeUSDC,
@@ -222,14 +239,18 @@ export class AnomalyDetector {
             };
           }
 
-          // No behavioral anomaly detected
+          // Behavioral baseline exists and trade is within normal range for this wallet.
+          // Return null — do NOT fall through to market Z-score, which would generate
+          // a false positive for a whale who is simply making a normal-sized trade.
           return null;
         }
+        // else: tradeCount < 5 or stddev === 0 — fall through to market-level fallbacks
       } catch (err) {
-        this.logger.warn('AnomalyDetector: failed to get wallet trade history, falling back', {
+        this.logger.warn('AnomalyDetector: unexpected error in behavioral Z-score path', {
           walletAddress: trade.walletAddress,
           error: String(err),
         });
+        // fall through
       }
     }
 

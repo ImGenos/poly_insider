@@ -1,12 +1,12 @@
 import { Anomaly, ClusterAnomaly, FilteredTrade, TelegramMessage } from '../types/index';
+import { SmartMoneyAlert } from '../detectors/SmartMoneyDetector';
 import { escapeMarkdown } from '../utils/helpers';
 import { ExchangeRateService } from '../utils/ExchangeRateService';
+import { Logger } from '../utils/Logger';
 
 const POLYGONSCAN_BASE = 'https://polygonscan.com/address';
 const POLYMARKET_BASE = 'https://polymarket.com/event';
 const MAX_MESSAGE_LENGTH = 4096;
-
-const fxService = ExchangeRateService.getInstance();
 
 function severityEmoji(severity: string): string {
   if (severity === 'HIGH' || severity === 'CRITICAL') return '🚨';
@@ -28,9 +28,17 @@ function sideFr(side: string): string {
   return side === 'YES' ? 'OUI' : 'NON';
 }
 
+/** Returns the position label: outcome name + side when outcome is known, plain OUI/NON otherwise. */
+function positionLabel(trade: FilteredTrade): string {
+  if (trade.outcome) {
+    return `${trade.outcome} \\(${sideFr(trade.side)}\\)`;
+  }
+  return sideFr(trade.side);
+}
+
 /** Convertit un montant USDC en euros et le formate en français (taux en cache) */
-function formatEur(sizeUSDC: number): string {
-  const eur = sizeUSDC * fxService.getCachedRate();
+function formatEur(sizeUSDC: number, rate: number): string {
+  const eur = sizeUSDC * rate;
   const formatted = eur.toLocaleString('fr-FR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -55,12 +63,15 @@ function truncate(text: string): string {
 }
 
 export class AlertFormatter {
+  private fxService: ExchangeRateService = ExchangeRateService.getInstance();
+
   /**
    * Pré-charge le taux de change USD→EUR au démarrage.
    * À appeler une fois lors de l'initialisation du service.
    */
-  async init(): Promise<void> {
-    await fxService.getUsdToEurRate();
+  async init(logger?: Logger): Promise<void> {
+    this.fxService = ExchangeRateService.getInstance(logger);
+    await this.fxService.getUsdToEurRate();
   }
 
   format(anomaly: Anomaly, trade: FilteredTrade): TelegramMessage {
@@ -91,6 +102,7 @@ export class AlertFormatter {
     const emoji = severityEmoji(anomaly.severity);
     const metrics = anomaly.details.metrics as Record<string, unknown>;
     const zScore = metrics.zScore as number | undefined;
+    const rate = this.fxService.getCachedRate();
 
     let detectionInfo: string;
     if (zScore !== undefined && zScore !== null) {
@@ -106,8 +118,8 @@ export class AlertFormatter {
       `${emoji} *GLISSEMENT DE COTE RAPIDE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Position : *${sideFr(trade.side)}*`,
-      `Montant : *${formatEur(trade.sizeUSDC)}*`,
+      `Position : *${escapeMarkdown(positionLabel(trade))}*`,
+      `Montant : *${formatEur(trade.sizeUSDC, rate)}*`,
       `${detectionInfo}`,
       `Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
       ``,
@@ -120,13 +132,14 @@ export class AlertFormatter {
     const metrics = anomaly.details.metrics as Record<string, unknown>;
     const zScore = metrics.zScore as number | undefined;
     const liquidityPct = metrics.liquidityConsumedPercent as number | undefined;
+    const rate = this.fxService.getCachedRate();
 
     const lines = [
       `${emoji} *ACTIVITÉ BALEINE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Position : *${sideFr(trade.side)}*`,
-      `Montant : *${formatEur(trade.sizeUSDC)}*`,
+      `Position : *${escapeMarkdown(positionLabel(trade))}*`,
+      `Montant : *${formatEur(trade.sizeUSDC, rate)}*`,
     ];
 
     if (liquidityPct !== undefined) {
@@ -150,13 +163,14 @@ export class AlertFormatter {
     const walletAge = metrics.ageHours as number | undefined;
     const txCount = metrics.transactionCount as number | undefined;
     const riskScore = metrics.riskScore as number | undefined;
+    const rate = this.fxService.getCachedRate();
 
     const lines = [
       `${emoji} *DÉLIT D'INITIÉ* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
-      `Position : *${sideFr(trade.side)}*`,
-      `Montant : *${formatEur(trade.sizeUSDC)}*`,
+      `Position : *${escapeMarkdown(positionLabel(trade))}*`,
+      `Montant : *${formatEur(trade.sizeUSDC, rate)}*`,
     ];
 
     if (walletAge !== undefined) {
@@ -178,13 +192,14 @@ export class AlertFormatter {
 
   formatClusterAlert(anomaly: ClusterAnomaly): string {
     const emoji = severityEmoji(anomaly.severity);
+    const rate = this.fxService.getCachedRate();
 
     const lines = [
       `${emoji} *CLUSTER DE PORTEFEUILLES COORDONNÉS* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(anomaly.marketId, anomaly.marketName)}`,
       `Position : *${sideFr(anomaly.side)}*`,
-      `Montant total : *${formatEur(anomaly.totalSizeUSDC)}*`,
+      `Montant total : *${formatEur(anomaly.totalSizeUSDC, rate)}*`,
       `Portefeuilles : *${escapeMarkdown(String(anomaly.wallets.length))}* en *${escapeMarkdown(String(anomaly.windowMinutes))} min*`,
     ];
 
@@ -220,6 +235,7 @@ export class AlertFormatter {
   formatSmartMoneyAlert(alert: SmartMoneyAlert): string {
     const emoji = severityEmoji(alert.severity);
     const ci = alert.confidenceIndex;
+    const rate = this.fxService.getCachedRate();
 
     const lines = [
       `${emoji} *ARGENT INTELLIGENT DÉTECTÉ* \\| ${escapeMarkdown(severityFr(alert.severity))}`,
@@ -227,16 +243,16 @@ export class AlertFormatter {
       `⚽ *Marché Football*`,
       `Marché : ${polymarketLink(alert.marketId, alert.marketName)}`,
       `Position : *${sideFr(alert.side)}*`,
-      `Montant : *${formatEur(alert.amount)}*`,
+      `Montant : *${formatEur(alert.amount, rate)}*`,
       `Prix : *${escapeMarkdown((alert.price * 100).toFixed(1))}%*`,
       ``,
       `📊 *Indice de confiance du parieur : ${escapeMarkdown(String(ci.score))}/100*`,
       ``,
       `*Métriques :*`,
-      `• PnL : *${formatEur(ci.metrics.pnl)}* \\(score : ${escapeMarkdown(ci.metrics.pnlScore.toFixed(0))}\\)`,
-      `• Volume récent : *${formatEur(ci.metrics.recentVolume)}* \\(score : ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
+      `• Volume récent : *${formatEur(ci.metrics.recentVolume, rate)}* \\(score : ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
       `• Ratio mise : *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* \\(score : ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))}\\)`,
-      `• Taux de victoire : *${escapeMarkdown((ci.metrics.winRate * 100).toFixed(1))}%* \\(score : ${escapeMarkdown(ci.metrics.winRateScore.toFixed(0))}\\)`,
+      `• Régularité : *${escapeMarkdown((ci.metrics.activityConsistency * 100).toFixed(1))}%* \\(score : ${escapeMarkdown(ci.metrics.activityConsistencyScore.toFixed(0))}\\)`,
+      `• Transactions : *${escapeMarkdown(String(ci.metrics.transferCount))}*`,
       ``,
       `Portefeuille : ${polygonScanLink(alert.walletAddress)}`,
     ];
@@ -253,28 +269,4 @@ export class AlertFormatter {
   }
 }
 
-// ─── Type Import for Smart Money ──────────────────────────────────────────
 
-interface SmartMoneyAlert {
-  marketId: string;
-  marketName: string;
-  side: 'YES' | 'NO';
-  amount: number;
-  price: number;
-  walletAddress: string;
-  confidenceIndex: {
-    score: number;
-    metrics: {
-      pnl: number;
-      pnlScore: number;
-      recentVolume: number;
-      volumeScore: number;
-      betSizeRatio: number;
-      betSizeScore: number;
-      winRate: number;
-      winRateScore: number;
-    };
-  };
-  severity: string;
-  detectedAt: Date;
-}

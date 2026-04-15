@@ -2,6 +2,14 @@ import { RawTrade, FilteredTrade } from '../types/index';
 
 const DEFAULT_MIN_TRADE_SIZE_USDC = 5000;
 
+/**
+ * Matches short-duration market names like:
+ *   "Will X happen in the next 5 minutes?"
+ *   "5-min", "5 min", "5minute", "10 minutes", "15-minute", etc.
+ * Covers 1–59 minute windows to catch all intraday noise markets.
+ */
+const SHORT_DURATION_MARKET_REGEX = /\b([1-9]|[1-5]\d)\s*-?\s*min(ute)?s?\b/i;
+
 export class TradeFilter {
   private minTradeSizeUSDC: number;
 
@@ -10,12 +18,17 @@ export class TradeFilter {
   }
 
   /**
-   * Filter a raw trade against the minimum size threshold.
-   * Returns a FilteredTrade (camelCase fields) if size_usd >= threshold, null otherwise.
+   * Filter a raw trade against the minimum size threshold and market duration.
+   * Returns a FilteredTrade (camelCase fields) if size_usd >= threshold and the
+   * market is not a short-duration (sub-hour) market, null otherwise.
    * Does NOT mutate the input trade.
    */
   filter(trade: RawTrade): FilteredTrade | null {
     if (trade.size_usd < this.minTradeSizeUSDC) {
+      return null;
+    }
+
+    if (SHORT_DURATION_MARKET_REGEX.test(trade.market_name)) {
       return null;
     }
 
@@ -27,6 +40,7 @@ export class TradeFilter {
     return {
       marketId: trade.market_id,
       marketName: trade.market_name,
+      outcome: trade.outcome,
       side: trade.side,
       price: trade.price,
       sizeUSDC: trade.size_usd,

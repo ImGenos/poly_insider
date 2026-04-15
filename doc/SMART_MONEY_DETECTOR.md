@@ -2,14 +2,15 @@
 
 ## Vue d'ensemble
 
-Le **SmartMoneyDetector** est un module d'analyse avancé qui identifie les transactions effectuées par des "smart money" (parieurs expérimentés et performants) sur les marchés de football de Polymarket.
+Le **SmartMoneyDetector** est un module d'analyse avancé qui identifie les transactions effectuées par des "smart money" (parieurs expérimentés et performants) sur les marchés de **football et de tennis** de Polymarket.
 
 ## Fonctionnalités
 
-### 1. Filtre de Marché Football
+### 1. Filtre de Marché (Football & Tennis)
 
-Le détecteur ne traite que les marchés liés au football, identifiés par des mots-clés dans le nom du marché ou la catégorie :
+Le détecteur ne traite que les marchés liés au football ou au tennis, identifiés par des mots-clés dans le nom du marché ou la catégorie :
 
+**Football / Soccer**
 - football
 - soccer
 - champions league
@@ -24,33 +25,44 @@ Le détecteur ne traite que les marchés liés au football, identifiés par des 
 - euro
 - copa
 
+**Tennis**
+- tennis
+- atp
+- wta
+- grand slam
+- wimbledon
+- roland garros
+- us open
+- australian open
+- french open
+- davis cup
+
+La méthode `isSupportedMarket()` vérifie si le nom du marché ou sa catégorie contient l'un de ces mots-clés (insensible à la casse).
+
 ### 2. Index de Confiance du Parieur (Bettor Confidence Index)
 
 Pour chaque transaction dépassant le seuil minimum (`SMART_MONEY_MIN_TRADE_SIZE`), le module calcule un score de confiance sur 100 basé sur les métriques on-chain suivantes :
 
 #### Métriques Analysées
 
-1. **Historique PnL (Profit & Loss)** - Pondération : 40%
-   - Analyse le profit/perte historique du portefeuille sur Polymarket
-   - Score : 0-100 (0 = PnL négatif, 100 = PnL > $50k)
-
-2. **Volume Récent** - Pondération : 20%
+1. **Volume Récent** - Pondération : 35%
    - Volume de trading des 30 derniers jours
    - Score : 0-100 (0 = < $1k, 100 = > $100k)
 
-3. **Ratio de Mise (Bet Size Ratio)** - Pondération : 25%
+2. **Ratio de Mise (Bet Size Ratio)** - Pondération : 35%
    - Ratio entre la mise actuelle et la mise moyenne historique
    - Score : 0-100 (0 = < 0.5x, 100 = > 10x)
    - Une mise 10x supérieure à la moyenne indique une conviction très forte
 
-4. **Taux de Réussite (Win Rate)** - Pondération : 15%
-   - Ratio de positions clôturées en profit vs en perte
-   - Score : 0-100 (0 = < 40%, 100 = > 70%)
+3. **Consistance d'Activité** - Pondération : 30%
+   - Coefficient de variation (CV = écart-type / moyenne) des tailles de mise
+   - Un CV faible = mises régulières = parieur discipliné
+   - Score : 0-100 (0 = très irrégulier, 100 = parfaitement uniforme)
 
 #### Formule du Score Final
 
 ```
-Score = (PnL Score × 0.40) + (Volume Score × 0.20) + (Bet Size Score × 0.25) + (Win Rate Score × 0.15)
+Score = (Volume Score × 0.35) + (Bet Size Score × 0.35) + (Activity Consistency Score × 0.30)
 ```
 
 ### 3. Mise en Cache & Stockage
@@ -68,7 +80,7 @@ Score = (PnL Score × 0.40) + (Volume Score × 0.20) + (Bet Size Score × 0.25) 
 ### 4. Alertes Telegram
 
 Une alerte Telegram est générée si :
-- Le marché est lié au football
+- Le marché est lié au football **ou au tennis**
 - La transaction dépasse `SMART_MONEY_MIN_TRADE_SIZE`
 - L'Index de Confiance dépasse `SMART_MONEY_CONFIDENCE_THRESHOLD` (défaut : 80/100)
 
@@ -77,7 +89,7 @@ Une alerte Telegram est générée si :
 ```
 🚨 SMART MONEY DETECTED | HIGH
 
-⚽ Football Market
+⚽ Football Market   (ou 🎾 Tennis Market)
 Market: [Nom du marché](lien)
 Side: YES
 Amount: 15,000 USDC
@@ -86,10 +98,9 @@ Price: 65.0%
 📊 Bettor Confidence Index: 87/100
 
 Metrics:
-• PnL: $45,000 (score: 90)
 • Recent Volume: $80,000 (score: 80)
 • Bet Size Ratio: 8.5x (score: 85)
-• Win Rate: 65.0% (score: 83)
+• Activity Consistency: 0.85 (score: 90)
 
 Wallet: [0x1234...5678](lien)
 ```
@@ -120,13 +131,13 @@ SMART_MONEY_WALLET_CACHE_TTL=86400
 ### Flux de Traitement
 
 1. **Filtrage Initial**
-   - Vérification du marché football
+   - Vérification du marché football ou tennis (`isSupportedMarket`)
    - Vérification du seuil de taille minimum
    - Vérification de la présence d'une adresse wallet
 
 2. **Calcul de l'Index de Confiance**
    - Vérification du cache Redis
-   - Si absent : récupération des métriques via Alchemy
+   - Si absent : récupération des métriques via Alchemy (transfers USDC vers Polymarket CTF Exchange)
    - Calcul des scores individuels
    - Calcul du score final pondéré
    - Mise en cache du résultat
@@ -145,17 +156,17 @@ Le SmartMoneyDetector s'exécute en parallèle avec les autres détecteurs (Anom
 
 ### Limitations Actuelles
 
-1. **Calcul PnL Simplifié**
-   - Le PnL est estimé à partir du volume total
-   - Une implémentation réelle nécessiterait le tracking des positions ouvertes/fermées
+1. **Calcul PnL Non Disponible**
+   - Le PnL ne peut pas être dérivé des seuls transfers USDC on-chain sans tracker les résolutions de marchés
+   - Stocké à 0 en base comme placeholder neutre
 
 2. **Win Rate Estimé**
-   - Le taux de réussite est actuellement estimé à 60%
+   - Le taux de réussite est réutilisé pour stocker la consistance d'activité (même plage 0–1)
    - Une implémentation complète nécessiterait l'analyse des résultats de chaque position
 
 3. **Données Limitées**
    - Utilise uniquement les données on-chain via Alchemy
-   - Pas d'intégration avec l'API Polymarket pour les données de marché détaillées
+   - Minimum 5 transfers requis pour calculer un score (wallets trop récents ignorés)
 
 ### Améliorations Futures
 
@@ -163,13 +174,13 @@ Le SmartMoneyDetector s'exécute en parallèle avec les autres détecteurs (Anom
    - Récupérer l'historique complet des positions
    - Calculer le PnL réel et le win rate précis
 
-2. **Machine Learning**
+2. **Extension à d'autres sports**
+   - Basketball (NBA, Euroleague)
+   - Baseball, cricket, etc.
+
+3. **Machine Learning**
    - Modèle prédictif pour identifier les patterns de smart money
    - Ajustement dynamique des pondérations
-
-3. **Analyse Multi-Marchés**
-   - Extension à d'autres catégories de marchés
-   - Détection de patterns cross-marchés
 
 4. **Scoring Avancé**
    - Prise en compte de la volatilité du marché

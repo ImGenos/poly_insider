@@ -3,6 +3,8 @@
 export interface RawTrade {
   market_id: string;
   market_name: string;
+  /** The specific outcome being traded, e.g. "Kamilla Rakhimova" in a head-to-head market. */
+  outcome?: string;
   side: 'YES' | 'NO';
   price: number; // 0–1
   size: number;
@@ -23,6 +25,8 @@ export interface RawTrade {
 export interface NormalizedTrade {
   market_id: string;
   market_name: string;
+  /** The specific outcome being traded, e.g. "Kamilla Rakhimova" in a head-to-head market. */
+  outcome?: string;
   side: 'YES' | 'NO';
   price: number;
   size: number;   // raw share quantity
@@ -41,6 +45,8 @@ export interface NormalizedTrade {
 export interface FilteredTrade {
   marketId: string;
   marketName: string;
+  /** The specific outcome being traded, e.g. "Kamilla Rakhimova" in a head-to-head market. */
+  outcome?: string;
   side: 'YES' | 'NO';
   price: number;
   sizeUSDC: number;

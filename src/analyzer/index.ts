@@ -165,13 +165,14 @@ export class AnalyzerService {
       this.redisCache,
       this.blockchainAnalyzer,
       this.logger,
+      config.getAlchemyApiKey(),
     );
     this.telegramNotifier = new TelegramNotifier(config.getTelegramConfig(), this.logger);
 
     this.logger.info('AnalyzerService starting');
 
     // Pré-charge le taux de change USD→EUR
-    await this.alertFormatter.init();
+    await this.alertFormatter.init(this.logger);
 
     // Connect dependencies
     await this.redisCache!.connect();
@@ -229,7 +230,7 @@ export class AnalyzerService {
           if (now - this.lastDepthAlertAt > 10 * 60 * 1000) {
             this.lastDepthAlertAt = now;
             await this.telegramNotifier!.sendAlert({
-              text: `⚠️ Stream backlog critical: ${depth.toLocaleString()} messages pending. Consider horizontal scaling.`,
+              text: `⚠️ File d'attente critique : ${depth.toLocaleString()} messages en attente\\. Envisagez une mise à l'échelle horizontale\\.`,
               parse_mode: 'MarkdownV2',
               disable_web_page_preview: true,
             });
@@ -268,7 +269,16 @@ export class AnalyzerService {
       }
 
       for (const message of messages) {
-        await this.processMessage(message);
+        // processMessage has its own try/catch + finally for XACK.
+        // This outer catch is a last-resort safety net: if processMessage itself
+        // throws (e.g. a programming error escapes the inner try), we still ACK
+        // the message to prevent infinite redelivery.
+        try {
+          await this.processMessage(message);
+        } catch (err) {
+          this.logger.error('AnalyzerService: processMessage panicked — ACKing to prevent redelivery', err, { id: message.id });
+          await this.ackMessage(message.id);
+        }
       }
     }
   }
@@ -378,7 +388,7 @@ export class AnalyzerService {
           consecutiveFails: this.alchemyConsecutiveFails,
         });
         await this.telegramNotifier!.sendAlert({
-          text: 'Alchemy API degraded — insider detection using fallback',
+          text: 'API Alchemy dégradée — détection initié utilisant le fallback',
           parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
@@ -397,7 +407,7 @@ export class AnalyzerService {
           consecutiveFails: this.alchemyConsecutiveFails,
         });
         await this.telegramNotifier!.sendAlert({
-          text: 'Alchemy API degraded — insider detection using fallback',
+          text: 'API Alchemy dégradée — détection initié utilisant le fallback',
           parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
@@ -440,7 +450,7 @@ export class AnalyzerService {
           unavailableMs,
         });
         await this.telegramNotifier!.sendAlert({
-          text: 'TimescaleDB unavailable — Z-score detection using static thresholds',
+          text: 'TimescaleDB indisponible — détection Z\\-score utilisant les seuils statiques',
           parse_mode: 'MarkdownV2',
           disable_web_page_preview: true,
         }).catch(() => {/* non-blocking */});
@@ -471,7 +481,7 @@ export class AnalyzerService {
           });
           // Send Telegram notification (Req 16.5) — fire-and-forget
           this.telegramNotifier!.sendAlert({
-            text: `⚠️ Malformed trade error rate: ${(errorRate * 100).toFixed(1)}% of last ${MALFORMED_WINDOW_SIZE} messages`,
+            text: `⚠️ Taux d'erreur trades malformés : ${(errorRate * 100).toFixed(1)}% des ${MALFORMED_WINDOW_SIZE} derniers messages`,
             parse_mode: 'MarkdownV2',
             disable_web_page_preview: true,
           }).catch(() => {/* non-blocking */});

@@ -1,6 +1,7 @@
 const https = require('https');
+require('dotenv').config();
 
-const token = '8507906204:AAE4PhDKK4Jk2syJ9AZ4r8D93SaLi1DlWpQ';
+const token = process.env.TELEGRAM_BOT_TOKEN;
 
 console.log('Fetching updates from Telegram bot...\n');
 

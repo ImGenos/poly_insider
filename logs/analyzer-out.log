@@ -5473,3 +5473,57 @@
 2026-04-16 18:09:36 +02:00: [2026-04-16T16:09:36.801Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
 2026-04-16 18:09:36 +02:00: [2026-04-16T16:09:36.875Z] [INFO ] AnalyzerService: all connections established
 2026-04-16 18:09:36 +02:00: [2026-04-16T16:09:36.875Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.077Z] [INFO ] AnalyzerService starting
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.252Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.261Z] [INFO ] Redis connected
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.266Z] [INFO ] Redis ready
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.731Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.802Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 18:52:03 +02:00: [2026-04-16T16:52:03.802Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 19:04:15 +02:00: [2026-04-16T17:04:15.013Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc0ff6a9ac424210cf218fda5c5753324c34a9953"}
+2026-04-16 19:04:15 +02:00: [2026-04-16T17:04:15.161Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:04:15 +02:00: [2026-04-16T17:04:15.876Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa7715a969f35fea826258fc7b7ce4c95fdf642d1"}
+2026-04-16 19:14:15 +02:00: [2026-04-16T17:14:15.362Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xbaa2bcb5439e985ce4ccf815b4700027d1b92c73"}
+2026-04-16 19:14:15 +02:00: [2026-04-16T17:14:15.518Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:19:15 +02:00: [2026-04-16T17:19:15.585Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x1e71f904cc33cbcff444a6eb98918c7e4c8feba7"}
+2026-04-16 19:19:15 +02:00: [2026-04-16T17:19:15.773Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:24:15 +02:00: [2026-04-16T17:24:15.805Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xead152b855effa6b5b5837f53b24c0756830c76a"}
+2026-04-16 19:24:15 +02:00: [2026-04-16T17:24:15.945Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:29:16 +02:00: [2026-04-16T17:29:16.036Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x43ff8626d5eea59f1b87893a23070ce4322ba491"}
+2026-04-16 19:29:17 +02:00: [2026-04-16T17:29:17.433Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x5ae14dc9e0cf9df72de8d873dcea05aacb799fad"}
+2026-04-16 19:29:17 +02:00: [2026-04-16T17:29:17.652Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:29:19 +02:00: [2026-04-16T17:29:19.222Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x44a1159b925c145e70f746bb3f0f58380553bd21"}
+2026-04-16 19:29:19 +02:00: [2026-04-16T17:29:19.347Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:34:17 +02:00: [2026-04-16T17:34:17.320Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa81eecce3f68e31f388a53de2897346e23ffe615"}
+2026-04-16 19:34:17 +02:00: [2026-04-16T17:34:17.446Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:44:18 +02:00: [2026-04-16T17:44:18.770Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x6ac0caf622798132614a5972f81d86ff23fc55f3"}
+2026-04-16 19:49:16 +02:00: [2026-04-16T17:49:16.410Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 19:54:18 +02:00: [2026-04-16T17:54:18.878Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xfdc0bd67fbd71aa8edd00121eb2a7fcbddc34b85"}
+2026-04-16 19:59:17 +02:00: [2026-04-16T17:59:17.566Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x9ddfa4d5b954379a03d19f87df36b9820b862c83"}
+2026-04-16 20:04:19 +02:00: [2026-04-16T18:04:19.522Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xe196f409e71330371e9b9b7a4e09596ac04a0ab5"}
+2026-04-16 20:09:18 +02:00: [2026-04-16T18:09:18.068Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xbb39ba863319281427a482c8714ffdf69cb7ee8a"}
+2026-04-16 20:09:18 +02:00: [2026-04-16T18:09:18.220Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x30e22cbd8a3b6bdf6ef362ec6e90f288ce3c77e1"}
+2026-04-16 20:09:19 +02:00: [2026-04-16T18:09:19.251Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x567ea69d0163d665a71b868b524fb6d83cd16042"}
+2026-04-16 20:09:19 +02:00: [2026-04-16T18:09:19.380Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x7bfc80d50a0edbe6ad5aee719d33921f454f18e3"}
+2026-04-16 20:09:19 +02:00: [2026-04-16T18:09:19.639Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:14:21 +02:00: [2026-04-16T18:14:18.536Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x36d8cbf698826ca74d9e444df634e303de4cc7c7"}
+2026-04-16 20:14:21 +02:00: [2026-04-16T18:14:18.562Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x36d8cbf698826ca74d9e444df634e303de4cc7c7"}
+2026-04-16 20:14:21 +02:00: [2026-04-16T18:14:18.691Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:14:21 +02:00: [2026-04-16T18:14:19.617Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x39fcd0aafb7047035e9323e6d1f99cd46f43e2f2"}
+2026-04-16 20:14:21 +02:00: [2026-04-16T18:14:19.868Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x782b172470bdf75e3758f37fc1adaf981663ff64"}
+2026-04-16 20:24:18 +02:00: [2026-04-16T18:24:18.844Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc8b9a30184244d427169cf62485dde6041b2b836"}
+2026-04-16 20:24:18 +02:00: [2026-04-16T18:24:18.913Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x4fdf7eef165deeb93605ada5a4feed1a3e714452"}
+2026-04-16 20:29:19 +02:00: [2026-04-16T18:29:19.077Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x1493a66b18eb39326c7b5501ccecf0648986105e"}
+2026-04-16 20:34:18 +02:00: [2026-04-16T18:34:18.558Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:34:19 +02:00: [2026-04-16T18:34:19.339Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x4133bcbad1d9c41de776646696f41c34d0a65e70"}
+2026-04-16 20:34:23 +02:00: [2026-04-16T18:34:23.933Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:39:18 +02:00: [2026-04-16T18:39:18.846Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:39:20 +02:00: [2026-04-16T18:39:20.794Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xef9f447115075a4a8b7edd8eac47a64e094179ee"}
+2026-04-16 20:39:20 +02:00: [2026-04-16T18:39:20.816Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x9d8f6343686bd37d5c958de4e5e8049576b1ed03"}
+2026-04-16 20:39:20 +02:00: [2026-04-16T18:39:20.887Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:44:19 +02:00: [2026-04-16T18:44:19.898Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xb5a81dac015dc3c336921072df4b9b2a9b50bbd2"}
+2026-04-16 20:44:19 +02:00: [2026-04-16T18:44:19.977Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xb2ddc07c76d5c6802b398931adfb56a7711d7ec0"}
+2026-04-16 20:44:19 +02:00: [2026-04-16T18:44:19.979Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2e01832a5646266682fe53adb6e428bc9d7c0875"}
+2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.101Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.110Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x631c2b93ff03c21d29b2b73af4ff965e88ea450f"}
+2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.218Z] [INFO ] Telegram alert sent {"attempt":0}

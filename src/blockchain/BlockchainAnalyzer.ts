@@ -9,7 +9,7 @@ const EXCHANGE_LABEL = 'Exchange';
 // that multiple instances (e.g. in tests or future horizontal scale-up within the same
 // process) cannot each independently allow 5 req/s, effectively multiplying the cap.
 let _lastAlchemyCallTime = 0;
-const _minAlchemyIntervalMs = 50; // 20 req/s max
+const _minAlchemyIntervalMs = 200; // 5 req/s — conservative to avoid 429s under burst load
 
 export class BlockchainAnalyzer {
   private readonly alchemyApiKey: string;
@@ -50,6 +50,26 @@ export class BlockchainAnalyzer {
     _lastAlchemyCallTime = Date.now();
   }
 
+  /**
+   * Retry wrapper for Alchemy calls — 2 retries with exponential backoff.
+   * Absorbs transient network errors and 429s without triggering the fallback counter.
+   */
+  private async withAlchemyRetry<T>(fn: () => Promise<T>): Promise<T> {
+    const delays = [500, 1500]; // ms between retries
+    let lastErr: unknown;
+    for (let attempt = 0; attempt <= delays.length; attempt++) {
+      try {
+        return await fn();
+      } catch (err) {
+        lastErr = err;
+        if (attempt < delays.length) {
+          await sleep(delays[attempt]);
+        }
+      }
+    }
+    throw lastErr;
+  }
+
   // ─── Alchemy API ──────────────────────────────────────────────────────────
 
   /**
@@ -57,43 +77,45 @@ export class BlockchainAnalyzer {
    * Uses HTTPS per Req 19.5. Rate-limited per Req 20.3.
    */
   private async alchemyGetFirstInboundTransfer(address: string): Promise<AlchemyTransfer | null> {
-    await this.throttleAlchemy();
+    return this.withAlchemyRetry(async () => {
+      await this.throttleAlchemy();
 
-    const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
-    const body = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'alchemy_getAssetTransfers',
-      params: [
-        {
-          fromBlock: '0x0',
-          toAddress: address,
-          maxCount: 1,
-          order: 'asc',
-          category: ['external', 'internal', 'erc20', 'erc721', 'erc1155'],
-        },
-      ],
-    };
+      const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
+      const body = {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'alchemy_getAssetTransfers',
+        params: [
+          {
+            fromBlock: '0x0',
+            toAddress: address,
+            maxCount: 1,
+            order: 'asc',
+            category: ['external', 'internal', 'erc20', 'erc721', 'erc1155'],
+          },
+        ],
+      };
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(5000),
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(10000),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Alchemy HTTP error: ${response.status}`);
+      }
+
+      const data = await response.json() as AlchemyResponse;
+
+      if (data.error) {
+        throw new Error(`Alchemy RPC error: ${data.error.message}`);
+      }
+
+      const transfers = data.result?.transfers ?? [];
+      return transfers.length > 0 ? transfers[0] : null;
     });
-
-    if (!response.ok) {
-      throw new Error(`Alchemy HTTP error: ${response.status}`);
-    }
-
-    const data = await response.json() as AlchemyResponse;
-
-    if (data.error) {
-      throw new Error(`Alchemy RPC error: ${data.error.message}`);
-    }
-
-    const transfers = data.result?.transfers ?? [];
-    return transfers.length > 0 ? transfers[0] : null;
   }
 
   /**
@@ -104,8 +126,6 @@ export class BlockchainAnalyzer {
    * @throws Error when Alchemy API call fails (caller must handle and track failures)
    */
   async getWalletTradeHistory(address: string, maxCount = 100): Promise<WalletTradeHistory> {
-    await this.throttleAlchemy();
-
     const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
     
     // Get both inbound and outbound USDC transfers
@@ -127,22 +147,27 @@ export class BlockchainAnalyzer {
 
     let data: AlchemyResponse;
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(5000),
+      data = await this.withAlchemyRetry(async () => {
+        await this.throttleAlchemy();
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(10000),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Alchemy HTTP error: ${response.status}`);
+        }
+
+        const parsed = await response.json() as AlchemyResponse;
+
+        if (parsed.error) {
+          throw new Error(`Alchemy RPC error: ${parsed.error.message}`);
+        }
+
+        return parsed;
       });
-
-      if (!response.ok) {
-        throw new Error(`Alchemy HTTP error: ${response.status}`);
-      }
-
-      data = await response.json() as AlchemyResponse;
-
-      if (data.error) {
-        throw new Error(`Alchemy RPC error: ${data.error.message}`);
-      }
     } catch (err) {
       this.lastCallUsedFallback = true;
       this.logger.warn('BlockchainAnalyzer: getWalletTradeHistory fetch failed', {

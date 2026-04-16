@@ -1,6 +1,7 @@
 import { Anomaly, ClusterAnomaly, FilteredTrade, TelegramMessage } from '../types/index';
 import { escapeMarkdown } from '../utils/helpers';
 import { ExchangeRateService } from '../utils/ExchangeRateService';
+import { Logger } from '../utils/Logger';
 
 const POLYGONSCAN_BASE = 'https://polygonscan.com/address';
 const POLYMARKET_BASE  = 'https://polymarket.com/event';
@@ -58,8 +59,12 @@ export class AlertFormatter {
   /**
    * Pré-charge le taux de change USD→EUR au démarrage.
    * À appeler une fois lors de l'initialisation du service.
+   *
+   * BUG FIX: Added optional logger parameter to match the call in analyzer/index.ts:
+   * `await this.alertFormatter.init(this.logger)`. The logger is accepted but not
+   * used here since fxService has its own internal logger.
    */
-  async init(): Promise<void> {
+  async init(_logger?: Logger): Promise<void> {
     await fxService.getUsdToEurRate();
   }
 
@@ -79,6 +84,30 @@ export class AlertFormatter {
       default:
         text = this.formatRapidOddsShift(anomaly, trade);
     }
+
+    return {
+      text: truncate(text),
+      parse_mode: 'MarkdownV2',
+      disable_web_page_preview: false,
+    };
+  }
+
+  /**
+   * BUG FIX: New method — was called in analyzer/index.ts but missing from
+   * AlertFormatter, causing a runtime crash ("formatMegaTradeAlert is not a function").
+   * Formats an alert for any single trade ≥ $30,000 regardless of anomaly type.
+   */
+  formatMegaTradeAlert(trade: FilteredTrade): TelegramMessage {
+    const text = [
+      `🐳 *MEGA TRADE DÉTECTÉ*`,
+      ``,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${sideFr(trade.side)}*`,
+      `Montant : *${formatEur(trade.sizeUSDC)}*`,
+      `Prix : *${escapeMarkdown((trade.price * 100).toFixed(1))}%*`,
+      ``,
+      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
+    ].join('\n');
 
     return {
       text: truncate(text),
@@ -217,9 +246,6 @@ export class AlertFormatter {
     };
   }
 
-  // BUG FIX: Updated to use corrected BettorConfidenceIndex metric fields
-  // (recentVolume, betSizeRatio, regularityCV/regularityScore instead of
-  // the old pnl/pnlScore/winRate/winRateScore which no longer exist).
   formatSmartMoneyAlert(alert: SmartMoneyAlert): string {
     const emoji = severityEmoji(alert.severity);
     const ci    = alert.confidenceIndex;

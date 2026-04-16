@@ -6,6 +6,7 @@ import { Logger } from '../utils/Logger';
 import { RedisCache } from '../cache/RedisCache';
 import { WebSocketManager } from '../websocket/WebSocketManager';
 import { DataAPIPoller } from './DataAPIPoller';
+import { TradeEnricher } from './TradeEnricher';
 import { RawTrade, NormalizedTrade } from '../types/index';
 import { isValidEthAddress, exponentialBackoff } from '../utils/helpers';
 
@@ -102,6 +103,7 @@ export class IngestorService {
   private redisCache: RedisCache | null = null;
   private wsManager: WebSocketManager | null = null;
   private dataAPIPoller: DataAPIPoller | null = null;
+  private tradeEnricher: TradeEnricher | null = null;
 
   private droppedTrades = 0;
   private droppedLogTimer: ReturnType<typeof setInterval> | null = null;
@@ -129,6 +131,7 @@ export class IngestorService {
     this.redisCache = new RedisCache(config.getRedisUrl(), this.logger);
     this.wsManager = new WebSocketManager(config.getPolymarketWsUrl(), this.logger);
     this.dataAPIPoller = new DataAPIPoller(this.logger, 10000); // Poll every 10 seconds
+    this.tradeEnricher = new TradeEnricher(this.logger);
 
     this.logger.info('IngestorService starting');
 
@@ -193,7 +196,18 @@ export class IngestorService {
       return;
     }
 
-    const normalized = normalize(rawTrade);
+    // Enrich trades based on source
+    let enrichedTrade = rawTrade;
+    if (source === 'DataAPI') {
+      // Cache Data API trades for enrichment
+      this.tradeEnricher!.addDataAPITrade(rawTrade);
+      enrichedTrade = rawTrade;
+    } else if (source === 'WebSocket') {
+      // Enrich WebSocket trades with cached wallet addresses
+      enrichedTrade = this.tradeEnricher!.enrichWebSocketTrade(rawTrade);
+    }
+
+    const normalized = normalize(enrichedTrade);
     const fields = toStreamFields(normalized);
 
     // Fire-and-forget: never await downstream per Requirements 1.4
@@ -211,6 +225,7 @@ export class IngestorService {
       clearInterval(this.droppedLogTimer);
       this.droppedLogTimer = null;
     }
+    this.tradeEnricher?.stop();
     this.dataAPIPoller?.stop();
     this.wsManager?.disconnect();
     await this.redisCache?.disconnect();

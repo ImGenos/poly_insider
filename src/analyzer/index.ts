@@ -315,6 +315,26 @@ export class AnalyzerService {
 
       this.trackMalformed(false);
 
+      // MEGA TRADE ALERT: Automatic alert for any trade ≥ $30,000
+      const MEGA_TRADE_THRESHOLD = 30000;
+      if (filteredTrade.sizeUSDC >= MEGA_TRADE_THRESHOLD) {
+        const alreadySent = await this.redisCache!.hasAlertBeenSent(
+          'MEGA_TRADE',
+          filteredTrade.marketId,
+          filteredTrade.walletAddress || '',
+        );
+        if (!alreadySent) {
+          const msg = this.alertFormatter.formatMegaTradeAlert(filteredTrade);
+          await this.telegramNotifier!.sendAlert(msg);
+          await this.redisCache!.recordSentAlert(
+            'MEGA_TRADE',
+            filteredTrade.marketId,
+            filteredTrade.walletAddress || '',
+            this.config!.getAlertDedupTtl(),
+          );
+        }
+      }
+
       // Run ClusterDetector, AnomalyDetector, and SmartMoneyDetector in parallel
       const [clusterAnomaly, anomalies, smartMoneyAlert] = await Promise.all([
         this.runClusterDetector(filteredTrade),

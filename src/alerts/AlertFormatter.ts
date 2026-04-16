@@ -123,7 +123,7 @@ export class AlertFormatter {
       `${detectionInfo}`,
       `Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
       ``,
-      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : escapeMarkdown('N/A')}`,
+      ...(trade.walletAddress ? [`Portefeuille : ${polygonScanLink(trade.walletAddress)}`] : []),
     ].join('\n');
   }
 
@@ -152,7 +152,9 @@ export class AlertFormatter {
 
     lines.push(`Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
-    lines.push(`Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
+    if (trade.walletAddress) {
+      lines.push(`Portefeuille : ${polygonScanLink(trade.walletAddress)}`);
+    }
 
     return lines.join('\n');
   }
@@ -166,7 +168,7 @@ export class AlertFormatter {
     const rate = this.fxService.getCachedRate();
 
     const lines = [
-      `${emoji} *DÉLIT D'INITIÉ* | ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      `${emoji} *${escapeMarkdown('DÉLIT D\'INITIÉ')}* ${escapeMarkdown('|')} ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Position : *${escapeMarkdown(positionLabel(trade))}*`,
@@ -185,7 +187,9 @@ export class AlertFormatter {
 
     lines.push(`Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
     lines.push(``);
-    lines.push(`Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`);
+    if (trade.walletAddress) {
+      lines.push(`Portefeuille : ${polygonScanLink(trade.walletAddress)}`);
+    }
 
     return lines.join('\n');
   }
@@ -263,6 +267,30 @@ export class AlertFormatter {
   formatSmartMoneyMessage(alert: SmartMoneyAlert): TelegramMessage {
     return {
       text: truncate(this.formatSmartMoneyAlert(alert)),
+      parse_mode: 'MarkdownV2',
+      disable_web_page_preview: false,
+    };
+  }
+
+  formatMegaTradeAlert(trade: FilteredTrade): TelegramMessage {
+    const rate = this.fxService.getCachedRate();
+    
+    const lines = [
+      `💰 *${escapeMarkdown('MEGA TRADE')}* ${escapeMarkdown('|')} ${escapeMarkdown('≥ $30,000')}`,
+      ``,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${escapeMarkdown(positionLabel(trade))}*`,
+      `Montant : *${formatEur(trade.sizeUSDC, rate)}*`,
+      `Prix : *${escapeMarkdown((trade.price * 100).toFixed(1))}%*`,
+      ``,
+    ];
+
+    if (trade.walletAddress) {
+      lines.push(`Portefeuille : ${polygonScanLink(trade.walletAddress)}`);
+    }
+
+    return {
+      text: truncate(lines.join('\n')),
       parse_mode: 'MarkdownV2',
       disable_web_page_preview: false,
     };

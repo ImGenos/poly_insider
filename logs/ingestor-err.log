@@ -13838,3 +13838,1024 @@
 2026-04-15 23:21:21 +02:00: [2026-04-15T21:21:21.307Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
 2026-04-15 23:21:23 +02:00: [2026-04-15T21:21:23.310Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
 2026-04-15 23:21:25 +02:00: [2026-04-15T21:21:25.318Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:57:41 +02:00: [2026-04-16T08:57:41.504Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:57:41 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:57:41 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:57:41 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:57:41 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:57:41 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:57:47 +02:00: [2026-04-16T08:57:47.403Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:57:47 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:57:47 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:57:47 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:57:47 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:57:47 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:57:53 +02:00: [2026-04-16T08:57:53.026Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:57:53 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:57:53 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:57:53 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:57:53 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:57:53 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:57:59 +02:00: [2026-04-16T08:57:59.215Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:57:59 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:57:59 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:57:59 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:57:59 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:57:59 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:05 +02:00: [2026-04-16T08:58:05.018Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:10 +02:00: [2026-04-16T08:58:10.595Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:10 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:10 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:10 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:10 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:10 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:16 +02:00: [2026-04-16T08:58:16.120Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:21 +02:00: [2026-04-16T08:58:21.614Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:21 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:21 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:21 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:21 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:21 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:27 +02:00: [2026-04-16T08:58:27.140Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:32 +02:00: [2026-04-16T08:58:32.763Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:32 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:32 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:32 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:32 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:32 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:38 +02:00: [2026-04-16T08:58:38.196Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:43 +02:00: [2026-04-16T08:58:43.703Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:43 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:43 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:43 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:43 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:43 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:49 +02:00: [2026-04-16T08:58:49.169Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:49 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:49 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:49 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:49 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:49 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:58:54 +02:00: [2026-04-16T08:58:54.716Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:58:54 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:58:54 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:58:54 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:58:54 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:58:54 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:00 +02:00: [2026-04-16T08:59:00.145Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:00 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:00 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:00 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:00 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:00 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:05 +02:00: [2026-04-16T08:59:05.610Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:11 +02:00: [2026-04-16T08:59:11.119Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:16 +02:00: [2026-04-16T08:59:16.610Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:22 +02:00: [2026-04-16T08:59:22.039Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:27 +02:00: [2026-04-16T08:59:27.773Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:33 +02:00: [2026-04-16T08:59:33.192Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:38 +02:00: [2026-04-16T08:59:38.619Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:44 +02:00: [2026-04-16T08:59:44.055Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:44 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:44 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:44 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:44 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:44 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:49 +02:00: [2026-04-16T08:59:49.602Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:49 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:49 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:49 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:49 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:49 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 10:59:55 +02:00: [2026-04-16T08:59:55.203Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 10:59:55 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 10:59:55 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 10:59:55 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 10:59:55 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 10:59:55 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:06 +02:00: [2026-04-16T09:00:06.617Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:06 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:06 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:06 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:06 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:06 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:12 +02:00: [2026-04-16T09:00:12.053Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:12 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:12 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:12 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:12 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:12 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:17 +02:00: [2026-04-16T09:00:17.492Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:17 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:17 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:17 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:17 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:17 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:22 +02:00: [2026-04-16T09:00:22.954Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:28 +02:00: [2026-04-16T09:00:28.421Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:28 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:28 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:28 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:28 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:28 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:33 +02:00: [2026-04-16T09:00:33.890Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:39 +02:00: [2026-04-16T09:00:39.458Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:39 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:39 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:39 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:39 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:39 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:44 +02:00: [2026-04-16T09:00:44.901Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:44 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:44 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:44 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:44 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:44 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:50 +02:00: [2026-04-16T09:00:50.357Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:50 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:50 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:50 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:50 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:50 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:00:55 +02:00: [2026-04-16T09:00:55.769Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:00:55 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:00:55 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:00:55 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:00:55 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:00:55 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:01 +02:00: [2026-04-16T09:01:01.187Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:01 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:01 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:01 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:01 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:01 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:13 +02:00: [2026-04-16T09:01:13.586Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:19 +02:00: [2026-04-16T09:01:19.066Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:19 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:19 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:19 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:19 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:19 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:24 +02:00: [2026-04-16T09:01:24.501Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:24 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:24 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:24 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:24 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:24 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:29 +02:00: [2026-04-16T09:01:29.918Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:29 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:29 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:29 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:29 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:29 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:35 +02:00: [2026-04-16T09:01:35.351Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:35 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:35 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:35 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:35 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:35 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:40 +02:00: [2026-04-16T09:01:40.783Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:40 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:40 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:40 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:40 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:40 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:46 +02:00: [2026-04-16T09:01:46.199Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:46 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:46 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:46 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:46 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:46 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:51 +02:00: [2026-04-16T09:01:51.616Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:51 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:51 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:51 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:51 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:51 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:01:57 +02:00: [2026-04-16T09:01:57.034Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:01:57 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:01:57 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:01:57 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:01:57 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:01:57 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:02 +02:00: [2026-04-16T09:02:02.450Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:02 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:02 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:02 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:02 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:02 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:07 +02:00: [2026-04-16T09:02:07.868Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:07 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:07 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:07 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:07 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:07 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:13 +02:00: [2026-04-16T09:02:13.285Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:13 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:13 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:13 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:13 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:13 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:18 +02:00: [2026-04-16T09:02:18.702Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:18 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:18 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:18 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:18 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:18 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:24 +02:00: [2026-04-16T09:02:24.120Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:24 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:24 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:24 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:24 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:24 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:29 +02:00: [2026-04-16T09:02:29.537Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:29 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:29 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:29 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:29 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:29 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:34 +02:00: [2026-04-16T09:02:34.970Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:34 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:34 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:34 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:34 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:34 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:40 +02:00: [2026-04-16T09:02:40.387Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:40 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:40 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:40 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:40 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:40 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:45 +02:00: [2026-04-16T09:02:45.805Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:45 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:45 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:45 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:45 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:45 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:51 +02:00: [2026-04-16T09:02:51.253Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:51 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:51 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:51 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:51 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:51 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:02:56 +02:00: [2026-04-16T09:02:56.717Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:02:56 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:02:56 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:02:56 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:02:56 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:02:56 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:02 +02:00: [2026-04-16T09:03:02.135Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:02 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:02 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:02 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:02 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:02 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:07 +02:00: [2026-04-16T09:03:07.553Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:07 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:07 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:07 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:07 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:07 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:12 +02:00: [2026-04-16T09:03:12.971Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:12 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:12 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:12 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:12 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:12 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:18 +02:00: [2026-04-16T09:03:18.388Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:18 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:18 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:18 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:18 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:18 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:23 +02:00: [2026-04-16T09:03:23.806Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:23 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:23 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:23 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:23 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:23 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:29 +02:00: [2026-04-16T09:03:29.426Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:29 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:29 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:29 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:29 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:29 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:34 +02:00: [2026-04-16T09:03:34.860Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:34 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:34 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:34 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:34 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:34 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:40 +02:00: [2026-04-16T09:03:40.293Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:40 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:40 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:40 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:40 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:40 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:03:45 +02:00: [2026-04-16T09:03:45.727Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:03:45 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:03:45 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:03:45 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:03:45 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:03:45 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:07 +02:00: [2026-04-16T09:04:07.847Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:07 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:07 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:07 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:07 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:07 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:13 +02:00: [2026-04-16T09:04:13.280Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:13 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:13 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:13 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:13 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:13 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:18 +02:00: [2026-04-16T09:04:18.713Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:18 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:18 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:18 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:18 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:18 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:24 +02:00: [2026-04-16T09:04:24.144Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:24 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:24 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:24 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:24 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:24 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:29 +02:00: [2026-04-16T09:04:29.578Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:29 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:29 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:29 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:29 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:29 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:35 +02:00: [2026-04-16T09:04:35.010Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:35 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:35 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:35 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:35 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:35 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:40 +02:00: [2026-04-16T09:04:40.427Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:40 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:40 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:40 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:40 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:40 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:45 +02:00: [2026-04-16T09:04:45.844Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:45 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:45 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:45 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:45 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:45 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:04:51 +02:00: [2026-04-16T09:04:51.277Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:04:51 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:04:51 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:04:51 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:04:51 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:04:51 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:00 +02:00: [2026-04-16T09:05:00.406Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:00 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:00 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:00 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:00 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:00 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:05 +02:00: [2026-04-16T09:05:05.979Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:11 +02:00: [2026-04-16T09:05:11.396Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:16 +02:00: [2026-04-16T09:05:16.814Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:22 +02:00: [2026-04-16T09:05:22.231Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:27 +02:00: [2026-04-16T09:05:27.648Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:33 +02:00: [2026-04-16T09:05:33.409Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:38 +02:00: [2026-04-16T09:05:38.827Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:44 +02:00: [2026-04-16T09:05:44.260Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:44 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:44 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:44 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:44 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:44 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:49 +02:00: [2026-04-16T09:05:49.677Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:49 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:49 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:49 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:49 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:49 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:05:55 +02:00: [2026-04-16T09:05:55.095Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:05:55 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:05:55 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:05:55 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:05:55 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:05:55 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:00 +02:00: [2026-04-16T09:06:00.512Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:00 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:00 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:00 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:00 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:00 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:05 +02:00: [2026-04-16T09:06:05.929Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:11 +02:00: [2026-04-16T09:06:11.346Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:16 +02:00: [2026-04-16T09:06:16.763Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:22 +02:00: [2026-04-16T09:06:22.181Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:27 +02:00: [2026-04-16T09:06:27.598Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:33 +02:00: [2026-04-16T09:06:33.016Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:38 +02:00: [2026-04-16T09:06:38.433Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:43 +02:00: [2026-04-16T09:06:43.866Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:43 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:43 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:43 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:43 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:43 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:49 +02:00: [2026-04-16T09:06:49.299Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:49 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:49 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:49 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:49 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:49 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:06:54 +02:00: [2026-04-16T09:06:54.889Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:06:54 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:06:54 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:06:54 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:06:54 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:06:54 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:00 +02:00: [2026-04-16T09:07:00.308Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:00 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:00 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:00 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:00 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:00 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:05 +02:00: [2026-04-16T09:07:05.740Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:11 +02:00: [2026-04-16T09:07:11.276Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:16 +02:00: [2026-04-16T09:07:16.731Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:22 +02:00: [2026-04-16T09:07:22.148Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:27 +02:00: [2026-04-16T09:07:27.565Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:33 +02:00: [2026-04-16T09:07:33.061Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:38 +02:00: [2026-04-16T09:07:38.478Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:43 +02:00: [2026-04-16T09:07:43.898Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:43 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:43 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:43 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:43 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:43 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:49 +02:00: [2026-04-16T09:07:49.315Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:49 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:49 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:49 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:49 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:49 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:07:54 +02:00: [2026-04-16T09:07:54.731Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:07:54 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:07:54 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:07:54 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:07:54 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:07:54 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:00 +02:00: [2026-04-16T09:08:00.149Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:00 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:00 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:00 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:00 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:00 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:05 +02:00: [2026-04-16T09:08:05.569Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:11 +02:00: [2026-04-16T09:08:11.001Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:16 +02:00: [2026-04-16T09:08:16.418Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:21 +02:00: [2026-04-16T09:08:21.837Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:21 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:21 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:21 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:21 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:21 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:27 +02:00: [2026-04-16T09:08:27.269Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:32 +02:00: [2026-04-16T09:08:32.686Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:32 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:32 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:32 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:32 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:32 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:38 +02:00: [2026-04-16T09:08:38.103Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:43 +02:00: [2026-04-16T09:08:43.520Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:43 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:43 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:43 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:43 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:43 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:48 +02:00: [2026-04-16T09:08:48.953Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:48 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:48 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:48 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:48 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:48 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:54 +02:00: [2026-04-16T09:08:54.371Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:54 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:54 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:54 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:54 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:54 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:08:59 +02:00: [2026-04-16T09:08:59.788Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:08:59 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:08:59 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:08:59 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:08:59 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:08:59 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:05 +02:00: [2026-04-16T09:09:05.205Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:05 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:05 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:05 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:05 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:05 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:10 +02:00: [2026-04-16T09:09:10.622Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:10 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:10 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:10 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:10 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:10 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:16 +02:00: [2026-04-16T09:09:16.039Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:21 +02:00: [2026-04-16T09:09:21.457Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:21 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:21 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:21 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:21 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:21 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:26 +02:00: [2026-04-16T09:09:26.874Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:26 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:26 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:26 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:26 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:32 +02:00: [2026-04-16T09:09:32.294Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:32 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:32 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:32 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:32 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:32 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:37 +02:00: [2026-04-16T09:09:37.711Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:37 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:37 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:37 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:37 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:37 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:43 +02:00: [2026-04-16T09:09:43.128Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:43 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:43 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:43 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:43 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:43 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:48 +02:00: [2026-04-16T09:09:48.545Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:48 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:48 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:48 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:48 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:48 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:53 +02:00: [2026-04-16T09:09:53.962Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:53 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:53 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:53 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:53 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:53 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:09:59 +02:00: [2026-04-16T09:09:59.395Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:09:59 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:09:59 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:09:59 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:09:59 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:09:59 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:04 +02:00: [2026-04-16T09:10:04.832Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:04 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:04 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:04 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:04 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:04 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:10 +02:00: [2026-04-16T09:10:10.269Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:10 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:10 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:10 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:10 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:10 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:15 +02:00: [2026-04-16T09:10:15.732Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:15 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:15 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:15 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:15 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:15 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:21 +02:00: [2026-04-16T09:10:21.214Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:21 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:21 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:21 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:21 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:21 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:26 +02:00: [2026-04-16T09:10:26.658Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:26 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:26 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:26 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:26 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:32 +02:00: [2026-04-16T09:10:32.100Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:32 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:32 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:32 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:32 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:32 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:10:37 +02:00: [2026-04-16T09:10:37.526Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:10:37 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:10:37 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:10:37 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:10:37 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:10:37 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:11 +02:00: [2026-04-16T09:11:11.470Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:11 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:11 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:11 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:11 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:11 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:16 +02:00: [2026-04-16T09:11:16.984Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:16 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:16 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:16 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:16 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:16 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:22 +02:00: [2026-04-16T09:11:22.442Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:22 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:22 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:22 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:22 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:22 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:27 +02:00: [2026-04-16T09:11:27.911Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:27 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:27 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:27 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:27 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:27 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:33 +02:00: [2026-04-16T09:11:33.345Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:33 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:33 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:33 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:33 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:33 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:38 +02:00: [2026-04-16T09:11:38.796Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:38 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:38 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:38 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:38 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:38 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:11:58 +02:00: [2026-04-16T09:11:58.825Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:11:58 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:11:58 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:11:58 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:11:58 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:11:58 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:04 +02:00: [2026-04-16T09:12:04.293Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:04 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:04 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:04 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:04 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:04 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:09 +02:00: [2026-04-16T09:12:09.797Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:09 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:09 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:09 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:09 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:09 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:15 +02:00: [2026-04-16T09:12:15.395Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:15 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:15 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:15 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:15 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:15 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:20 +02:00: [2026-04-16T09:12:20.837Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:20 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:20 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:20 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:20 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:20 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:26 +02:00: [2026-04-16T09:12:26.303Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:26 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:26 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:26 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:26 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:31 +02:00: [2026-04-16T09:12:31.766Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:31 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:31 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:31 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:31 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:31 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:37 +02:00: [2026-04-16T09:12:37.234Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:37 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:37 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:37 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:37 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:37 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:42 +02:00: [2026-04-16T09:12:42.675Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:42 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:42 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:42 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:42 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:42 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:48 +02:00: [2026-04-16T09:12:48.102Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:48 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:48 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:48 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:48 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:48 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:53 +02:00: [2026-04-16T09:12:53.564Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:53 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:53 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:53 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:53 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:53 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:12:59 +02:00: [2026-04-16T09:12:59.078Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:12:59 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:12:59 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:12:59 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:12:59 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:12:59 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:04 +02:00: [2026-04-16T09:13:04.515Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:04 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:04 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:04 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:04 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:04 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:09 +02:00: [2026-04-16T09:13:09.960Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:09 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:09 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:09 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:09 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:09 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:15 +02:00: [2026-04-16T09:13:15.409Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:15 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:15 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:15 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:15 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:15 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:20 +02:00: [2026-04-16T09:13:20.864Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:20 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:20 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:20 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:20 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:20 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:26 +02:00: [2026-04-16T09:13:26.341Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:26 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:26 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:26 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:26 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:31 +02:00: [2026-04-16T09:13:31.793Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:31 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:31 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:31 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:31 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:31 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:37 +02:00: [2026-04-16T09:13:37.219Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:37 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:37 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:37 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:37 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:37 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:42 +02:00: [2026-04-16T09:13:42.701Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:42 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:42 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:42 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:42 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:42 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:48 +02:00: [2026-04-16T09:13:48.144Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:48 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:48 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:48 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:48 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:48 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:53 +02:00: [2026-04-16T09:13:53.595Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:53 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:53 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:53 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:53 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:53 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:13:59 +02:00: [2026-04-16T09:13:59.043Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:13:59 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:13:59 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:13:59 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:13:59 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:13:59 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:14:04 +02:00: [2026-04-16T09:14:04.466Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:14:04 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:14:04 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:14:04 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:14:04 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:14:04 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:14:09 +02:00: [2026-04-16T09:14:09.911Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:14:09 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:14:09 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:14:09 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:14:09 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:14:09 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:14:15 +02:00: [2026-04-16T09:14:15.359Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:14:15 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:14:15 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:14:15 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:14:15 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:14:15 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:14:20 +02:00: [2026-04-16T09:14:20.810Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:14:20 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:14:20 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:14:20 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:14:20 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:14:20 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 11:14:26 +02:00: [2026-04-16T09:14:26.266Z] [ERROR] Redis error {"error":{"message":"","stack":"AggregateError: \n    at internalConnectMultiple (node:net:1139:18)\n    at afterConnectMultiple (node:net:1712:7)"}}
+2026-04-16 11:14:26 +02:00: Fatal error in ingestor: Error: Connection is closed.
+2026-04-16 11:14:26 +02:00:     at EventEmitter.connectionCloseHandler (C:\Users\Alexandre\Desktop\jeremie\Polynsider\node_modules\ioredis\built\Redis.js:208:28)
+2026-04-16 11:14:26 +02:00:     at Object.onceWrapper (node:events:633:26)
+2026-04-16 11:14:26 +02:00:     at EventEmitter.emit (node:events:518:28)
+2026-04-16 11:14:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)

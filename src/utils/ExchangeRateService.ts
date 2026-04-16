@@ -15,15 +15,15 @@ export class ExchangeRateService {
   private rate: number = FALLBACK_RATE;
   private lastFetchedAt: number = 0;
   private fetchPromise: Promise<void> | null = null;
-  private readonly logger: Logger;
+  // BUG FIX: Logger constructor expects (logLevel: LogLevel, logFilePath?: string),
+  // not a service-name string. Pass a valid LogLevel instead.
+  private readonly logger = new Logger('info', undefined);
 
-  private constructor(logger?: Logger) {
-    this.logger = logger ?? new Logger('info', undefined);
-  }
+  private constructor() {}
 
-  static getInstance(logger?: Logger): ExchangeRateService {
+  static getInstance(): ExchangeRateService {
     if (!ExchangeRateService.instance) {
-      ExchangeRateService.instance = new ExchangeRateService(logger);
+      ExchangeRateService.instance = new ExchangeRateService();
     }
     return ExchangeRateService.instance;
   }

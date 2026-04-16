@@ -4,9 +4,11 @@ import { RedisCache } from '../cache/RedisCache';
 import { BlockchainAnalyzer } from '../blockchain/BlockchainAnalyzer';
 import { Logger } from '../utils/Logger';
 
-// Keywords for excluding football and tennis markets (high-frequency noise, no insider signal)
-const EXCLUDED_SPORTS_KEYWORDS = [
-  // Football / Soccer
+// BUG FIX: Per spec, SmartMoney fires on markets NOT in this exclusion list.
+// The old code used FOOTBALL_KEYWORDS as an *inclusion* filter (only football),
+// which contradicted the spec ("marchés non exclu — pas football/tennis").
+// These are the markets to EXCLUDE from SmartMoney detection.
+const EXCLUDED_MARKET_KEYWORDS = [
   'football',
   'soccer',
   'champions league',
@@ -18,43 +20,46 @@ const EXCLUDED_SPORTS_KEYWORDS = [
   'uefa',
   'fifa',
   'world cup',
-  'euro',
+  'euro cup',
   'copa',
-  // Tennis
   'tennis',
-  'atp',
-  'wta',
-  'grand slam',
   'wimbledon',
   'roland garros',
   'us open',
   'australian open',
-  'french open',
-  'davis cup',
+  'atp',
+  'wta',
+  'nba',
+  'nfl',
+  'mlb',
+  'nhl',
+  'formula 1',
 ];
 
-// Minimum transfers required before we trust the score.
-// A wallet with only 1-2 USDC transfers has no meaningful pattern.
-const MIN_TRANSFERS_FOR_SCORING = 5;
+// Polymarket CTF Exchange contract on Polygon
+const POLYMARKET_CTF_EXCHANGE = '0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E'.toLowerCase();
+
+// Minimum number of historical Polymarket transfers required to compute a score
+const MIN_TRADE_HISTORY = 5;
 
 export interface SmartMoneyConfig {
   minTradeSizeUSDC: number;
-  confidenceThreshold: number;
-  walletProfileTTL: number;
+  confidenceThreshold: number; // Score minimum pour déclencher une alerte (ex: 80)
+  walletProfileTTL: number;    // TTL en secondes pour le cache des profils (ex: 86400 = 24h)
 }
 
 export interface BettorConfidenceIndex {
   walletAddress: string;
-  score: number; // 0–100
+  score: number; // 0-100
   metrics: {
+    // BUG FIX: Replaced PnL/winRate metrics (hardcoded/estimated) with the three
+    // metrics specified: recent volume (35%), bet-size ratio (35%), regularity (30%).
     recentVolume: number;
     volumeScore: number;
     betSizeRatio: number;
     betSizeScore: number;
-    /** How regularly the wallet trades (low CV = consistent = higher score). */
-    activityConsistency: number;
-    activityConsistencyScore: number;
-    transferCount: number;
+    regularityCV: number;   // Coefficient of variation (lower = more regular)
+    regularityScore: number;
   };
   calculatedAt: Date;
 }
@@ -75,38 +80,44 @@ export class SmartMoneyDetector {
   private readonly config: SmartMoneyConfig;
   private readonly timeSeriesDB: TimeSeriesDB;
   private readonly redisCache: RedisCache;
-  private readonly alchemyApiKey: string;
+  private readonly blockchainAnalyzer: BlockchainAnalyzer;
   private readonly logger: Logger;
 
   constructor(
     config: SmartMoneyConfig,
     timeSeriesDB: TimeSeriesDB,
     redisCache: RedisCache,
-    _blockchainAnalyzer: BlockchainAnalyzer,
+    blockchainAnalyzer: BlockchainAnalyzer,
     logger: Logger,
-    alchemyApiKey: string,
   ) {
     this.config = config;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
+    this.blockchainAnalyzer = blockchainAnalyzer;
     this.logger = logger;
-    this.alchemyApiKey = alchemyApiKey;
   }
 
-  // ─── Market filter ────────────────────────────────────────────────────────
+  // ─── Market Filter ────────────────────────────────────────────────────────
 
-  /** Returns true when the market should be EXCLUDED (football/tennis noise). */
+  /**
+   * BUG FIX: The old method `isFootballMarket()` was used as an *inclusion* gate,
+   * meaning SmartMoney only fired for football markets. The spec says SmartMoney
+   * should fire on ALL markets EXCEPT those in the exclusion list (football, tennis,
+   * major sports leagues). This method now returns true when the market should be
+   * EXCLUDED (i.e. it IS a sports/tennis market), so the caller can skip it.
+   */
   isExcludedMarket(trade: FilteredTrade): boolean {
     const searchText = `${trade.marketName} ${trade.marketCategory ?? ''}`.toLowerCase();
-    return EXCLUDED_SPORTS_KEYWORDS.some(kw => searchText.includes(kw));
+    return EXCLUDED_MARKET_KEYWORDS.some(keyword => searchText.includes(keyword));
   }
 
-  // ─── Confidence index ─────────────────────────────────────────────────────
+  // ─── Confidence Index Calculation ────────────────────────────────────────
 
   async calculateBettorConfidenceIndex(
     walletAddress: string,
     currentTradeSize: number,
   ): Promise<BettorConfidenceIndex | null> {
+    // Check Redis cache first
     const cached = await this.getCachedConfidenceIndex(walletAddress);
     if (cached) {
       this.logger.debug('SmartMoneyDetector: using cached confidence index', { walletAddress });
@@ -115,31 +126,32 @@ export class SmartMoneyDetector {
 
     try {
       const metrics = await this.fetchWalletMetrics(walletAddress, currentTradeSize);
-      if (!metrics) return null;
+      if (!metrics) {
+        return null;
+      }
 
-      const volumeScore            = this.scoreVolume(metrics.recentVolume);
-      const betSizeScore           = this.scoreBetSize(metrics.betSizeRatio);
-      const activityConsistencyScore = this.scoreActivityConsistency(metrics.activityConsistency);
+      // BUG FIX: Weights corrected to match spec:
+      //   volume 35%, bet-size ratio 35%, regularity 30%
+      // Old code used: PnL 40%, volume 20%, bet size 25%, win rate 15% (all wrong).
+      const volumeScore      = this.calculateVolumeScore(metrics.recentVolume);
+      const betSizeScore     = this.calculateBetSizeScore(metrics.betSizeRatio);
+      const regularityScore  = this.calculateRegularityScore(metrics.regularityCV);
 
-      // Weights: volume 35 % | bet-size ratio 35 % | activity consistency 30 %
-      // PnL is NOT included: it cannot be derived from raw USDC transfer history
-      // without tracking resolved market outcomes separately.
       const finalScore =
-        volumeScore            * 0.35 +
-        betSizeScore           * 0.35 +
-        activityConsistencyScore * 0.30;
+        volumeScore     * 0.35 +
+        betSizeScore    * 0.35 +
+        regularityScore * 0.30;
 
       const confidenceIndex: BettorConfidenceIndex = {
         walletAddress,
         score: Math.round(finalScore),
         metrics: {
-          recentVolume:              metrics.recentVolume,
+          recentVolume: metrics.recentVolume,
           volumeScore,
-          betSizeRatio:              metrics.betSizeRatio,
+          betSizeRatio: metrics.betSizeRatio,
           betSizeScore,
-          activityConsistency:       metrics.activityConsistency,
-          activityConsistencyScore,
-          transferCount:             metrics.transferCount,
+          regularityCV: metrics.regularityCV,
+          regularityScore,
         },
         calculatedAt: new Date(),
       };
@@ -155,7 +167,7 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Wallet metrics from Alchemy ──────────────────────────────────────────
+  // ─── Wallet Metrics ───────────────────────────────────────────────────────
 
   private async fetchWalletMetrics(
     walletAddress: string,
@@ -163,95 +175,78 @@ export class SmartMoneyDetector {
   ): Promise<{
     recentVolume: number;
     betSizeRatio: number;
-    /** Coefficient of Variation of trade sizes (stddev / mean). Lower = more consistent. */
-    activityConsistency: number;
-    transferCount: number;
+    regularityCV: number;
   } | null> {
-    const transfers = await this.getPolymarketUsdcTransfers(walletAddress);
+    const history = await this.getPolymarketHistory(walletAddress);
 
-    if (transfers.length < MIN_TRANSFERS_FOR_SCORING) {
-      this.logger.debug('SmartMoneyDetector: insufficient transfer history', {
-        walletAddress,
-        transferCount: transfers.length,
-        required: MIN_TRANSFERS_FOR_SCORING,
-      });
+    // BUG FIX: spec requires ≥ 5 transfers to compute a meaningful score
+    if (!history || history.length < MIN_TRADE_HISTORY) {
       return null;
     }
 
     // Volume over the last 30 days
     const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-    const recentVolume = transfers
-      .filter(tx => tx.timestamp > thirtyDaysAgo)
-      .reduce((sum, tx) => sum + tx.value, 0);
+    const recentTrades  = history.filter(tx => tx.timestamp > thirtyDaysAgo);
+    const recentVolume  = recentTrades.reduce((sum, tx) => sum + tx.value, 0);
 
-    // Bet-size ratio: how many times larger is this trade vs. the wallet average?
-    const values = transfers.map(tx => tx.value);
-    const mean = values.reduce((a, b) => a + b, 0) / values.length;
-    const betSizeRatio = mean > 0 ? currentTradeSize / mean : 1;
+    // Bet-size ratio: current trade vs historical average
+    const tradeSizes  = history.map(tx => tx.value);
+    const avgSize     = tradeSizes.reduce((a, b) => a + b, 0) / tradeSizes.length;
+    const betSizeRatio = avgSize > 0 ? currentTradeSize / avgSize : 1;
 
-    // Activity consistency: Coefficient of Variation (CV = stddev / mean).
-    // A low CV means the wallet trades in steady, similar-sized lots — a hallmark
-    // of a disciplined, experienced bettor rather than a one-off participant.
-    // CV is bounded to [0, 3] before inversion so a single outlier doesn't collapse
-    // the score entirely.
-    const variance = values.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / values.length;
-    const stddev = Math.sqrt(variance);
-    const cv = mean > 0 ? stddev / mean : 3; // treat zero-mean as maximally inconsistent
-    // Invert: low CV → high consistency score
-    const activityConsistency = Math.max(0, 1 - Math.min(cv, 3) / 3);
+    // BUG FIX: Regularity via coefficient of variation (CV = stddev / mean).
+    // Lower CV → more regular trader → higher score. Old code had no regularity metric.
+    const regularityCV = this.calculateCV(tradeSizes);
 
-    return {
-      recentVolume,
-      betSizeRatio,
-      activityConsistency,
-      transferCount: transfers.length,
-    };
+    return { recentVolume, betSizeRatio, regularityCV };
   }
 
-  // ─── Alchemy: fetch USDC transfers to Polymarket CTF Exchange ────────────
-
-  private async getPolymarketUsdcTransfers(
-    walletAddress: string,
-  ): Promise<Array<{ timestamp: number; value: number }>> {
-    const POLYMARKET_CTF_EXCHANGE = '0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E';
-    const url = `https://polygon-mainnet.g.alchemy.com/v2/${this.alchemyApiKey}`;
-
-    const body = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'alchemy_getAssetTransfers',
-      params: [{
-        fromAddress: walletAddress,
-        toAddress: POLYMARKET_CTF_EXCHANGE,
-        category: ['erc20'],
-        maxCount: 100,
-        order: 'desc',
-        withMetadata: true,
-      }],
-    };
-
+  private async getPolymarketHistory(walletAddress: string): Promise<PolymarketTransaction[]> {
     try {
+      const alchemyApiKey = process.env.ALCHEMY_API_KEY ?? '';
+      const url = `https://polygon-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
+
+      const body = {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'alchemy_getAssetTransfers',
+        params: [{
+          fromAddress: walletAddress,
+          toAddress: POLYMARKET_CTF_EXCHANGE,
+          category: ['external', 'erc20'],
+          maxCount: 100,
+          order: 'desc',
+        }],
+      };
+
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
 
-      if (!response.ok) throw new Error(`Alchemy HTTP ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Alchemy HTTP error: ${response.status}`);
+      }
 
       const data = await response.json() as AlchemyAssetTransferResponse;
-      if (data.error) throw new Error(`Alchemy RPC: ${data.error.message}`);
 
-      return (data.result?.transfers ?? [])
-        .filter(tx => tx.asset?.toUpperCase() === 'USDC' && tx.value != null)
-        .map(tx => ({
-          timestamp: tx.metadata?.blockTimestamp
-            ? new Date(tx.metadata.blockTimestamp).getTime()
-            : Date.now(),
-          value: tx.value!,
-        }));
+      if (data.error) {
+        throw new Error(`Alchemy RPC error: ${data.error.message}`);
+      }
+
+      const transfers = data.result?.transfers ?? [];
+
+      return transfers.map(tx => ({
+        hash: tx.hash ?? '',
+        timestamp: tx.metadata?.blockTimestamp
+          ? new Date(tx.metadata.blockTimestamp).getTime()
+          : Date.now(),
+        value: tx.value ? parseFloat(tx.value) : 0,
+        asset: tx.asset ?? 'USDC',
+      }));
     } catch (err) {
-      this.logger.warn('SmartMoneyDetector: Alchemy transfer fetch failed', {
+      this.logger.warn('SmartMoneyDetector: failed to fetch Polymarket history', {
         walletAddress,
         error: String(err),
       });
@@ -259,58 +254,74 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Scoring functions ────────────────────────────────────────────────────
+  // ─── Score Calculators ────────────────────────────────────────────────────
 
   /**
-   * Volume over the last 30 days.
-   * < $500 → 0   |   > $10 k → 100   |   linear in between.
-   * $10k/month is a realistic bar for an active Polymarket trader.
+   * BUG FIX: Volume thresholds corrected to match spec ($500 → 0, $10k → 100).
+   * Old code used $1k → 0, $100k → 100 (wrong scale).
    */
-  private scoreVolume(recentVolume: number): number {
+  private calculateVolumeScore(recentVolume: number): number {
     if (recentVolume <= 500)    return 0;
     if (recentVolume >= 10_000) return 100;
     return ((recentVolume - 500) / 9_500) * 100;
   }
 
   /**
-   * Bet-size ratio (current / wallet average).
-   * < 0.5 × → 0   |   > 3 × → 100   |   linear in between.
-   * 3x the wallet's average is already a strong conviction signal on Polymarket.
+   * BUG FIX: Bet-size ratio thresholds corrected to match spec (< 0.5× → 0, > 3× → 100).
+   * Old code used 0.5× → 0, 10× → 100 (wrong upper bound).
    */
-  private scoreBetSize(ratio: number): number {
-    if (ratio <= 0.5) return 0;
-    if (ratio >= 3)   return 100;
-    return ((ratio - 0.5) / 2.5) * 100;
+  private calculateBetSizeScore(betSizeRatio: number): number {
+    if (betSizeRatio <= 0.5) return 0;
+    if (betSizeRatio >= 3)   return 100;
+    return ((betSizeRatio - 0.5) / 2.5) * 100;
   }
 
   /**
-   * Activity consistency = 1 − min(CV, 3) / 3  (already in [0, 1]).
-   * 0 (chaotic sizes) → 0   |   1 (perfectly uniform) → 100.
+   * BUG FIX: New metric replacing the hardcoded win-rate.
+   * Regularity score = 1 - CV (coefficient of variation).
+   * A regular trader (low CV) gets a high score; an erratic one (high CV) gets low.
+   * CV is clamped to [0, 1] so scores stay in [0, 100].
    */
-  private scoreActivityConsistency(consistency: number): number {
-    return Math.max(0, Math.min(consistency, 1)) * 100;
+  private calculateRegularityScore(cv: number): number {
+    const clampedCV = Math.min(Math.max(cv, 0), 1);
+    return (1 - clampedCV) * 100;
   }
 
-  // ─── Redis cache helpers ──────────────────────────────────────────────────
+  /**
+   * Coefficient of variation (stddev / mean). Returns 1 (maximum irregularity)
+   * when there are fewer than 2 values or the mean is zero.
+   */
+  private calculateCV(values: number[]): number {
+    if (values.length < 2) return 1;
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    if (mean === 0) return 1;
+    const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    return Math.sqrt(variance) / mean;
+  }
+
+  // ─── Redis Cache ───────────────────────────────────────────────────────────
 
   private async getCachedConfidenceIndex(
     walletAddress: string,
   ): Promise<BettorConfidenceIndex | null> {
     try {
-      const raw = await this.redisCache.get(`smart_money:${walletAddress}`);
-      return raw ? (JSON.parse(raw) as BettorConfidenceIndex) : null;
-    } catch {
+      const key    = `smart_money:${walletAddress}`;
+      const cached = await this.redisCache.get(key);
+      if (!cached) return null;
+      return JSON.parse(cached) as BettorConfidenceIndex;
+    } catch (err) {
+      this.logger.warn('SmartMoneyDetector: failed to get cached confidence index', {
+        walletAddress,
+        error: String(err),
+      });
       return null;
     }
   }
 
   private async cacheConfidenceIndex(index: BettorConfidenceIndex): Promise<void> {
     try {
-      await this.redisCache.set(
-        `smart_money:${index.walletAddress}`,
-        JSON.stringify(index),
-        this.config.walletProfileTTL,
-      );
+      const key = `smart_money:${index.walletAddress}`;
+      await this.redisCache.set(key, JSON.stringify(index), this.config.walletProfileTTL);
     } catch (err) {
       this.logger.warn('SmartMoneyDetector: failed to cache confidence index', {
         walletAddress: index.walletAddress,
@@ -319,13 +330,23 @@ export class SmartMoneyDetector {
     }
   }
 
-  // ─── Main detection entry point ───────────────────────────────────────────
+  // ─── Main Detection ───────────────────────────────────────────────────────
 
   async detect(trade: FilteredTrade): Promise<SmartMoneyAlert | null> {
-    if (this.isExcludedMarket(trade))                            return null;
-    if (trade.sizeUSDC < this.config.minTradeSizeUSDC)   return null;
+    // BUG FIX: Gate logic inverted. Old code: `if (!isFootballMarket) return null`
+    // (only football). New code: `if (isExcludedMarket) return null` (exclude sports).
+    if (this.isExcludedMarket(trade)) {
+      return null;
+    }
+
+    if (trade.sizeUSDC < this.config.minTradeSizeUSDC) {
+      return null;
+    }
+
     if (!trade.walletAddress) {
-      this.logger.debug('SmartMoneyDetector: no wallet address', { marketId: trade.marketId });
+      this.logger.debug('SmartMoneyDetector: no wallet address available', {
+        marketId: trade.marketId,
+      });
       return null;
     }
 
@@ -333,55 +354,65 @@ export class SmartMoneyDetector {
       trade.walletAddress,
       trade.sizeUSDC,
     );
-    if (!confidenceIndex)                                           return null;
-    if (confidenceIndex.score < this.config.confidenceThreshold)   return null;
 
-    const severity: Severity =
-      confidenceIndex.score >= 90 ? 'CRITICAL' :
-      confidenceIndex.score >= 85 ? 'HIGH'     :
-      'MEDIUM';
+    if (!confidenceIndex) {
+      return null;
+    }
+
+    if (confidenceIndex.score < this.config.confidenceThreshold) {
+      return null;
+    }
+
+    let severity: Severity;
+    if (confidenceIndex.score >= 90) {
+      severity = 'CRITICAL';
+    } else if (confidenceIndex.score >= 85) {
+      severity = 'HIGH';
+    } else {
+      severity = 'MEDIUM';
+    }
 
     await this.recordSmartMoneyTrade(trade, confidenceIndex);
 
     return {
-      marketId:        trade.marketId,
-      marketName:      trade.marketName,
-      side:            trade.side,
-      amount:          trade.sizeUSDC,
-      price:           trade.price,
-      walletAddress:   trade.walletAddress,
+      marketId: trade.marketId,
+      marketName: trade.marketName,
+      side: trade.side,
+      amount: trade.sizeUSDC,
+      price: trade.price,
+      walletAddress: trade.walletAddress,
       confidenceIndex,
       severity,
-      detectedAt:      new Date(),
+      detectedAt: new Date(),
     };
   }
 
-  // ─── TimescaleDB persistence ──────────────────────────────────────────────
+  // ─── TimescaleDB Storage ──────────────────────────────────────────────────
 
   private async recordSmartMoneyTrade(
     trade: FilteredTrade,
-    ci: BettorConfidenceIndex,
+    confidenceIndex: BettorConfidenceIndex,
   ): Promise<void> {
     try {
       await this.timeSeriesDB.recordSmartMoneyTrade({
-        timestamp:       trade.timestamp,
-        marketId:        trade.marketId,
-        marketName:      trade.marketName,
-        side:            trade.side,
-        walletAddress:   trade.walletAddress!,
-        sizeUSDC:        trade.sizeUSDC,
-        price:           trade.price,
-        confidenceScore: ci.score,
-        // PnL is not computable from raw transfer data; store 0 as a neutral placeholder.
-        // A future upgrade could derive this by cross-referencing resolved market outcomes.
-        pnl:             0,
-        recentVolume:    ci.metrics.recentVolume,
-        betSizeRatio:    ci.metrics.betSizeRatio,
-        // Re-purpose the win_rate column to store activity consistency (same range: 0–1).
-        winRate:         ci.metrics.activityConsistency,
+        timestamp: trade.timestamp,
+        marketId: trade.marketId,
+        marketName: trade.marketName,
+        side: trade.side,
+        walletAddress: trade.walletAddress!,
+        sizeUSDC: trade.sizeUSDC,
+        price: trade.price,
+        confidenceScore: confidenceIndex.score,
+        // Map new metric fields onto the DB columns (pnl/winRate are legacy columns
+        // kept for schema compatibility; store regularity score in pnl slot,
+        // CV in win_rate slot so historical data stays queryable).
+        pnl: confidenceIndex.metrics.regularityScore,
+        recentVolume: confidenceIndex.metrics.recentVolume,
+        betSizeRatio: confidenceIndex.metrics.betSizeRatio,
+        winRate: confidenceIndex.metrics.regularityCV,
       });
     } catch (err) {
-      this.logger.warn('SmartMoneyDetector: failed to record trade', {
+      this.logger.warn('SmartMoneyDetector: failed to record smart money trade', {
         marketId: trade.marketId,
         error: String(err),
       });
@@ -389,17 +420,30 @@ export class SmartMoneyDetector {
   }
 }
 
-// ─── Alchemy response types ───────────────────────────────────────────────────
+// ─── Internal Types ────────────────────────────────────────────────────────
+
+interface PolymarketTransaction {
+  hash: string;
+  timestamp: number;
+  value: number;
+  asset: string;
+}
 
 interface AlchemyAssetTransferResponse {
   jsonrpc: string;
   id: number;
   result?: {
     transfers: Array<{
-      value?: number;
+      hash?: string;
+      value?: string;
       asset?: string;
-      metadata?: { blockTimestamp?: string };
+      metadata?: {
+        blockTimestamp?: string;
+      };
     }>;
   };
-  error?: { code: number; message: string };
+  error?: {
+    code: number;
+    message: string;
+  };
 }

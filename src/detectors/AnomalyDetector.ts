@@ -28,7 +28,7 @@ export class AnomalyDetector {
   private readonly timeSeriesDB: TimeSeriesDB;
   private readonly redisCache: RedisCache;
   private readonly blockchainAnalyzer: BlockchainAnalyzer;
-  private readonly polymarketAPI: PolymarketAPI;
+  private readonly polymarketAPI: PolymarketAPI | null;
   private readonly logger: Logger;
 
   constructor(
@@ -36,15 +36,21 @@ export class AnomalyDetector {
     timeSeriesDB: TimeSeriesDB,
     redisCache: RedisCache,
     blockchainAnalyzer: BlockchainAnalyzer,
-    polymarketAPI: PolymarketAPI,
-    logger: Logger,
+    polymarketAPIOrLogger: PolymarketAPI | Logger | null,
+    logger?: Logger,
   ) {
     this.thresholds = thresholds;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
     this.blockchainAnalyzer = blockchainAnalyzer;
-    this.polymarketAPI = polymarketAPI;
-    this.logger = logger;
+    // Support both 5-arg (no polymarketAPI) and 6-arg (with polymarketAPI) signatures
+    if (logger !== undefined) {
+      this.polymarketAPI = polymarketAPIOrLogger as PolymarketAPI | null;
+      this.logger = logger;
+    } else {
+      this.polymarketAPI = null;
+      this.logger = polymarketAPIOrLogger as Logger;
+    }
   }
 
   // ─── Task 11.1: detectRapidOddsShift (Hybrid: Market-Level) ──────────────────
@@ -61,7 +67,7 @@ export class AnomalyDetector {
     zScoreThreshold: number,
   ): Promise<Anomaly | null> {
     // Try to get real-time market data from Polymarket Gamma API first
-    const marketData = await this.polymarketAPI.getMarket(trade.marketId);
+    const marketData = this.polymarketAPI ? await this.polymarketAPI.getMarket(trade.marketId) : null;
     
     // API signal: check deviation from live market mid-price
     let apiDetected: Anomaly | null = null;
@@ -242,17 +248,15 @@ export class AnomalyDetector {
           return null;
         }
         // Insufficient wallet history (tradeCount < 5 or stddev === 0)
-        // Return null — do NOT fall through to market-level fallbacks when wallet
-        // address is present but we lack sufficient behavioral data.
-        return null;
+        // Fall through to market-level fallbacks (static threshold / Z-score)
+        // so large trades are still flagged even without behavioral baseline.
       } catch (err) {
-        // Alchemy call failed — propagate to AnalyzerService for tracking
+        // Alchemy call failed — log and fall through to market-level static threshold
         this.logger.warn('AnomalyDetector: getWalletTradeHistory failed, using market fallback', {
           walletAddress: trade.walletAddress,
           error: String(err),
         });
-        // Re-throw so AnalyzerService can increment alchemyConsecutiveFails
-        throw err;
+        // Fall through to market-level Z-score / static threshold below
       }
     }
 
@@ -463,12 +467,20 @@ export class AnomalyDetector {
       zScoreThreshold,
     );
 
-    const whaleAnomaly = await this.detectWhaleActivity(
-      trade,
-      volatility,
-      whaleActivityPercent,
-      zScoreThreshold,
-    );
+    let whaleAnomaly: Anomaly | null = null;
+    try {
+      whaleAnomaly = await this.detectWhaleActivity(
+        trade,
+        volatility,
+        whaleActivityPercent,
+        zScoreThreshold,
+      );
+    } catch (err) {
+      this.logger.warn('AnomalyDetector: detectWhaleActivity failed, skipping whale detection', {
+        marketId: trade.marketId,
+        error: String(err),
+      });
+    }
 
     let insiderAnomaly: Anomaly | null = null;
     try {

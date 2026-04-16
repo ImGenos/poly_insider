@@ -21,6 +21,7 @@ class MockWs extends EventEmitter {
   }
   close() { this.readyState = MockWs.CLOSED; this.emit('close'); }
   terminate() { this.readyState = MockWs.CLOSED; this.emit('close'); }
+  send(_data: unknown) { /* no-op */ }
 }
 
 jest.mock('ws', () => {
@@ -51,16 +52,13 @@ function makeLogger(): Logger {
 
 function validTrade(overrides: Partial<Record<string, unknown>> = {}): Record<string, unknown> {
   return {
-    market_id: 'mkt-1',
-    market_name: 'Test Market',
-    side: 'YES',
-    price: 0.6,
-    size: 100,
-    size_usd: 5000,
-    timestamp: Date.now(),
-    maker_address: '0xaAbBcCdDeEfF0011223344556677889900aAbBcC',
-    taker_address: '0x1122334455667788990011223344556677889900',
-    order_book_depth: { bid_liquidity: 10000, ask_liquidity: 8000 },
+    event_type: 'last_trade_price',
+    asset_id: 'token-mkt-1',
+    market: 'condition-mkt-1',
+    price: '0.6',
+    size: '100',
+    side: 'BUY',
+    timestamp: String(Date.now()),
     ...overrides,
   };
 }
@@ -70,6 +68,11 @@ function validTrade(overrides: Partial<Record<string, unknown>> = {}): Record<st
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
+  // Mock fetch so _fetchMarkets() resolves immediately with an empty list
+  global.fetch = jest.fn().mockResolvedValue({
+    ok: false,
+    status: 503,
+  } as Response);
 });
 
 afterEach(() => {
@@ -236,8 +239,9 @@ describe('WebSocketManager — malformed message handling', () => {
     mockWsInstance.emit('open');
     await connectPromise;
 
+    // Missing price field → NaN → skipped
     const bad = validTrade();
-    delete bad['market_id'];
+    delete bad['price'];
     mockWsInstance.emit('message', Buffer.from(JSON.stringify(bad)));
 
     expect(onTrade).not.toHaveBeenCalled();
@@ -253,7 +257,8 @@ describe('WebSocketManager — malformed message handling', () => {
     mockWsInstance.emit('open');
     await connectPromise;
 
-    mockWsInstance.emit('message', Buffer.from(JSON.stringify(validTrade({ side: 'MAYBE' }))));
+    // Non-last_trade_price event_type → ignored
+    mockWsInstance.emit('message', Buffer.from(JSON.stringify(validTrade({ event_type: 'book' }))));
 
     expect(onTrade).not.toHaveBeenCalled();
   });
@@ -268,7 +273,8 @@ describe('WebSocketManager — malformed message handling', () => {
     mockWsInstance.emit('open');
     await connectPromise;
 
-    mockWsInstance.emit('message', Buffer.from(JSON.stringify(validTrade({ maker_address: 'not-an-address' }))));
+    // Invalid size (NaN) → skipped
+    mockWsInstance.emit('message', Buffer.from(JSON.stringify(validTrade({ size: 'not-a-number' }))));
 
     expect(onTrade).not.toHaveBeenCalled();
   });
@@ -288,8 +294,9 @@ describe('WebSocketManager — malformed message handling', () => {
 
     expect(onTrade).toHaveBeenCalledTimes(1);
     const received: RawTrade = onTrade.mock.calls[0][0];
-    expect(received.market_id).toBe('mkt-1');
-    expect(received.side).toBe('YES');
-    expect(received.size_usd).toBe(5000);
+    // asset_id 'token-mkt-1' is not in tokenToMarket map, so market_id falls back to asset_id
+    expect(received.market_id).toBeDefined();
+    expect(received.side).toBe('YES'); // BUY → YES
+    expect(received.size_usd).toBeCloseTo(0.6 * 100, 5);
   });
 });

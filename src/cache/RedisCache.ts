@@ -127,8 +127,13 @@ export class RedisCache {
     await this.client.xack(streamKey, group, messageId);
   }
 
-  async getStreamDepth(streamKey: string): Promise<number> {
+  async getStreamDepth(streamKey: string, group?: string): Promise<number> {
     if (!this.client || !this.isConnected) return 0;
+    if (group) {
+      // Return actual pending (unprocessed) count for the consumer group
+      const info = await this.client.xpending(streamKey, group) as [number, ...unknown[]];
+      return info[0] ?? 0;
+    }
     return this.client.xlen(streamKey);
   }
 

@@ -122,7 +122,10 @@ export class TelegramNotifier {
       error: error instanceof Error ? error.message : String(error),
     });
 
-    fs.promises.appendFile(FAILED_ALERTS_LOG, entry + '\n', 'utf8')
-      .catch(fsErr => this.logger.error('Failed to write to failed-alerts.log', fsErr));
+    try {
+      fs.appendFileSync(FAILED_ALERTS_LOG, entry + '\n', 'utf8');
+    } catch (fsErr) {
+      this.logger.error('Failed to write to failed-alerts.log', fsErr);
+    }
   }
 }

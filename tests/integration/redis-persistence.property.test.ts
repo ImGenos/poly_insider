@@ -26,6 +26,7 @@ const mockRedisClient = {
   on: jest.fn(),
   connect: jest.fn().mockResolvedValue(undefined),
   quit: jest.fn().mockResolvedValue(undefined),
+  expire: jest.fn().mockResolvedValue(1),
 
   hset: jest.fn().mockImplementation(async (key: string, ...args: string[]) => {
     const existing = persistentStore.get(key) ?? {};

@@ -17,6 +17,7 @@ const mockXreadgroup = jest.fn();
 const mockXack = jest.fn();
 const mockXlen = jest.fn();
 const mockXgroup = jest.fn();
+const mockExpire = jest.fn().mockResolvedValue(1);
 
 jest.mock('ioredis', () => {
   return jest.fn().mockImplementation(() => ({
@@ -33,6 +34,7 @@ jest.mock('ioredis', () => {
     xack: mockXack,
     xlen: mockXlen,
     xgroup: mockXgroup,
+    expire: mockExpire,
   }));
 });
 

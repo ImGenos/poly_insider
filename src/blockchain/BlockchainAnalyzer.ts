@@ -9,7 +9,7 @@ const EXCHANGE_LABEL = 'Exchange';
 // that multiple instances (e.g. in tests or future horizontal scale-up within the same
 // process) cannot each independently allow 5 req/s, effectively multiplying the cap.
 let _lastAlchemyCallTime = 0;
-const _minAlchemyIntervalMs = 200; // 5 req/s max
+const _minAlchemyIntervalMs = 50; // 20 req/s max
 
 export class BlockchainAnalyzer {
   private readonly alchemyApiKey: string;
@@ -79,6 +79,7 @@ export class BlockchainAnalyzer {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!response.ok) {
@@ -130,6 +131,7 @@ export class BlockchainAnalyzer {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: AbortSignal.timeout(5000),
       });
 
       if (!response.ok) {
@@ -197,6 +199,7 @@ export class BlockchainAnalyzer {
     const response = await fetch(url, {
       method: 'GET',
       headers: { 'X-API-Key': this.moralisApiKey },
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!response.ok) {
@@ -390,20 +393,20 @@ export class BlockchainAnalyzer {
   async analyzeClusterFunding(wallets: string[]): Promise<FundingAnalysis> {
     const validWallets = wallets.filter(w => isValidEthAddress(w));
 
-    const funders: Record<string, string> = {};         // wallet -> funder
-    const sharedFunders: Record<string, string[]> = {}; // funder (lowercase) -> wallets[]
+    const funders = new Map<string, string>();         // wallet -> funder
+    const sharedFunders = new Map<string, string[]>(); // funder (lowercase) -> wallets[]
 
     // Fetch all funders concurrently (Req 7.3)
     await Promise.all(validWallets.map(async (wallet) => {
       try {
         const funder = await this.getWalletFunder(wallet);
         if (funder) {
-          funders[wallet] = funder;
+          funders.set(wallet, funder);
           const funderLower = funder.toLowerCase();
-          if (!sharedFunders[funderLower]) {
-            sharedFunders[funderLower] = [];
+          if (!sharedFunders.has(funderLower)) {
+            sharedFunders.set(funderLower, []);
           }
-          sharedFunders[funderLower].push(wallet);
+          sharedFunders.get(funderLower)!.push(wallet);
         }
       } catch {
         // Skip individual wallet on failure (Req 7.5) — non-blocking
@@ -412,7 +415,7 @@ export class BlockchainAnalyzer {
     }));
 
     // If all lookups failed, return safe default (Req 7.6)
-    if (Object.keys(funders).length === 0) {
+    if (funders.size === 0) {
       return {
         wallets,
         funders,
@@ -430,7 +433,7 @@ export class BlockchainAnalyzer {
     let isKnownExchange = false;
     let exchangeName: string | null = null;
 
-    for (const [funderAddr, fundedWallets] of Object.entries(sharedFunders)) {
+    for (const [funderAddr, fundedWallets] of sharedFunders) {
       if (fundedWallets.length >= 2) {
         if (this.knownExchangeWallets.has(funderAddr)) {
           // Known exchange: set exchange info but do NOT set hasCommonNonExchangeFunder (Req 7.4)
@@ -511,5 +514,5 @@ export interface WalletTradeHistory {
    * a wallet that genuinely has no USDC transfer history.
    * Callers MUST NOT treat a failed result as "new wallet with 0 trades".
    */
-  fetchFailed: boolean;
+  fetchFailed?: boolean;
 }

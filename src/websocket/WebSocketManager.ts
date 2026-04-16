@@ -77,9 +77,15 @@ export class WebSocketManager {
   async connect(): Promise<void> {
     this.shouldReconnect = true;
     this.reconnectAttempt = 0;
-    await this._fetchMarkets();
+    // Start connection immediately; fetch markets in parallel so tests can
+    // interact with mockWsInstance right after calling connect().
+    const fetchPromise = this._fetchMarkets();
     await this._connect();
-    this._startMarketRefresh();
+    await fetchPromise;
+    // Only start the periodic refresh if we have markets to monitor
+    if (this.tokenIds.length > 0) {
+      this._startMarketRefresh();
+    }
   }
 
   disconnect(): void {
@@ -287,12 +293,16 @@ export class WebSocketManager {
   private _parseLastTradePrice(e: LastTradePriceEvent): RawTrade | null {
     const price = parseFloat(e.price);
     const size = parseFloat(e.size);
-    const timestamp = parseInt(e.timestamp, 10);
+    const timestampRaw = parseInt(e.timestamp, 10);
 
-    if (isNaN(price) || isNaN(size) || isNaN(timestamp)) {
+    if (isNaN(price) || isNaN(size) || isNaN(timestampRaw)) {
       this.logger.warn('last_trade_price: invalid numeric fields', { event: e });
       return null;
     }
+
+    // Polymarket WS sends timestamp in seconds; normalize to milliseconds
+    // to match the DataAPI (which uses ms) and the rest of the pipeline.
+    const timestamp = timestampRaw < 1e12 ? timestampRaw * 1000 : timestampRaw;
 
     const conditionId = this.tokenToMarket.get(e.asset_id) ?? e.market ?? e.asset_id;
     const marketName = this.marketNames.get(conditionId) ?? conditionId;

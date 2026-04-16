@@ -87,7 +87,7 @@ export class AlertFormatter {
 
     return {
       text: truncate(text),
-      parse_mode: 'MarkdownV2',
+      parse_mode: 'Markdown',
       disable_web_page_preview: false,
     };
   }
@@ -111,7 +111,7 @@ export class AlertFormatter {
 
     return {
       text: truncate(text),
-      parse_mode: 'MarkdownV2',
+      parse_mode: 'Markdown',
       disable_web_page_preview: false,
     };
   }
@@ -220,10 +220,10 @@ export class AlertFormatter {
     if (anomaly.severity === 'CRITICAL' && anomaly.fundingAnalysis?.commonFunderAddress) {
       const funder = anomaly.fundingAnalysis.commonFunderAddress;
       lines.push(``);
-      lines.push(`*Financeur commun :*`);
+      lines.push(`*Common Funder:*`);
       lines.push(`${polygonScanLink(funder)}`);
       lines.push(``);
-      lines.push(`*Portefeuilles financés :*`);
+      lines.push(`*Funded Wallets:*`);
       for (const wallet of anomaly.wallets) {
         lines.push(`• ${polygonScanLink(wallet)}`);
       }
@@ -241,7 +241,7 @@ export class AlertFormatter {
   formatClusterMessage(anomaly: ClusterAnomaly): TelegramMessage {
     return {
       text: truncate(this.formatClusterAlert(anomaly)),
-      parse_mode: 'MarkdownV2',
+      parse_mode: 'Markdown',
       disable_web_page_preview: false,
     };
   }
@@ -275,7 +275,7 @@ export class AlertFormatter {
   formatSmartMoneyMessage(alert: SmartMoneyAlert): TelegramMessage {
     return {
       text: truncate(this.formatSmartMoneyAlert(alert)),
-      parse_mode: 'MarkdownV2',
+      parse_mode: 'Markdown',
       disable_web_page_preview: false,
     };
   }

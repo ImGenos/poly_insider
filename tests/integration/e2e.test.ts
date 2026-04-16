@@ -219,7 +219,7 @@ async function runPipeline(
     const alreadySent = await redisCache.hasAlertBeenSent(
       anomaly.type,
       filteredTrade.marketId,
-      filteredTrade.walletAddress,
+      filteredTrade.walletAddress ?? '',
     );
     if (!alreadySent) {
       const msg = alertFormatter.format(anomaly, filteredTrade);
@@ -227,7 +227,7 @@ async function runPipeline(
       await redisCache.recordSentAlert(
         anomaly.type,
         filteredTrade.marketId,
-        filteredTrade.walletAddress,
+        filteredTrade.walletAddress ?? '',
         3600,
       );
     }
@@ -377,8 +377,8 @@ describe('E2E: insider trading detection (Req 5.6)', () => {
   it('does NOT detect insider trading for old wallet', async () => {
     const components = makeComponents();
 
-    // Old wallet (1000h old)
-    components.redisCache.getWalletProfile.mockResolvedValue(
+    // Old wallet (1000h old) — override the blockchainAnalyzer mock
+    components.blockchainAnalyzer.analyzeWalletProfile.mockResolvedValue(
       makeWalletProfile({ ageHours: 1000, isNew: false }),
     );
     components.timeSeriesDB.getPriceHistory.mockResolvedValue([

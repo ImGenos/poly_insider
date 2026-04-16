@@ -14859,3 +14859,10 @@
 2026-04-16 11:14:26 +02:00:     at Object.onceWrapper (node:events:633:26)
 2026-04-16 11:14:26 +02:00:     at EventEmitter.emit (node:events:518:28)
 2026-04-16 11:14:26 +02:00:     at processTicksAndRejections (node:internal/process/task_queues:85:11)
+2026-04-16 12:51:38 +02:00: [2026-04-16T10:51:38.849Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 12:51:48 +02:00: [2026-04-16T10:51:48.871Z] [WARN ] WebSocket closed
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.218Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 15:34:18 +02:00: [2026-04-16T13:34:18.255Z] [WARN ] WebSocket closed
+2026-04-16 15:47:50 +02:00: [2026-04-16T13:47:50.092Z] [WARN ] WebSocket closed
+2026-04-16 15:50:21 +02:00: [2026-04-16T13:50:21.479Z] [WARN ] WebSocket closed
+2026-04-16 16:05:22 +02:00: [2026-04-16T14:05:22.345Z] [WARN ] WebSocket closed

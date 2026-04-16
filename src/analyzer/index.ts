@@ -18,7 +18,7 @@ import { RawTrade, StreamMessage } from '../types/index';
 const STREAM_KEY = 'trades:stream';
 const CONSUMER_GROUP = 'analyzers';
 const CONSUMER_NAME = 'analyzer-1';
-const STREAM_READ_COUNT = 10;
+const STREAM_READ_COUNT = 100;
 const STREAM_DEPTH_CHECK_INTERVAL_MS = 30_000;
 const STREAM_DEPTH_WARN_THRESHOLD = 10_000;
 const STREAM_DEPTH_ALERT_THRESHOLD = 50_000;
@@ -171,7 +171,6 @@ export class AnalyzerService {
       this.redisCache,
       this.blockchainAnalyzer,
       this.logger,
-      config.getAlchemyApiKey(),
     );
     this.telegramNotifier = new TelegramNotifier(config.getTelegramConfig(), this.logger);
 
@@ -227,7 +226,7 @@ export class AnalyzerService {
   private startDepthMonitor(): void {
     this.depthCheckTimer = setInterval(async () => {
       try {
-        const depth = await this.redisCache!.getStreamDepth(STREAM_KEY);
+        const depth = await this.redisCache!.getStreamDepth(STREAM_KEY, CONSUMER_GROUP);
 
         if (depth > STREAM_DEPTH_ALERT_THRESHOLD) {
           // Req 12.7: send Telegram alert, throttled to once per 10 minutes
@@ -274,7 +273,8 @@ export class AnalyzerService {
         continue;
       }
 
-      for (const message of messages) {
+      // Process all messages in the batch concurrently
+      await Promise.all(messages.map(async (message) => {
         // processMessage has its own try/catch + finally for XACK.
         // This outer catch is a last-resort safety net: if processMessage itself
         // throws (e.g. a programming error escapes the inner try), we still ACK
@@ -285,7 +285,7 @@ export class AnalyzerService {
           this.logger.error('AnalyzerService: processMessage panicked — ACKing to prevent redelivery', err, { id: message.id });
           await this.ackMessage(message.id);
         }
-      }
+      }));
     }
   }
 

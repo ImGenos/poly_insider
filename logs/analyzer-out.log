@@ -5378,3 +5378,62 @@
 2026-04-16 11:17:56 +02:00: [2026-04-16T09:17:56.615Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
 2026-04-16 11:17:56 +02:00: [2026-04-16T09:17:56.691Z] [INFO ] AnalyzerService: all connections established
 2026-04-16 11:17:56 +02:00: [2026-04-16T09:17:56.691Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 11:57:57 +02:00: [2026-04-16T09:57:57.415Z] [INFO ] AnalyzerService starting
+2026-04-16 11:57:57 +02:00: [2026-04-16T09:57:57.677Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 11:57:57 +02:00: [2026-04-16T09:57:57.685Z] [INFO ] Redis connected
+2026-04-16 11:57:57 +02:00: [2026-04-16T09:57:57.690Z] [INFO ] Redis ready
+2026-04-16 11:57:58 +02:00: [2026-04-16T09:57:58.238Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 11:58:01 +02:00: [2026-04-16T09:58:01.863Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 11:58:01 +02:00: [2026-04-16T09:58:01.863Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 12:26:56 +02:00: [2026-04-16T10:26:56.468Z] [INFO ] AnalyzerService starting
+2026-04-16 12:26:56 +02:00: [2026-04-16T10:26:56.679Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 12:26:56 +02:00: [2026-04-16T10:26:56.685Z] [INFO ] Redis connected
+2026-04-16 12:26:56 +02:00: [2026-04-16T10:26:56.761Z] [INFO ] Redis ready
+2026-04-16 12:26:56 +02:00: [2026-04-16T10:26:56.965Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 12:26:57 +02:00: [2026-04-16T10:26:57.044Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 12:26:57 +02:00: [2026-04-16T10:26:57.045Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.202Z] [INFO ] AnalyzerService starting
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.341Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.348Z] [INFO ] Redis connected
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.352Z] [INFO ] Redis ready
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.605Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.674Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 12:51:39 +02:00: [2026-04-16T10:51:39.675Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.089Z] [INFO ] AnalyzerService starting
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.228Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.234Z] [INFO ] Redis connected
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.241Z] [INFO ] Redis ready
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.401Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.470Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 14:00:49 +02:00: [2026-04-16T12:00:49.471Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 14:18:33 +02:00: [2026-04-16T12:18:33.125Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 14:18:36 +02:00: [2026-04-16T12:18:36.012Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa5ea13a81d2b7e8e424b182bdc1db08e756bd96a"}
+2026-04-16 14:18:36 +02:00: [2026-04-16T12:18:36.082Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 14:27:48 +02:00: [2026-04-16T12:27:48.907Z] [INFO ] AnalyzerService starting
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.041Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.048Z] [INFO ] Redis connected
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.054Z] [INFO ] Redis ready
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.136Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.208Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 14:27:49 +02:00: [2026-04-16T12:27:49.209Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 14:52:14 +02:00: [2026-04-16T12:52:14.675Z] [INFO ] AnalyzerService starting
+2026-04-16 14:52:14 +02:00: [2026-04-16T12:52:14.883Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 14:52:14 +02:00: [2026-04-16T12:52:14.894Z] [INFO ] Redis connected
+2026-04-16 14:52:14 +02:00: [2026-04-16T12:52:14.903Z] [INFO ] Redis ready
+2026-04-16 14:52:15 +02:00: [2026-04-16T12:52:15.175Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 14:52:15 +02:00: [2026-04-16T12:52:15.254Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 14:52:15 +02:00: [2026-04-16T12:52:15.254Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 15:19:09 +02:00: [2026-04-16T13:19:09.734Z] [INFO ] AnalyzerService starting
+2026-04-16 15:19:09 +02:00: [2026-04-16T13:19:09.898Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 15:19:09 +02:00: [2026-04-16T13:19:09.904Z] [INFO ] Redis connected
+2026-04-16 15:19:09 +02:00: [2026-04-16T13:19:09.911Z] [INFO ] Redis ready
+2026-04-16 15:19:09 +02:00: [2026-04-16T13:19:09.955Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 15:19:10 +02:00: [2026-04-16T13:19:10.035Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 15:19:10 +02:00: [2026-04-16T13:19:10.035Z] [INFO ] AnalyzerService: starting consumer loop
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.452Z] [INFO ] AnalyzerService starting
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.597Z] [INFO ] Taux USD→EUR mis à jour : 0.8475
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.603Z] [INFO ] Redis connected
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.608Z] [INFO ] Redis ready
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.838Z] [INFO ] TimeSeriesDB schema up to date {"version":1}
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.903Z] [INFO ] AnalyzerService: all connections established
+2026-04-16 15:34:08 +02:00: [2026-04-16T13:34:08.903Z] [INFO ] AnalyzerService: starting consumer loop

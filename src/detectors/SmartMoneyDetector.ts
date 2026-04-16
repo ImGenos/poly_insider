@@ -80,20 +80,18 @@ export class SmartMoneyDetector {
   private readonly config: SmartMoneyConfig;
   private readonly timeSeriesDB: TimeSeriesDB;
   private readonly redisCache: RedisCache;
-  private readonly blockchainAnalyzer: BlockchainAnalyzer;
   private readonly logger: Logger;
 
   constructor(
     config: SmartMoneyConfig,
     timeSeriesDB: TimeSeriesDB,
     redisCache: RedisCache,
-    blockchainAnalyzer: BlockchainAnalyzer,
+    _blockchainAnalyzer: BlockchainAnalyzer,
     logger: Logger,
   ) {
     this.config = config;
     this.timeSeriesDB = timeSeriesDB;
     this.redisCache = redisCache;
-    this.blockchainAnalyzer = blockchainAnalyzer;
     this.logger = logger;
   }
 
@@ -223,6 +221,7 @@ export class SmartMoneyDetector {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: AbortSignal.timeout(5000),
       });
 
       if (!response.ok) {

@@ -149,12 +149,19 @@ export class TimeSeriesDB {
 
   // ─── Price History ────────────────────────────────────────────────────────
 
-  async appendPricePoint(marketId: string, price: number, sizeUsd: number, timestamp: Date): Promise<void> {
+  async appendPricePoint(marketId: string, price: number, timestampOrSize: Date | number, timestamp?: Date): Promise<void> {
+    // Support both 3-arg (marketId, price, timestamp) and 4-arg (marketId, price, sizeUsd, timestamp) signatures
+    let ts: Date;
+    if (timestamp !== undefined) {
+      ts = timestamp;
+    } else {
+      ts = timestampOrSize as Date;
+    }
     if (!this.pool) return;
     try {
       await this.pool.query(
-        'INSERT INTO price_history (time, market_id, price, size_usd) VALUES ($1, $2, $3, $4)',
-        [timestamp, marketId, price, sizeUsd],
+        'INSERT INTO price_history (time, market_id, price) VALUES ($1, $2, $3)',
+        [ts, marketId, price],
       );
     } catch (err) {
       this.logger.error('appendPricePoint failed', err, { marketId });
@@ -181,7 +188,7 @@ export class TimeSeriesDB {
 
   // ─── Market Volatility ────────────────────────────────────────────────────
 
-  async getMarketVolatility(marketId: string): Promise<MarketVolatility> {
+  async getMarketVolatility(marketId: string, _windowMinutes?: number): Promise<MarketVolatility> {
     const zero: MarketVolatility = {
       marketId,
       avgPrice: 0,

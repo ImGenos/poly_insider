@@ -36,10 +36,11 @@ export class TradeFilter {
       return null;
     }
 
-    // Always use the taker address: the taker is the aggressive order placer who
-    // crossed the spread and initiated the trade, making them the more meaningful
-    // signal for anomaly detection regardless of side.
-    const walletAddress = trade.taker_address ?? undefined;
+    // For YES (buy) trades, the taker is the aggressive buyer who crossed the spread.
+    // For NO (sell) trades, the maker placed the sell order, making them the signal.
+    const walletAddress = trade.side === 'NO'
+      ? (trade.maker_address ?? undefined)
+      : (trade.taker_address ?? undefined);
 
     return {
       marketId: trade.market_id,

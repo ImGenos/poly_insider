@@ -116,8 +116,8 @@ export interface MarketVolatility {
 
 export interface FundingAnalysis {
   wallets: string[];
-  funders: Record<string, string>;
-  sharedFunders: Record<string, string[]>;
+  funders: Map<string, string>;
+  sharedFunders: Map<string, string[]>;
   hasCommonNonExchangeFunder: boolean;
   commonFunderAddress: string | null;
   isKnownExchange: boolean;
@@ -163,7 +163,7 @@ export interface ConnectionOptions {
 
 export interface TelegramMessage {
   text: string;
-  parse_mode: 'MarkdownV2' | 'HTML';
+  parse_mode: 'MarkdownV2' | 'HTML' | 'Markdown';
   disable_web_page_preview: boolean;
 }
 

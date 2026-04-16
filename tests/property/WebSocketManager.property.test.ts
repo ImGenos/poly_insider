@@ -32,6 +32,7 @@ class MockWs extends EventEmitter {
     this.readyState = MockWs.CLOSED;
     this.emit('close');
   }
+  send(_data: unknown) { /* no-op */ }
 }
 
 jest.mock('ws', () => {
@@ -87,6 +88,11 @@ async function triggerOneReconnect(): Promise<void> {
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
+  // Mock fetch so _fetchMarkets() resolves immediately with an empty list
+  global.fetch = jest.fn().mockResolvedValue({
+    ok: false,
+    status: 503,
+  } as Response);
 });
 
 afterEach(() => {

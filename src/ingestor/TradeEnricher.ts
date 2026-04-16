@@ -11,6 +11,7 @@ import { RawTrade } from '../types/index';
 
 interface CachedTrade {
   takerAddress: string;
+  timestamp: number;    // Unix ms
   expiresAt: number;
 }
 
@@ -37,6 +38,7 @@ export class TradeEnricher {
     const key = this.generateKey(trade);
     this.cache.set(key, {
       takerAddress: trade.taker_address,
+      timestamp: trade.timestamp,
       expiresAt: Date.now() + this.CACHE_TTL_MS,
     });
 
@@ -90,12 +92,12 @@ export class TradeEnricher {
 
       // Parse the key
       const parts = key.split('|');
-      if (parts.length !== 5) continue;
+      if (parts.length !== 4) continue;
 
-      const [marketId, side, priceStr, sizeStr, timestampStr] = parts;
+      const [marketId, side, priceStr, sizeStr] = parts;
       const cachedPrice = parseFloat(priceStr);
       const cachedSize = parseFloat(sizeStr);
-      const cachedTimestamp = parseInt(timestampStr, 10);
+      const cachedTimestamp = cached.timestamp;
 
       // Match market and side
       if (marketId !== trade.market_id || side !== trade.side) continue;
@@ -127,7 +129,6 @@ export class TradeEnricher {
       trade.side,
       trade.price.toFixed(4),
       trade.size_usd.toFixed(2),
-      trade.timestamp,
     ].join('|');
   }
 

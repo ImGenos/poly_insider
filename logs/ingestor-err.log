@@ -14866,3 +14866,11 @@
 2026-04-16 15:47:50 +02:00: [2026-04-16T13:47:50.092Z] [WARN ] WebSocket closed
 2026-04-16 15:50:21 +02:00: [2026-04-16T13:50:21.479Z] [WARN ] WebSocket closed
 2026-04-16 16:05:22 +02:00: [2026-04-16T14:05:22.345Z] [WARN ] WebSocket closed
+2026-04-16 16:40:10 +02:00: [2026-04-16T14:40:10.095Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 16:40:20 +02:00: [2026-04-16T14:40:20.147Z] [WARN ] WebSocket closed
+2026-04-16 16:55:19 +02:00: [2026-04-16T14:55:19.277Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 16:55:29 +02:00: [2026-04-16T14:55:29.307Z] [WARN ] WebSocket closed
+2026-04-16 17:04:08 +02:00: [2026-04-16T15:04:08.460Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 17:04:18 +02:00: [2026-04-16T15:04:18.493Z] [WARN ] WebSocket closed
+2026-04-16 17:06:08 +02:00: [2026-04-16T15:06:08.689Z] [WARN ] No token IDs to subscribe to — no trades will be received
+2026-04-16 17:06:18 +02:00: [2026-04-16T15:06:18.712Z] [WARN ] WebSocket closed

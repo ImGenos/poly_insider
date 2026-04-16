@@ -77,12 +77,9 @@ export class WebSocketManager {
   async connect(): Promise<void> {
     this.shouldReconnect = true;
     this.reconnectAttempt = 0;
-    // Start connection immediately; fetch markets in parallel so tests can
-    // interact with mockWsInstance right after calling connect().
-    const fetchPromise = this._fetchMarkets();
+    // Fetch markets first, then connect so _subscribe always has token IDs ready
+    await this._fetchMarkets();
     await this._connect();
-    await fetchPromise;
-    // Only start the periodic refresh if we have markets to monitor
     if (this.tokenIds.length > 0) {
       this._startMarketRefresh();
     }
@@ -143,18 +140,25 @@ export class WebSocketManager {
   private _startMarketRefresh(): void {
     if (this.marketRefreshTimer !== null) return;
     this.marketRefreshTimer = setInterval(async () => {
+      // Capture the old count before _fetchMarkets mutates this.tokenIds
+      const previousTotalCount = this.tokenIds.length;
+
       const newTokenIds = await this._fetchMarkets();
       if (newTokenIds.length === 0) return;
 
       const ws = this.ws;
       if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
-      // Subscribe only to the newly discovered tokens
-      const tokens = newTokenIds.slice(0, MAX_TOTAL_TOKENS - (this.tokenIds.length - newTokenIds.length));
-      if (tokens.length === 0) return;
+      // Only subscribe tokens that fit within the server cap
+      const remainingSlots = Math.max(0, MAX_TOTAL_TOKENS - previousTotalCount);
+      const tokensToSubscribe = newTokenIds.slice(0, remainingSlots);
+      if (tokensToSubscribe.length === 0) return;
 
-      ws.send(JSON.stringify({ assets_ids: tokens, type: 'market' }));
-      this.logger.info('Market refresh: subscribed to new tokens', { newTokenCount: tokens.length });
+      ws.send(JSON.stringify({ assets_ids: tokensToSubscribe, type: 'market' }));
+      this.logger.info('Market refresh: subscribed to new tokens', {
+        newTokenCount: tokensToSubscribe.length,
+        previousTotalCount,
+      });
     }, 6 * 60 * 60 * 1000); // every 6 hours
   }
 

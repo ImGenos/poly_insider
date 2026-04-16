@@ -116,7 +116,7 @@ export class SmartMoneyDetector {
     currentTradeSize: number,
   ): Promise<BettorConfidenceIndex | null> {
     // Check Redis cache first
-    const cached = await this.getCachedConfidenceIndex(walletAddress);
+    const cached = await this.getCachedConfidenceIndex(walletAddress, currentTradeSize);
     if (cached) {
       this.logger.debug('SmartMoneyDetector: using cached confidence index', { walletAddress });
       return cached;
@@ -154,7 +154,7 @@ export class SmartMoneyDetector {
         calculatedAt: new Date(),
       };
 
-      await this.cacheConfidenceIndex(confidenceIndex);
+      await this.cacheConfidenceIndex(confidenceIndex, currentTradeSize);
       return confidenceIndex;
     } catch (err) {
       this.logger.warn('SmartMoneyDetector: failed to calculate confidence index', {
@@ -300,11 +300,21 @@ export class SmartMoneyDetector {
 
   // ─── Redis Cache ───────────────────────────────────────────────────────────
 
+  private tradeSizeBucket(sizeUSDC: number): string {
+    if (sizeUSDC < 1_000)   return 'xs';
+    if (sizeUSDC < 5_000)   return 's';
+    if (sizeUSDC < 25_000)  return 'm';
+    if (sizeUSDC < 100_000) return 'l';
+    return 'xl';
+  }
+
   private async getCachedConfidenceIndex(
     walletAddress: string,
+    sizeUSDC: number,
   ): Promise<BettorConfidenceIndex | null> {
     try {
-      const key    = `smart_money:${walletAddress}`;
+      const bucket = this.tradeSizeBucket(sizeUSDC);
+      const key    = `smart_money:${walletAddress}:${bucket}`;
       const cached = await this.redisCache.get(key);
       if (!cached) return null;
       return JSON.parse(cached) as BettorConfidenceIndex;
@@ -317,9 +327,10 @@ export class SmartMoneyDetector {
     }
   }
 
-  private async cacheConfidenceIndex(index: BettorConfidenceIndex): Promise<void> {
+  private async cacheConfidenceIndex(index: BettorConfidenceIndex, sizeUSDC: number): Promise<void> {
     try {
-      const key = `smart_money:${index.walletAddress}`;
+      const bucket = this.tradeSizeBucket(sizeUSDC);
+      const key = `smart_money:${index.walletAddress}:${bucket}`;
       await this.redisCache.set(key, JSON.stringify(index), this.config.walletProfileTTL);
     } catch (err) {
       this.logger.warn('SmartMoneyDetector: failed to cache confidence index', {

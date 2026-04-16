@@ -112,10 +112,13 @@ export class AnomalyDetector {
     if (
       volatility !== null &&
       volatility.sampleCount >= zScoreMinSamples &&
-      volatility.stddevPrice > 0
+      volatility.stddevPrice > 0 &&
+      priceHistory.length >= 1
     ) {
-      const priceChange = Math.abs(trade.price - volatility.avgPrice);
-      const zScore = calculateZScore(trade.price, volatility.avgPrice, volatility.stddevPrice);
+      const lastKnownPrice = priceHistory[priceHistory.length - 1].price;
+      const priceChange = Math.abs(trade.price - lastKnownPrice);
+      // Z-score the delta: how many standard deviations is this move?
+      const zScore = calculateZScore(priceChange, 0, volatility.stddevPrice);
 
       if (zScore >= zScoreThreshold) {
         const severity: Severity = zScore > zScoreThreshold * 2 ? 'HIGH' : 'MEDIUM';
@@ -358,7 +361,6 @@ export class AnomalyDetector {
     const {
       insiderWalletAgeHours,
       insiderMinTradeSize,
-      nicheMarketCategories,
     } = this.thresholds;
 
     // Req 5.1: analyzeWalletProfile checks Redis cache before any Alchemy call
@@ -370,14 +372,11 @@ export class AnomalyDetector {
     const ageHours = walletProfile.ageHours;
     const transactionCount = walletProfile.transactionCount;
 
-    // Req 5.6: all three conditions must be met
+    // New wallet + large trade — fires on ANY market (no category gate)
     const isNewWallet = ageHours !== null && ageHours < insiderWalletAgeHours;
     const isLargeTrade = trade.sizeUSDC >= insiderMinTradeSize;
-    const isNicheMarket =
-      trade.marketCategory !== undefined &&
-      nicheMarketCategories.includes(trade.marketCategory);
 
-    if (!isNewWallet || !isLargeTrade || !isNicheMarket) {
+    if (!isNewWallet || !isLargeTrade) {
       return null;
     }
 
@@ -407,7 +406,7 @@ export class AnomalyDetector {
       severity,
       confidence,
       details: {
-        description: `Insider trading pattern detected: new wallet (${ageHours?.toFixed(1)}h old) making large trade on niche market`,
+        description: `Insider trading pattern detected: new wallet (${ageHours?.toFixed(1)}h old) making large trade`,
         metrics: {
           ageHours,
           ageScore,

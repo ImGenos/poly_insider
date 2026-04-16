@@ -144,6 +144,7 @@ export class BlockchainAnalyzer {
         throw new Error(`Alchemy RPC error: ${data.error.message}`);
       }
     } catch (err) {
+      this.lastCallUsedFallback = true;
       this.logger.warn('BlockchainAnalyzer: getWalletTradeHistory fetch failed', {
         address,
         error: String(err),

@@ -15218,3 +15218,8 @@
 2026-04-16 14:50:49 +02:00: [2026-04-16T12:50:49.615Z] [WARN ] Stream depth exceeds warning threshold {"depth":14216}
 2026-04-16 14:51:19 +02:00: [2026-04-16T12:51:19.606Z] [WARN ] Stream depth exceeds warning threshold {"depth":14216}
 2026-04-16 14:51:49 +02:00: [2026-04-16T12:51:49.479Z] [WARN ] Stream depth exceeds warning threshold {"depth":14216}
+2026-04-16 16:43:50 +02:00: [2026-04-16T14:43:50.566Z] [WARN ] PolymarketAPI: failed to fetch market data {"conditionId":"israel-x-hezbollah-ceasefire-by-june-30-2026-817-566-426-174","status":422}
+2026-04-16 16:43:50 +02:00: [2026-04-16T14:43:50.665Z] [WARN ] SmartMoneyDetector: failed to fetch Polymarket history {"walletAddress":"0x4b7410aefbf0f38012b0dfb1131a4de147a9e8d7","error":"Error: Alchemy RPC error: Invalid hex string: 100"}
+2026-04-16 16:43:50 +02:00: [2026-04-16T14:43:50.778Z] [WARN ] BlockchainAnalyzer: getWalletTradeHistory fetch failed {"address":"0x4b7410aefbf0f38012b0dfb1131a4de147a9e8d7","error":"Error: Alchemy RPC error: Invalid hex string: 100"}
+2026-04-16 16:43:50 +02:00: [2026-04-16T14:43:50.778Z] [WARN ] AnomalyDetector: getWalletTradeHistory failed, using market fallback {"walletAddress":"0x4b7410aefbf0f38012b0dfb1131a4de147a9e8d7","error":"Error: Alchemy RPC error: Invalid hex string: 100"}
+2026-04-16 16:43:50 +02:00: [2026-04-16T14:43:50.953Z] [WARN ] BlockchainAnalyzer: Alchemy failed, trying Moralis {"address":"0x4b7410aefbf0f38012b0dfb1131a4de147a9e8d7","error":"Error: Alchemy RPC error: Invalid hex string: 1"}

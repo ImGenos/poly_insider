@@ -72,11 +72,11 @@ describe('TimeSeriesDB — appendPricePoint and getPriceHistory', () => {
     mockQuery.mockResolvedValue({ rows: [] });
     const ts = new Date('2024-01-01T12:00:00Z');
 
-    await db.appendPricePoint('market-1', 0.65, ts);
+    await db.appendPricePoint('market-1', 0.65, 100, ts);
 
     expect(mockQuery).toHaveBeenCalledWith(
-      'INSERT INTO price_history (time, market_id, price) VALUES ($1, $2, $3)',
-      [ts, 'market-1', 0.65],
+      'INSERT INTO price_history (time, market_id, price, size_usd) VALUES ($1, $2, $3, $4)',
+      [ts, 'market-1', 0.65, 100],
     );
   });
 
@@ -300,7 +300,7 @@ describe('TimeSeriesDB — getClusterTotalSize', () => {
 describe('TimeSeriesDB — graceful degradation when pool is null', () => {
   it('appendPricePoint resolves without throwing', async () => {
     const db = new TimeSeriesDB('postgresql://localhost/test', makeLogger());
-    await expect(db.appendPricePoint('m', 0.5, new Date())).resolves.toBeUndefined();
+    await expect(db.appendPricePoint('m', 0.5, 0, new Date())).resolves.toBeUndefined();
   });
 
   it('getMarketVolatility returns zero-baseline object', async () => {

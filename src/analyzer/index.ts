@@ -32,7 +32,7 @@ const TIMESCALEDB_UNAVAILABLE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
 function deserializeStreamFields(fields: Record<string, string>): RawTrade | null {
   const price = Number(fields['price'] ?? NaN);
   const sizeUsd = Number(fields['size_usd'] ?? NaN);
-  const side = fields['side'];
+  const rawSide = fields['side'];
 
   // Validate price: must be finite and in [0, 1]
   if (!Number.isFinite(price) || price < 0 || price > 1) {
@@ -44,15 +44,21 @@ function deserializeStreamFields(fields: Record<string, string>): RawTrade | nul
     return null;
   }
 
-  // Validate side: must be exactly 'YES' or 'NO'
-  if (side !== 'YES' && side !== 'NO') {
+  // Normalize side: accept both BUY/SELL (from API) and YES/NO (normalized)
+  let side: 'YES' | 'NO';
+  if (rawSide === 'YES' || rawSide === 'BUY') {
+    side = 'YES';
+  } else if (rawSide === 'NO' || rawSide === 'SELL') {
+    side = 'NO';
+  } else {
     return null;
   }
 
   return {
     market_id: fields['market_id'] ?? '',
     market_name: fields['market_name'] ?? '',
-    side: side as 'YES' | 'NO',
+    outcome: fields['outcome'] || undefined,
+    side,
     price,
     size: Number(fields['size'] ?? 0),
     size_usd: sizeUsd,

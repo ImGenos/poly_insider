@@ -33,6 +33,7 @@ function normalize(trade: RawTrade): NormalizedTrade {
   return {
     market_id: trade.market_id,
     market_name: trade.market_name,
+    outcome: trade.outcome,
     side: trade.side,
     price: trade.price,
     size: trade.size,
@@ -59,7 +60,8 @@ function toStreamFields(trade: NormalizedTrade): Record<string, string> {
     ask_liquidity: String(trade.ask_liquidity),
     market_category: trade.market_category ?? '',
   };
-  // Only include addresses when they are known
+  // Only include optional fields when they are present
+  if (trade.outcome !== undefined) fields['outcome'] = trade.outcome;
   if (trade.maker_address !== undefined) fields['maker_address'] = trade.maker_address;
   if (trade.taker_address !== undefined) fields['taker_address'] = trade.taker_address;
   return fields;

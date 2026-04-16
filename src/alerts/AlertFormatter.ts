@@ -31,7 +31,7 @@ function sideFr(side: string): string {
 /** Returns the position label: outcome name + side when outcome is known, plain OUI/NON otherwise. */
 function positionLabel(trade: FilteredTrade): string {
   if (trade.outcome) {
-    return `${trade.outcome} \\(${sideFr(trade.side)}\\)`;
+    return `${trade.outcome} (${sideFr(trade.side)})`;
   }
   return sideFr(trade.side);
 }
@@ -106,16 +106,16 @@ export class AlertFormatter {
 
     let detectionInfo: string;
     if (zScore !== undefined && zScore !== null) {
-      detectionInfo = `Z\\-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`;
+      detectionInfo = `Z-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`;
     } else {
       const pctChange = metrics.priceChangePercent as number | undefined;
       detectionInfo = pctChange !== undefined
-        ? `Variation de cote : *${escapeMarkdown(pctChange.toFixed(1))}%* \\(seuil statique\\)`
+        ? `Variation de cote : *${escapeMarkdown(pctChange.toFixed(1))}%* (seuil statique)`
         : `Seuil statique déclenché`;
     }
 
     return [
-      `${emoji} *GLISSEMENT DE COTE RAPIDE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      `${emoji} *${escapeMarkdown('GLISSEMENT DE COTE RAPIDE')}* ${escapeMarkdown('|')} ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Position : *${escapeMarkdown(positionLabel(trade))}*`,
@@ -123,7 +123,7 @@ export class AlertFormatter {
       `${detectionInfo}`,
       `Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`,
       ``,
-      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
+      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : escapeMarkdown('N/A')}`,
     ].join('\n');
   }
 
@@ -135,7 +135,7 @@ export class AlertFormatter {
     const rate = this.fxService.getCachedRate();
 
     const lines = [
-      `${emoji} *ACTIVITÉ BALEINE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      `${emoji} *${escapeMarkdown('ACTIVITÉ BALEINE')}* ${escapeMarkdown('|')} ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Position : *${escapeMarkdown(positionLabel(trade))}*`,
@@ -147,7 +147,7 @@ export class AlertFormatter {
     }
 
     if (zScore !== undefined && zScore !== null) {
-      lines.push(`Z\\-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`);
+      lines.push(`Z-score : *${escapeMarkdown(zScore.toFixed(2))}σ*`);
     }
 
     lines.push(`Confiance : *${escapeMarkdown((anomaly.confidence * 100).toFixed(0))}%*`);
@@ -166,7 +166,7 @@ export class AlertFormatter {
     const rate = this.fxService.getCachedRate();
 
     const lines = [
-      `${emoji} *DÉLIT D'INITIÉ* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      `${emoji} *DÉLIT D'INITIÉ* | ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
       `Position : *${escapeMarkdown(positionLabel(trade))}*`,
@@ -195,7 +195,7 @@ export class AlertFormatter {
     const rate = this.fxService.getCachedRate();
 
     const lines = [
-      `${emoji} *CLUSTER DE PORTEFEUILLES COORDONNÉS* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      `${emoji} *CLUSTER DE PORTEFEUILLES COORDONNÉS* | ${escapeMarkdown(severityFr(anomaly.severity))}`,
       ``,
       `Marché : ${polymarketLink(anomaly.marketId, anomaly.marketName)}`,
       `Position : *${sideFr(anomaly.side)}*`,
@@ -238,7 +238,7 @@ export class AlertFormatter {
     const rate = this.fxService.getCachedRate();
 
     const lines = [
-      `${emoji} *ARGENT INTELLIGENT DÉTECTÉ* \\| ${escapeMarkdown(severityFr(alert.severity))}`,
+      `${emoji} *ARGENT INTELLIGENT DÉTECTÉ* | ${escapeMarkdown(severityFr(alert.severity))}`,
       ``,
       `⚽ *Marché Football*`,
       `Marché : ${polymarketLink(alert.marketId, alert.marketName)}`,
@@ -249,9 +249,9 @@ export class AlertFormatter {
       `📊 *Indice de confiance du parieur : ${escapeMarkdown(String(ci.score))}/100*`,
       ``,
       `*Métriques :*`,
-      `• Volume récent : *${formatEur(ci.metrics.recentVolume, rate)}* \\(score : ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))}\\)`,
-      `• Ratio mise : *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* \\(score : ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))}\\)`,
-      `• Régularité : *${escapeMarkdown((ci.metrics.activityConsistency * 100).toFixed(1))}%* \\(score : ${escapeMarkdown(ci.metrics.activityConsistencyScore.toFixed(0))}\\)`,
+      `• Volume récent : *${formatEur(ci.metrics.recentVolume, rate)}* (score : ${escapeMarkdown(ci.metrics.volumeScore.toFixed(0))})`,
+      `• Ratio mise : *${escapeMarkdown(ci.metrics.betSizeRatio.toFixed(2))}x* (score : ${escapeMarkdown(ci.metrics.betSizeScore.toFixed(0))})`,
+      `• Régularité : *${escapeMarkdown((ci.metrics.activityConsistency * 100).toFixed(1))}%* (score : ${escapeMarkdown(ci.metrics.activityConsistencyScore.toFixed(0))})`,
       `• Transactions : *${escapeMarkdown(String(ci.metrics.transferCount))}*`,
       ``,
       `Portefeuille : ${polygonScanLink(alert.walletAddress)}`,

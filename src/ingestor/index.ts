@@ -7,6 +7,7 @@ import { RedisCache } from '../cache/RedisCache';
 import { WebSocketManager } from '../websocket/WebSocketManager';
 import { DataAPIPoller } from './DataAPIPoller';
 import { TradeEnricher } from './TradeEnricher';
+import { PositionTracker } from './PositionTracker';
 import { RawTrade, NormalizedTrade } from '../types/index';
 import { isValidEthAddress, exponentialBackoff } from '../utils/helpers';
 
@@ -22,9 +23,6 @@ function validateRawTrade(t: RawTrade): boolean {
   if (typeof t.price !== 'number' || t.price < 0 || t.price > 1) return false;
   if (typeof t.size_usd !== 'number' || t.size_usd <= 0) return false;
   if (typeof t.timestamp !== 'number' || !isFinite(t.timestamp) || t.timestamp <= 0) return false;
-  // Addresses are optional (not exposed by the Polymarket CLOB WS market channel).
-  // When present, they must be valid Ethereum addresses. Zero-address placeholders
-  // from upstream sources are accepted here; downstream consumers can filter them.
   if (t.maker_address !== undefined && !isValidEthAddress(t.maker_address)) return false;
   if (t.taker_address !== undefined && !isValidEthAddress(t.taker_address)) return false;
   return true;
@@ -61,14 +59,13 @@ function toStreamFields(trade: NormalizedTrade): Record<string, string> {
     ask_liquidity: String(trade.ask_liquidity),
     market_category: trade.market_category ?? '',
   };
-  // Only include optional fields when they are present
   if (trade.outcome !== undefined) fields['outcome'] = trade.outcome;
   if (trade.maker_address !== undefined) fields['maker_address'] = trade.maker_address;
   if (trade.taker_address !== undefined) fields['taker_address'] = trade.taker_address;
   return fields;
 }
 
-// ─── Fire-and-forget push with exponential backoff on Redis unavailability ────
+// ─── Fire-and-forget push with exponential backoff ────────────────────────────
 
 async function pushWithRetry(
   redisCache: RedisCache,
@@ -104,24 +101,17 @@ export class IngestorService {
   private wsManager: WebSocketManager | null = null;
   private dataAPIPoller: DataAPIPoller | null = null;
   private tradeEnricher: TradeEnricher | null = null;
+  private positionTracker: PositionTracker | null = null;
 
   private droppedTrades = 0;
   private droppedLogTimer: ReturnType<typeof setInterval> | null = null;
 
-  /**
-   * @param config Pre-constructed ConfigManager. When omitted, a new one is
-   *   created inside start() so that env vars are only required at runtime,
-   *   not at construction time — making the service unit-testable without a
-   *   full environment.
-   */
   constructor(config?: ConfigManager) {
     this.config = config ?? null;
-    // Use a temporary info-level logger until config is available in start()
     this.logger = new Logger('info', undefined);
   }
 
   async start(): Promise<void> {
-    // Build config (and dependent services) here if not injected
     if (!this.config) {
       this.config = new ConfigManager();
     }
@@ -130,16 +120,23 @@ export class IngestorService {
     this.logger = new Logger(config.getLogLevel(), config.getLogFilePath());
     this.redisCache = new RedisCache(config.getRedisUrl(), this.logger);
     this.wsManager = new WebSocketManager(config.getPolymarketWsUrl(), this.logger);
-    this.dataAPIPoller = new DataAPIPoller(this.logger, 10000); // Poll every 10 seconds
+    this.dataAPIPoller = new DataAPIPoller(this.logger, 10000);
     this.tradeEnricher = new TradeEnricher(this.logger);
+
+    // PositionTracker: configurable via env vars with sensible defaults
+    this.positionTracker = new PositionTracker(this.logger, {
+      pollIntervalMs:            Number(process.env['POSITION_POLL_INTERVAL_MS']    ?? 30_000),
+      accumulationWindowMs:      Number(process.env['POSITION_ACCUMULATION_WINDOW_MS'] ?? 4 * 60 * 60 * 1000),
+      accumulationThresholdUsdc: Number(process.env['POSITION_ACCUMULATION_THRESHOLD_USDC'] ?? 20_000),
+      topMarketsCount:           Number(process.env['POSITION_TOP_MARKETS_COUNT']   ?? 50),
+      minTradeSizeUsdc:          Number(process.env['POSITION_MIN_TRADE_SIZE_USDC'] ?? 500),
+    });
 
     this.logger.info('IngestorService starting');
 
-    // Connect Redis and create consumer group (idempotent)
     await this.redisCache.connect();
     await this.redisCache.createConsumerGroup(STREAM_KEY, CONSUMER_GROUP);
 
-    // Periodically log the dropped-trade counter so operators can see the drop rate
     this.droppedLogTimer = setInterval(() => {
       if (this.droppedTrades > 0) {
         this.logger.warn('IngestorService: trades dropped due to Redis unavailability', {
@@ -149,14 +146,24 @@ export class IngestorService {
       }
     }, 60_000);
 
-    // Register trade callback for WebSocket
+    // WebSocket handler
     this.wsManager.onTrade((rawTrade: RawTrade) => {
       this._handleTrade(rawTrade, 'WebSocket');
     });
 
-    // Register trade callback for Data API Poller
+    // Data API poller handler
     this.dataAPIPoller.onTrade((rawTrade: RawTrade) => {
       this._handleTrade(rawTrade, 'DataAPI');
+    });
+
+    // PositionTracker emits synthetic accumulation trades
+    this.positionTracker.onTrade((rawTrade: RawTrade) => {
+      this.logger.info('IngestorService: accumulation trade from PositionTracker', {
+        marketId: rawTrade.market_id,
+        sizeUsd: rawTrade.size_usd,
+        wallet: rawTrade.taker_address?.slice(0, 10),
+      });
+      this._handleTrade(rawTrade, 'PositionTracker');
     });
 
     this.wsManager.onError((err: Error) => {
@@ -167,22 +174,18 @@ export class IngestorService {
       this.logger.info('WebSocket reconnecting...');
     });
 
-    // SIGINT handler per Requirements 1.7
     process.on('SIGINT', () => {
       this.stop().then(() => process.exit(0));
     });
 
-    // Connect WebSocket per Requirements 1.1
     await this.wsManager.connect();
-
-    // Start Data API Poller
     this.dataAPIPoller.start();
+    this.positionTracker.start();
 
-    this.logger.info('IngestorService started');
+    this.logger.info('IngestorService started (WebSocket + DataAPI poller + PositionTracker)');
   }
 
   private _handleTrade(rawTrade: RawTrade, source: string): void {
-    // Validate per Requirements 15.1, 15.2
     if (!validateRawTrade(rawTrade)) {
       this.logger.warn(`Ingestor: invalid raw trade from ${source}, skipping`, {
         market_id: rawTrade?.market_id,
@@ -196,22 +199,18 @@ export class IngestorService {
       return;
     }
 
-    // Enrich trades based on source
     let enrichedTrade = rawTrade;
     if (source === 'DataAPI') {
-      // Cache Data API trades for enrichment
       this.tradeEnricher!.addDataAPITrade(rawTrade);
       enrichedTrade = rawTrade;
     } else if (source === 'WebSocket') {
-      // Enrich WebSocket trades with cached wallet addresses
       enrichedTrade = this.tradeEnricher!.enrichWebSocketTrade(rawTrade);
     }
+    // PositionTracker trades pass through without enrichment — they already have the wallet
 
     const normalized = normalize(enrichedTrade);
     const fields = toStreamFields(normalized);
 
-    // Fire-and-forget: never await downstream per Requirements 1.4
-    // Retry with exponential backoff on Redis unavailability per Requirements 16.3
     pushWithRetry(this.redisCache!, fields, this.logger).then((pushed) => {
       if (!pushed) this.droppedTrades++;
     }).catch((err) => {
@@ -225,6 +224,7 @@ export class IngestorService {
       clearInterval(this.droppedLogTimer);
       this.droppedLogTimer = null;
     }
+    this.positionTracker?.stop();
     this.tradeEnricher?.stop();
     this.dataAPIPoller?.stop();
     this.wsManager?.disconnect();

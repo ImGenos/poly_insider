@@ -5527,3 +5527,369 @@
 2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.101Z] [INFO ] Telegram alert sent {"attempt":0}
 2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.110Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x631c2b93ff03c21d29b2b73af4ff965e88ea450f"}
 2026-04-16 20:44:20 +02:00: [2026-04-16T18:44:20.218Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:49:22 +02:00: [2026-04-16T18:49:22.715Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x3a847382ad6fff9be1db4e073fd9b869f6884d44"}
+2026-04-16 20:54:19 +02:00: [2026-04-16T18:54:19.851Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:54:21 +02:00: [2026-04-16T18:54:21.660Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x6a5dcef362629be9535ebff99e99330d87a558c0"}
+2026-04-16 20:54:21 +02:00: [2026-04-16T18:54:21.667Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x80990362a8ba391cdaab2afcc7f0f94a0392cceb"}
+2026-04-16 20:59:20 +02:00: [2026-04-16T18:59:20.070Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 20:59:20 +02:00: [2026-04-16T18:59:20.734Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x54d00bee04ad0fef256af327f4f0bb6842e18e20"}
+2026-04-16 20:59:21 +02:00: [2026-04-16T18:59:21.106Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 21:04:21 +02:00: [2026-04-16T19:04:21.060Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x5ccfd8c46c93b3c79088d10e5c021d4d9151c116"}
+2026-04-16 21:04:21 +02:00: [2026-04-16T19:04:21.189Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 21:09:22 +02:00: [2026-04-16T19:09:22.269Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x5d413aa093dd685fad4185224a96c12f183da3cb"}
+2026-04-16 21:12:34 +02:00: [2026-04-16T19:12:34.251Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x041f737b832770da3b681a100ede2f226f8c743f"}
+2026-04-16 21:12:35 +02:00: [2026-04-16T19:12:35.700Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x37be71f3d8cccbd323cd0cdab9add0d12fe4de3d"}
+2026-04-16 23:17:38 +02:00: [2026-04-16T21:17:38.525Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0fbcccfc93c2c33b4f1492bf34ae89b3992062a3"}
+2026-04-16 23:17:38 +02:00: [2026-04-16T21:17:38.647Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:22:48 +02:00: [2026-04-16T21:22:48.335Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0460c3e409e2f1aafeb60842bbfac121166561e5"}
+2026-04-16 23:27:46 +02:00: [2026-04-16T21:27:46.760Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:27:47 +02:00: [2026-04-16T21:27:47.680Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0e1b30c63f6bac4fa1eacc7b852fa7e72e93ecaf"}
+2026-04-16 23:27:47 +02:00: [2026-04-16T21:27:47.748Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:27:48 +02:00: [2026-04-16T21:27:48.758Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x19f814dd3698549a32145d529a7677b0d41c3c0c"}
+2026-04-16 23:27:48 +02:00: [2026-04-16T21:27:48.819Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xd71f1da958430dc844fc1d06645f12a25ac81b14"}
+2026-04-16 23:32:48 +02:00: [2026-04-16T21:32:48.523Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x934b66ca1b74121dda64fd75cea2bb6bc717e3f1"}
+2026-04-16 23:32:49 +02:00: [2026-04-16T21:32:49.100Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x51eb0959202f6547037ffbc565c6096200036bfa"}
+2026-04-16 23:42:47 +02:00: [2026-04-16T21:42:47.939Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2a2c53bd278c04da9962fcf96490e17f3dfb9bc1"}
+2026-04-16 23:42:48 +02:00: [2026-04-16T21:42:48.082Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:52:49 +02:00: [2026-04-16T21:52:49.681Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc6b13482e72f656519705d792a1f25587a6c78fd"}
+2026-04-16 23:52:49 +02:00: [2026-04-16T21:52:49.802Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2005d16a84ceefa912d4e380cd32e7ff827875ea"}
+2026-04-16 23:52:49 +02:00: [2026-04-16T21:52:49.813Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:52:49 +02:00: [2026-04-16T21:52:49.936Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:52:50 +02:00: [2026-04-16T21:52:50.924Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x5d58e38cd0a7e6f5fa67b7f9c2f70dd70df09a15"}
+2026-04-16 23:52:51 +02:00: [2026-04-16T21:52:51.105Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-16 23:57:50 +02:00: [2026-04-16T21:57:50.475Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xd138d838759dcdf2ed7a0b13724724cc3aab3140"}
+2026-04-16 23:57:50 +02:00: [2026-04-16T21:57:50.679Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:02:49 +02:00: [2026-04-16T22:02:49.069Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x021c7df18153e2636e368e85f0cedb34c245232f"}
+2026-04-17 00:02:49 +02:00: [2026-04-16T22:02:49.180Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:07:49 +02:00: [2026-04-16T22:07:49.174Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc1b5c7da3eda1d6dda8c7b0180cf188f1cf0c8f8"}
+2026-04-17 00:07:49 +02:00: [2026-04-16T22:07:49.840Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x49bc1b6a5314822bcdcc64ebcb962d6b2be05899"}
+2026-04-17 00:12:48 +02:00: [2026-04-16T22:12:48.533Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:12:49 +02:00: [2026-04-16T22:12:49.428Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x204f72f35326db932158cba6adff0b9a1da95e14"}
+2026-04-17 00:17:48 +02:00: [2026-04-16T22:17:48.493Z] [DEBUG] SmartMoneyDetector: no wallet address available {"marketId":"will-jerome-powell-be-confirmed-as-fed-chair"}
+2026-04-17 00:17:48 +02:00: [2026-04-16T22:17:48.756Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:17:51 +02:00: [2026-04-16T22:17:51.796Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc684828f6b03487759ced2ebdd975f91f3532228"}
+2026-04-17 00:22:50 +02:00: [2026-04-16T22:22:50.208Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xae7c98235d5dc797edfa3d3af2e0334238a4487e"}
+2026-04-17 00:22:52 +02:00: [2026-04-16T22:22:52.237Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x3c918a8ef8c379304f744592120cbb4d76149af7"}
+2026-04-17 00:22:52 +02:00: [2026-04-16T22:22:52.436Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:27:50 +02:00: [2026-04-16T22:27:50.284Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xbfd770b7ff07fb2ece41b0e7c593db65a84cf0bf"}
+2026-04-17 00:27:52 +02:00: [2026-04-16T22:27:52.149Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xde0463ea7f611b065e8ab06bbfbddad75e6dfa37"}
+2026-04-17 00:42:50 +02:00: [2026-04-16T22:42:50.844Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xb0cca63418089d7c8e01f599bc5da77d1f2df354"}
+2026-04-17 00:42:50 +02:00: [2026-04-16T22:42:50.877Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xb0cca63418089d7c8e01f599bc5da77d1f2df354"}
+2026-04-17 00:42:50 +02:00: [2026-04-16T22:42:50.957Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:42:51 +02:00: [2026-04-16T22:42:51.066Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:47:51 +02:00: [2026-04-16T22:47:51.188Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x08fcac67d1ab921dd11c65efb12e9464848b6131"}
+2026-04-17 00:47:51 +02:00: [2026-04-16T22:47:51.303Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:47:51 +02:00: [2026-04-16T22:47:51.919Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc5332342e07708de69d312a1a4426c430cfc258c"}
+2026-04-17 00:47:52 +02:00: [2026-04-16T22:47:52.042Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2b5f2aa79ec0795f225302c3e708a2e42bf90f07"}
+2026-04-17 00:47:52 +02:00: [2026-04-16T22:47:52.539Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xe44149cf86be9a50969d8372cdb1c4de97209680"}
+2026-04-17 00:47:52 +02:00: [2026-04-16T22:47:52.637Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x3bf376cefe46834b03916d03d4abc876e990f19a"}
+2026-04-17 00:47:52 +02:00: [2026-04-16T22:47:52.724Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:52:52 +02:00: [2026-04-16T22:52:52.550Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x4068addc9449460aeff65efedaccba7ebaf9338f"}
+2026-04-17 00:52:55 +02:00: [2026-04-16T22:52:55.554Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa9a34330903e3f00e470d2ba9a2e6305bd90ee27"}
+2026-04-17 00:52:55 +02:00: [2026-04-16T22:52:55.764Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:57:51 +02:00: [2026-04-16T22:57:51.602Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x13414a77a4be48988851c73dfd824d0168e70853"}
+2026-04-17 00:57:51 +02:00: [2026-04-16T22:57:51.723Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:57:52 +02:00: [2026-04-16T22:57:52.364Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0b500171d1f4ee073b352da7b4b3fbcf3b2227fb"}
+2026-04-17 00:57:52 +02:00: [2026-04-16T22:57:52.495Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 00:57:52 +02:00: [2026-04-16T22:57:52.581Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x13e0371bea1ba801d10fd9ff677e7cd5f368d9ef"}
+2026-04-17 00:57:52 +02:00: [2026-04-16T22:57:52.791Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x10284fb7656733577ab6d17434dbb2ccacb19833"}
+2026-04-17 00:57:53 +02:00: [2026-04-16T22:57:53.427Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x38e0f762b07c75c7b37f6ce712da36ce941fd666"}
+2026-04-17 00:57:53 +02:00: [2026-04-16T22:57:53.498Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:02:51 +02:00: [2026-04-16T23:02:51.785Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xbad26fe5458e6219cec3e40272760e275e835296"}
+2026-04-17 01:02:54 +02:00: [2026-04-16T23:02:54.233Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xeface9902242b0399856f981600b907dcc9bc9a1"}
+2026-04-17 01:02:54 +02:00: [2026-04-16T23:02:54.400Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:07:52 +02:00: [2026-04-16T23:07:52.060Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa4d6c2bafa8cedb4ae98bd19d46dce8d775f9357"}
+2026-04-17 01:07:53 +02:00: [2026-04-16T23:07:53.278Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x5e951f8b9f1d1e25b84fbc0600c2eca7200f5cd2"}
+2026-04-17 01:12:51 +02:00: [2026-04-16T23:12:51.647Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:12:53 +02:00: [2026-04-16T23:12:53.620Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x6542464de3d12970cf2d0e69917549ed0542662c"}
+2026-04-17 01:17:52 +02:00: [2026-04-16T23:17:52.881Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xabee9b4fc7e9532ac55df0690d49b64ad96cb859"}
+2026-04-17 01:17:52 +02:00: [2026-04-16T23:17:52.993Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:22:54 +02:00: [2026-04-16T23:22:54.520Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x8412b0bfafe547a016f9e2bf5cf1e2260fb68967"}
+2026-04-17 01:22:55 +02:00: [2026-04-16T23:22:55.348Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa442bbbd1447d684a7caa952b54c1ba3ba2cdca3"}
+2026-04-17 01:22:55 +02:00: [2026-04-16T23:22:55.548Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xb51f2cb4d49d5494985b90d555f6e5e4c5272fcc"}
+2026-04-17 01:22:55 +02:00: [2026-04-16T23:22:55.634Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xd4dafa21aad27e8514b5a5dad9278c3ece243175"}
+2026-04-17 01:22:55 +02:00: [2026-04-16T23:22:55.865Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:22:56 +02:00: [2026-04-16T23:22:56.651Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2abb423aacfbb64ae2d38c8a21f5ae63e22aef99"}
+2026-04-17 01:27:52 +02:00: [2026-04-16T23:27:52.999Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xff80bb23621f03fc6300808730316c78abe09b4d"}
+2026-04-17 01:27:54 +02:00: [2026-04-16T23:27:54.200Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xfcb45cdbfb42bb1d6d621418a2ecdd8f3422e0a9"}
+2026-04-17 01:32:53 +02:00: [2026-04-16T23:32:53.225Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x9e2f652edcc5f944f33f68410d10ea4464a9ec47"}
+2026-04-17 01:32:53 +02:00: [2026-04-16T23:32:53.374Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:32:54 +02:00: [2026-04-16T23:32:54.299Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x349238c721eab20e17e55d5585f3bdc07b805d40"}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.597Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc86eae4e862e55822f2bda0b1e3d2bb8d7c1829e"}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.656Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x8d58d1e3bc99e273e5ba1735b1e6d1c909ad4df8"}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.657Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x40656b85e7413ed8a5650ed11ebae5c7a5be9977"}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.697Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0a889c044084e883919b8e21457b399f1961e1c7"}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.765Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:37:54 +02:00: [2026-04-16T23:37:54.792Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xe7614eae433b827fa348eefed16cb664db170bcd"}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.160Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x8498bb369d6d2bb98ad1f86523e0220f96c90a19"}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.255Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.271Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x7d37e5ebf6c11ca85fa34c622c8d98c89614c04c"}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.276Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x651e7e4bab9ad802e1eb0822d2ceed088c096eef"}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.408Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:37:55 +02:00: [2026-04-16T23:37:55.513Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:37:57 +02:00: [2026-04-16T23:37:57.253Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xeaa31e58d79893d49f5a82094544ca3c179ceec2"}
+2026-04-17 01:37:57 +02:00: [2026-04-16T23:37:57.315Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:52:54 +02:00: [2026-04-16T23:52:54.297Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xf1b138d1d6c9c8f9d278f96bca9c1a7596901ef2"}
+2026-04-17 01:52:55 +02:00: [2026-04-16T23:52:55.294Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x882ae2ae0cebf6b4ac2aa9554b9741d198bccde2"}
+2026-04-17 01:52:55 +02:00: [2026-04-16T23:52:55.313Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xa806270a1a7a8b18a2409c927b1e08851ce72c7c"}
+2026-04-17 01:57:55 +02:00: [2026-04-16T23:57:55.837Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x0a3d1fb677458cc587cad1f69a9bc601e566857b"}
+2026-04-17 01:57:56 +02:00: [2026-04-16T23:57:56.073Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 01:57:56 +02:00: [2026-04-16T23:57:56.798Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x64db18033a3631ff8af30e657aede9a3cc279a6f"}
+2026-04-17 02:02:54 +02:00: [2026-04-17T00:02:54.597Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x412fe1a101554f0b382181c3af932e4b2d8030fa"}
+2026-04-17 02:02:54 +02:00: [2026-04-17T00:02:54.782Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 02:02:55 +02:00: [2026-04-17T00:02:55.555Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xfb6753389702a4f9c6c360eda42ccaf4b5f0dae9"}
+2026-04-17 02:07:55 +02:00: [2026-04-17T00:07:55.084Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0xc97485a44146b5db0b8b121358f57cf297cdb33b"}
+2026-04-17 02:07:55 +02:00: [2026-04-17T00:07:55.256Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 02:07:56 +02:00: [2026-04-17T00:07:56.902Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x21b48e8e2daa01f531fff08b62f2b4df6cff1f06"}
+2026-04-17 02:07:56 +02:00: [2026-04-17T00:07:56.991Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 02:12:56 +02:00: [2026-04-17T00:12:56.662Z] [DEBUG] BlockchainAnalyzer: fetched profile via Moralis {"address":"0x2ee8d4704633cf6c271c7df52b5234d2bea4f785"}
+2026-04-17 02:12:56 +02:00: [2026-04-17T00:12:56.797Z] [INFO ] Telegram alert sent {"attempt":0}
+2026-04-17 02:27:24 +02:00: [2026-04-17T00:27:24.282Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:28 +02:00: [2026-04-17T00:27:28.264Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:28 +02:00: [2026-04-17T00:27:28.270Z] [INFO ] Redis reconnecting...
+2026-04-17 02:27:35 +02:00: [2026-04-17T00:27:35.025Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:35 +02:00: [2026-04-17T00:27:35.152Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:35 +02:00: [2026-04-17T00:27:35.158Z] [INFO ] Redis reconnecting...
+2026-04-17 02:27:40 +02:00: [2026-04-17T00:27:40.587Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:40 +02:00: [2026-04-17T00:27:40.712Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:40 +02:00: [2026-04-17T00:27:40.718Z] [INFO ] Redis reconnecting...
+2026-04-17 02:27:46 +02:00: [2026-04-17T00:27:46.167Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:46 +02:00: [2026-04-17T00:27:46.286Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:46 +02:00: [2026-04-17T00:27:46.293Z] [INFO ] Redis reconnecting...
+2026-04-17 02:27:51 +02:00: [2026-04-17T00:27:51.727Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:51 +02:00: [2026-04-17T00:27:51.849Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:51 +02:00: [2026-04-17T00:27:51.856Z] [INFO ] Redis reconnecting...
+2026-04-17 02:27:57 +02:00: [2026-04-17T00:27:57.286Z] [INFO ] AnalyzerService starting
+2026-04-17 02:27:57 +02:00: [2026-04-17T00:27:57.412Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:27:57 +02:00: [2026-04-17T00:27:57.418Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:02 +02:00: [2026-04-17T00:28:02.891Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:03 +02:00: [2026-04-17T00:28:03.023Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:03 +02:00: [2026-04-17T00:28:03.029Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:08 +02:00: [2026-04-17T00:28:08.455Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:08 +02:00: [2026-04-17T00:28:08.577Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:08 +02:00: [2026-04-17T00:28:08.583Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:14 +02:00: [2026-04-17T00:28:14.007Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:14 +02:00: [2026-04-17T00:28:14.142Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:14 +02:00: [2026-04-17T00:28:14.148Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:19 +02:00: [2026-04-17T00:28:19.577Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:19 +02:00: [2026-04-17T00:28:19.706Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:19 +02:00: [2026-04-17T00:28:19.713Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:25 +02:00: [2026-04-17T00:28:25.153Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:25 +02:00: [2026-04-17T00:28:25.275Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:25 +02:00: [2026-04-17T00:28:25.282Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:32 +02:00: [2026-04-17T00:28:32.082Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:32 +02:00: [2026-04-17T00:28:32.252Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:32 +02:00: [2026-04-17T00:28:32.260Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:37 +02:00: [2026-04-17T00:28:37.715Z] [INFO ] AnalyzerService starting
+2026-04-17 02:28:37 +02:00: [2026-04-17T00:28:37.850Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:28:37 +02:00: [2026-04-17T00:28:37.856Z] [INFO ] Redis reconnecting...
+2026-04-17 02:28:59 +02:00: [2026-04-17T00:28:59.937Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:00 +02:00: [2026-04-17T00:29:00.072Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:00 +02:00: [2026-04-17T00:29:00.078Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:06 +02:00: [2026-04-17T00:29:06.868Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:06 +02:00: [2026-04-17T00:29:06.995Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:07 +02:00: [2026-04-17T00:29:07.002Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:12 +02:00: [2026-04-17T00:29:12.538Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:12 +02:00: [2026-04-17T00:29:12.685Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:12 +02:00: [2026-04-17T00:29:12.692Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:18 +02:00: [2026-04-17T00:29:18.227Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:18 +02:00: [2026-04-17T00:29:18.347Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:18 +02:00: [2026-04-17T00:29:18.353Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:23 +02:00: [2026-04-17T00:29:23.810Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:23 +02:00: [2026-04-17T00:29:23.936Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:23 +02:00: [2026-04-17T00:29:23.942Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:29 +02:00: [2026-04-17T00:29:29.394Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:29 +02:00: [2026-04-17T00:29:29.522Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:29 +02:00: [2026-04-17T00:29:29.528Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:34 +02:00: [2026-04-17T00:29:34.958Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:35 +02:00: [2026-04-17T00:29:35.086Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:35 +02:00: [2026-04-17T00:29:35.092Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:40 +02:00: [2026-04-17T00:29:40.528Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:40 +02:00: [2026-04-17T00:29:40.652Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:40 +02:00: [2026-04-17T00:29:40.658Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:46 +02:00: [2026-04-17T00:29:46.101Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:46 +02:00: [2026-04-17T00:29:46.231Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:46 +02:00: [2026-04-17T00:29:46.237Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:51 +02:00: [2026-04-17T00:29:51.735Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:51 +02:00: [2026-04-17T00:29:51.862Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:51 +02:00: [2026-04-17T00:29:51.868Z] [INFO ] Redis reconnecting...
+2026-04-17 02:29:57 +02:00: [2026-04-17T00:29:57.308Z] [INFO ] AnalyzerService starting
+2026-04-17 02:29:57 +02:00: [2026-04-17T00:29:57.429Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:29:57 +02:00: [2026-04-17T00:29:57.436Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:02 +02:00: [2026-04-17T00:30:02.904Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:03 +02:00: [2026-04-17T00:30:03.037Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:03 +02:00: [2026-04-17T00:30:03.044Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:08 +02:00: [2026-04-17T00:30:08.508Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:08 +02:00: [2026-04-17T00:30:08.639Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:08 +02:00: [2026-04-17T00:30:08.645Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:14 +02:00: [2026-04-17T00:30:14.085Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:14 +02:00: [2026-04-17T00:30:14.221Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:14 +02:00: [2026-04-17T00:30:14.229Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:19 +02:00: [2026-04-17T00:30:19.699Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:19 +02:00: [2026-04-17T00:30:19.827Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:19 +02:00: [2026-04-17T00:30:19.834Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:25 +02:00: [2026-04-17T00:30:25.265Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:25 +02:00: [2026-04-17T00:30:25.385Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:25 +02:00: [2026-04-17T00:30:25.392Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:30 +02:00: [2026-04-17T00:30:30.830Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:30 +02:00: [2026-04-17T00:30:30.964Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:30 +02:00: [2026-04-17T00:30:30.971Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:36 +02:00: [2026-04-17T00:30:36.439Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:36 +02:00: [2026-04-17T00:30:36.577Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:36 +02:00: [2026-04-17T00:30:36.584Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:42 +02:00: [2026-04-17T00:30:42.031Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:42 +02:00: [2026-04-17T00:30:42.160Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:42 +02:00: [2026-04-17T00:30:42.167Z] [INFO ] Redis reconnecting...
+2026-04-17 02:30:47 +02:00: [2026-04-17T00:30:47.660Z] [INFO ] AnalyzerService starting
+2026-04-17 02:30:47 +02:00: [2026-04-17T00:30:47.794Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:30:47 +02:00: [2026-04-17T00:30:47.801Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:06 +02:00: [2026-04-17T00:31:06.497Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:06 +02:00: [2026-04-17T00:31:06.640Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:06 +02:00: [2026-04-17T00:31:06.646Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:12 +02:00: [2026-04-17T00:31:12.137Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:12 +02:00: [2026-04-17T00:31:12.269Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:12 +02:00: [2026-04-17T00:31:12.275Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:17 +02:00: [2026-04-17T00:31:17.735Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:17 +02:00: [2026-04-17T00:31:17.861Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:17 +02:00: [2026-04-17T00:31:17.868Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:23 +02:00: [2026-04-17T00:31:23.318Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:23 +02:00: [2026-04-17T00:31:23.447Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:23 +02:00: [2026-04-17T00:31:23.453Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:28 +02:00: [2026-04-17T00:31:28.941Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:29 +02:00: [2026-04-17T00:31:29.067Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:29 +02:00: [2026-04-17T00:31:29.073Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:34 +02:00: [2026-04-17T00:31:34.534Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:34 +02:00: [2026-04-17T00:31:34.661Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:34 +02:00: [2026-04-17T00:31:34.667Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:40 +02:00: [2026-04-17T00:31:40.176Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:40 +02:00: [2026-04-17T00:31:40.299Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:40 +02:00: [2026-04-17T00:31:40.305Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:45 +02:00: [2026-04-17T00:31:45.756Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:45 +02:00: [2026-04-17T00:31:45.894Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:45 +02:00: [2026-04-17T00:31:45.900Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:51 +02:00: [2026-04-17T00:31:51.330Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:51 +02:00: [2026-04-17T00:31:51.498Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:51 +02:00: [2026-04-17T00:31:51.505Z] [INFO ] Redis reconnecting...
+2026-04-17 02:31:56 +02:00: [2026-04-17T00:31:56.947Z] [INFO ] AnalyzerService starting
+2026-04-17 02:31:57 +02:00: [2026-04-17T00:31:57.078Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:31:57 +02:00: [2026-04-17T00:31:57.084Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:02 +02:00: [2026-04-17T00:32:02.570Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:02 +02:00: [2026-04-17T00:32:02.710Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:02 +02:00: [2026-04-17T00:32:02.718Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:08 +02:00: [2026-04-17T00:32:08.153Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:08 +02:00: [2026-04-17T00:32:08.283Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:08 +02:00: [2026-04-17T00:32:08.289Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:13 +02:00: [2026-04-17T00:32:13.721Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:13 +02:00: [2026-04-17T00:32:13.850Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:13 +02:00: [2026-04-17T00:32:13.857Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:24 +02:00: [2026-04-17T00:32:24.677Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:24 +02:00: [2026-04-17T00:32:24.794Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:24 +02:00: [2026-04-17T00:32:24.800Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:30 +02:00: [2026-04-17T00:32:30.240Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:30 +02:00: [2026-04-17T00:32:30.367Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:30 +02:00: [2026-04-17T00:32:30.374Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:35 +02:00: [2026-04-17T00:32:35.922Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:36 +02:00: [2026-04-17T00:32:36.054Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:36 +02:00: [2026-04-17T00:32:36.061Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:41 +02:00: [2026-04-17T00:32:41.587Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:41 +02:00: [2026-04-17T00:32:41.711Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:41 +02:00: [2026-04-17T00:32:41.717Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:47 +02:00: [2026-04-17T00:32:47.156Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:47 +02:00: [2026-04-17T00:32:47.284Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:47 +02:00: [2026-04-17T00:32:47.290Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:52 +02:00: [2026-04-17T00:32:52.752Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:52 +02:00: [2026-04-17T00:32:52.876Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:52 +02:00: [2026-04-17T00:32:52.882Z] [INFO ] Redis reconnecting...
+2026-04-17 02:32:58 +02:00: [2026-04-17T00:32:58.323Z] [INFO ] AnalyzerService starting
+2026-04-17 02:32:58 +02:00: [2026-04-17T00:32:58.472Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:32:58 +02:00: [2026-04-17T00:32:58.479Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:03 +02:00: [2026-04-17T00:33:03.930Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:04 +02:00: [2026-04-17T00:33:04.058Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:04 +02:00: [2026-04-17T00:33:04.065Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:09 +02:00: [2026-04-17T00:33:09.528Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:09 +02:00: [2026-04-17T00:33:09.654Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:09 +02:00: [2026-04-17T00:33:09.660Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:15 +02:00: [2026-04-17T00:33:15.094Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:15 +02:00: [2026-04-17T00:33:15.232Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:15 +02:00: [2026-04-17T00:33:15.238Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:20 +02:00: [2026-04-17T00:33:20.769Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:20 +02:00: [2026-04-17T00:33:20.936Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:20 +02:00: [2026-04-17T00:33:20.942Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:26 +02:00: [2026-04-17T00:33:26.508Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:26 +02:00: [2026-04-17T00:33:26.643Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:26 +02:00: [2026-04-17T00:33:26.651Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:32 +02:00: [2026-04-17T00:33:32.108Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:32 +02:00: [2026-04-17T00:33:32.289Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:32 +02:00: [2026-04-17T00:33:32.303Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:38 +02:00: [2026-04-17T00:33:38.070Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:38 +02:00: [2026-04-17T00:33:38.207Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:38 +02:00: [2026-04-17T00:33:38.543Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:46 +02:00: [2026-04-17T00:33:46.139Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:46 +02:00: [2026-04-17T00:33:46.389Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:46 +02:00: [2026-04-17T00:33:46.395Z] [INFO ] Redis reconnecting...
+2026-04-17 02:33:54 +02:00: [2026-04-17T00:33:54.811Z] [INFO ] AnalyzerService starting
+2026-04-17 02:33:55 +02:00: [2026-04-17T00:33:55.279Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:33:55 +02:00: [2026-04-17T00:33:55.287Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:12 +02:00: [2026-04-17T00:34:12.112Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:12 +02:00: [2026-04-17T00:34:12.299Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:12 +02:00: [2026-04-17T00:34:12.305Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:17 +02:00: [2026-04-17T00:34:17.887Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:18 +02:00: [2026-04-17T00:34:18.019Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:18 +02:00: [2026-04-17T00:34:18.026Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:23 +02:00: [2026-04-17T00:34:23.557Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:23 +02:00: [2026-04-17T00:34:23.697Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:23 +02:00: [2026-04-17T00:34:23.705Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:29 +02:00: [2026-04-17T00:34:29.208Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:29 +02:00: [2026-04-17T00:34:29.370Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:29 +02:00: [2026-04-17T00:34:29.382Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:35 +02:00: [2026-04-17T00:34:35.389Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:35 +02:00: [2026-04-17T00:34:35.556Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:35 +02:00: [2026-04-17T00:34:35.572Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:41 +02:00: [2026-04-17T00:34:41.102Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:41 +02:00: [2026-04-17T00:34:41.229Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:41 +02:00: [2026-04-17T00:34:41.237Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:46 +02:00: [2026-04-17T00:34:46.771Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:46 +02:00: [2026-04-17T00:34:46.905Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:46 +02:00: [2026-04-17T00:34:46.913Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:52 +02:00: [2026-04-17T00:34:52.473Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:52 +02:00: [2026-04-17T00:34:52.638Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:52 +02:00: [2026-04-17T00:34:52.645Z] [INFO ] Redis reconnecting...
+2026-04-17 02:34:58 +02:00: [2026-04-17T00:34:58.151Z] [INFO ] AnalyzerService starting
+2026-04-17 02:34:58 +02:00: [2026-04-17T00:34:58.279Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:34:58 +02:00: [2026-04-17T00:34:58.286Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:03 +02:00: [2026-04-17T00:35:03.769Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:03 +02:00: [2026-04-17T00:35:03.903Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:03 +02:00: [2026-04-17T00:35:03.910Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:09 +02:00: [2026-04-17T00:35:09.352Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:09 +02:00: [2026-04-17T00:35:09.483Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:09 +02:00: [2026-04-17T00:35:09.490Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:14 +02:00: [2026-04-17T00:35:14.927Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:15 +02:00: [2026-04-17T00:35:15.063Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:15 +02:00: [2026-04-17T00:35:15.070Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:20 +02:00: [2026-04-17T00:35:20.602Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:20 +02:00: [2026-04-17T00:35:20.753Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:20 +02:00: [2026-04-17T00:35:20.761Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:26 +02:00: [2026-04-17T00:35:26.278Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:26 +02:00: [2026-04-17T00:35:26.415Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:26 +02:00: [2026-04-17T00:35:26.429Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:31 +02:00: [2026-04-17T00:35:31.878Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:32 +02:00: [2026-04-17T00:35:32.034Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:32 +02:00: [2026-04-17T00:35:32.040Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:37 +02:00: [2026-04-17T00:35:37.572Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:37 +02:00: [2026-04-17T00:35:37.746Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:37 +02:00: [2026-04-17T00:35:37.753Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:43 +02:00: [2026-04-17T00:35:43.372Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:43 +02:00: [2026-04-17T00:35:43.519Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:43 +02:00: [2026-04-17T00:35:43.528Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:49 +02:00: [2026-04-17T00:35:49.055Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:49 +02:00: [2026-04-17T00:35:49.186Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:49 +02:00: [2026-04-17T00:35:49.193Z] [INFO ] Redis reconnecting...
+2026-04-17 02:35:54 +02:00: [2026-04-17T00:35:54.659Z] [INFO ] AnalyzerService starting
+2026-04-17 02:35:54 +02:00: [2026-04-17T00:35:54.790Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:35:54 +02:00: [2026-04-17T00:35:54.797Z] [INFO ] Redis reconnecting...
+2026-04-17 02:36:00 +02:00: [2026-04-17T00:36:00.250Z] [INFO ] AnalyzerService starting
+2026-04-17 02:36:00 +02:00: [2026-04-17T00:36:00.386Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:36:00 +02:00: [2026-04-17T00:36:00.392Z] [INFO ] Redis reconnecting...
+2026-04-17 02:36:05 +02:00: [2026-04-17T00:36:05.860Z] [INFO ] AnalyzerService starting
+2026-04-17 02:36:05 +02:00: [2026-04-17T00:36:05.991Z] [INFO ] Taux USD→EUR mis à jour : 0.8490
+2026-04-17 02:36:06 +02:00: [2026-04-17T00:36:05.999Z] [INFO ] Redis reconnecting...

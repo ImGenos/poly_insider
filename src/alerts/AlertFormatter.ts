@@ -2,6 +2,7 @@ import { Anomaly, ClusterAnomaly, FilteredTrade, TelegramMessage } from '../type
 import { escapeMarkdown } from '../utils/helpers';
 import { ExchangeRateService } from '../utils/ExchangeRateService';
 import { Logger } from '../utils/Logger';
+import type { AccumulationAnomaly } from '../detectors/AccumulationDetector';
 
 const POLYGONSCAN_BASE = 'https://polygonscan.com/address';
 const POLYMARKET_BASE  = 'https://polymarket.com/event';
@@ -29,7 +30,6 @@ function sideFr(side: string): string {
   return side === 'YES' ? 'OUI' : 'NON';
 }
 
-/** Convertit un montant USDC en euros et le formate en français (taux en cache) */
 function formatEur(sizeUSDC: number): string {
   const eur = sizeUSDC * fxService.getCachedRate();
   const formatted = eur.toLocaleString('fr-FR', {
@@ -56,14 +56,6 @@ function truncate(text: string): string {
 }
 
 export class AlertFormatter {
-  /**
-   * Pré-charge le taux de change USD→EUR au démarrage.
-   * À appeler une fois lors de l'initialisation du service.
-   *
-   * BUG FIX: Added optional logger parameter to match the call in analyzer/index.ts:
-   * `await this.alertFormatter.init(this.logger)`. The logger is accepted but not
-   * used here since fxService has its own internal logger.
-   */
   async init(_logger?: Logger): Promise<void> {
     await fxService.getUsdToEurRate();
   }
@@ -92,11 +84,6 @@ export class AlertFormatter {
     };
   }
 
-  /**
-   * BUG FIX: New method — was called in analyzer/index.ts but missing from
-   * AlertFormatter, causing a runtime crash ("formatMegaTradeAlert is not a function").
-   * Formats an alert for any single trade ≥ $30,000 regardless of anomaly type.
-   */
   formatMegaTradeAlert(trade: FilteredTrade): TelegramMessage {
     const text = [
       `🐳 *MEGA TRADE DÉTECTÉ*`,
@@ -241,6 +228,40 @@ export class AlertFormatter {
   formatClusterMessage(anomaly: ClusterAnomaly): TelegramMessage {
     return {
       text: truncate(this.formatClusterAlert(anomaly)),
+      parse_mode: 'Markdown',
+      disable_web_page_preview: false,
+    };
+  }
+
+  // ─── Accumulation alert (gradual limit-order position building) ───────────
+
+  formatAccumulationAlert(anomaly: AccumulationAnomaly, trade: FilteredTrade): string {
+    const emoji = severityEmoji(anomaly.severity);
+    const ctx   = anomaly.accumulationContext;
+
+    const lines = [
+      `${emoji} *ACCUMULATION SILENCIEUSE* \\| ${escapeMarkdown(severityFr(anomaly.severity))}`,
+      ``,
+      `📈 *Position construite via ordres à cours limité*`,
+      `Marché : ${polymarketLink(trade.marketId, trade.marketName)}`,
+      `Position : *${sideFr(trade.side)}*`,
+      `Total accumulé : *${formatEur(ctx.totalSizeUsd)}*`,
+      `Fenêtre : *${escapeMarkdown(ctx.windowHours.toFixed(1))}h*`,
+      ``,
+      `*Profil du portefeuille :*`,
+      `• Volume historique total : *${formatEur(ctx.walletTotalVolumeUsdc)}*`,
+      `• Marchés distincts : *${escapeMarkdown(String(ctx.walletDistinctMarkets))}*`,
+      `• Premier pari sur ce marché : *${ctx.isFirstTimeOnThisMarket ? 'OUI ⚠️' : 'Non'}*`,
+      ``,
+      `Portefeuille : ${trade.walletAddress ? polygonScanLink(trade.walletAddress) : 'N/A'}`,
+    ];
+
+    return lines.join('\n');
+  }
+
+  formatAccumulationMessage(anomaly: AccumulationAnomaly, trade: FilteredTrade): TelegramMessage {
+    return {
+      text: truncate(this.formatAccumulationAlert(anomaly, trade)),
       parse_mode: 'Markdown',
       disable_web_page_preview: false,
     };
